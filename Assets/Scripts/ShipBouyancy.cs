@@ -40,7 +40,7 @@ public class ShipBouyancy : MonoBehaviour
 
             if(point.position.y < adjustedWaterLevel){
 
-                float submersion = adjustedWaterLevel - point.position.y;
+                float submersion = (adjustedWaterLevel - point.position.y) * 2;
                 Vector3 force = Vector3.up * buoyancyForce * submersion;
                 ApplyLimitedForce(point.position, force);
             }
