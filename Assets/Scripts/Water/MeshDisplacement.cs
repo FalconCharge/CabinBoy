@@ -54,5 +54,12 @@ public class MeshDisplacer : MonoBehaviour
         meshFilter.sharedMesh = mesh;
     }
 
+    public float GetWaveHeight(Vector3 pPosition){
+
+        float x = pPosition.x * scale + offsetX;
+        float z = pPosition.z * scale + offsetZ;
+        return Mathf.PerlinNoise(x, z) * amplitude;
+    }
+
 
 }
