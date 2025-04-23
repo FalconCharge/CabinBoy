@@ -12,9 +12,6 @@ public class PlayerLocomotion : MonoBehaviour
     [SerializeField]
     ConfigurableJoint mainJoint;
 
-    /// <summary>
-    /// ignoring player's layer:
-    /// </summary>
     static int playerLayer;// = LayerMask.NameToLayer("Player");
     static int ignorePlayerLM;// = 1 << playerLayer;     // bit mask for just the Player layer
     static int everythingButPlayerMask;// = ~ignorePlayerLM;
@@ -31,6 +28,8 @@ public class PlayerLocomotion : MonoBehaviour
     //public float AirAccelerationSpeed = 5f;
     //public float Drag = 0.1f;
 
+    SyncPhysicsObject[] syncPhysicsObjects;
+
     //Raycasts
     RaycastHit[] raycastHits = new RaycastHit[10];
 
@@ -46,6 +45,8 @@ public class PlayerLocomotion : MonoBehaviour
         playerMan = GetComponent<PlayerManager>();
         inputMan = GetComponent<InputManager>();
         _rb = GetComponent<Rigidbody>();
+
+        syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
 
 
         playerLayer = LayerMask.NameToLayer("player");
@@ -128,6 +129,11 @@ public class PlayerLocomotion : MonoBehaviour
             // 3) If you�re under top-speed, push along that same vector:
             if (speedAlongInput < maxSpeed)
                 _rb.AddForce(norm * MoveSpeed, ForceMode.Acceleration);
+        }
+
+        for (int i = 0; i < syncPhysicsObjects.Length; i++)
+        {
+            syncPhysicsObjects[i].UpdateJointFromAnimation();
         }
 
     }

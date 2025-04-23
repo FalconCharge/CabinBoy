@@ -99,7 +99,6 @@ public class InputManager : MonoBehaviour
     {
         if (jump_Input)
         {
-            Debug.Log("Jump inptu");
             playerLocomotion.HandleJumping();
             jump_Input = false;
         }
