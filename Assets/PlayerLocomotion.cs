@@ -12,6 +12,13 @@ public class PlayerLocomotion : MonoBehaviour
     [SerializeField]
     ConfigurableJoint mainJoint;
 
+    /// <summary>
+    /// ignoring player's layer:
+    /// </summary>
+    static int playerLayer;// = LayerMask.NameToLayer("Player");
+    static int ignorePlayerLM;// = 1 << playerLayer;     // bit mask for just the Player layer
+    static int everythingButPlayerMask;// = ~ignorePlayerLM;
+
     [Header("Stable Movement")]
     public float CurrentMoveSpeed = 0f;
     public float MoveSpeed = 10f;
@@ -32,12 +39,18 @@ public class PlayerLocomotion : MonoBehaviour
     public bool isSprinting;
 
     public Vector3 moveInputVector;
-    //private Vector3 _lookInputVector;
+
+
     private void Awake()
     {
         playerMan = GetComponent<PlayerManager>();
         inputMan = GetComponent<InputManager>();
         _rb = GetComponent<Rigidbody>();
+
+
+        playerLayer = LayerMask.NameToLayer("player");
+        ignorePlayerLM = 1 << playerLayer;     // bit mask for just the Player layer
+        everythingButPlayerMask = ~ignorePlayerLM;
     }
 
     public void HandleAllMovement()
@@ -51,7 +64,10 @@ public class PlayerLocomotion : MonoBehaviour
     public void HandleJumping()
     {
         //velocity up
-        _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        if(isGrounded)
+        {
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
     }
     private void HandleInputToCam()
     {
@@ -71,7 +87,12 @@ public class PlayerLocomotion : MonoBehaviour
         CurrentMoveSpeed = _rb.linearVelocity.magnitude;
         isGrounded = false;
 
-        int numberOfHits = Physics.SphereCastNonAlloc(_rb.position, 0.1f, transform.up * -1, raycastHits, 0.5f);
+        int numberOfHits = Physics.SphereCastNonAlloc(
+            _rb.position, 0.1f, transform.up * -1,
+            raycastHits, 0.5f,
+            everythingButPlayerMask,
+            QueryTriggerInteraction.Ignore
+            );
 
         for (int i = 0; i < numberOfHits; i++)
         {
