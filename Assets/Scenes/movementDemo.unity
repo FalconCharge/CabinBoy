@@ -8443,7 +8443,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 40
+    positionSpring: 10
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -9318,7 +9318,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 40
+    positionSpring: 5
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -9847,7 +9847,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 40
+    positionSpring: 10
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -10293,7 +10293,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 40
+    positionSpring: 5
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
