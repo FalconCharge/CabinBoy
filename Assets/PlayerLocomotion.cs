@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class PlayerLocomotion : MonoBehaviour
 {
+    [SerializeField] private Animator ani;
+
     [SerializeField] private Vector3 inputDir;
     PlayerManager playerMan;
     InputManager inputMan;
@@ -25,8 +27,6 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Air Movement")]
     public bool isGrounded = false;
     public float jumpForce = 10f;
-    //public float AirAccelerationSpeed = 5f;
-    //public float Drag = 0.1f;
 
     SyncPhysicsObject[] syncPhysicsObjects;
 
@@ -50,7 +50,7 @@ public class PlayerLocomotion : MonoBehaviour
 
 
         playerLayer = LayerMask.NameToLayer("player");
-        ignorePlayerLM = 1 << playerLayer;     // bit mask for just the Player layer
+        ignorePlayerLM = 1 << playerLayer;     // bit mask for just the player layer
         everythingButPlayerMask = ~ignorePlayerLM;
     }
 
@@ -88,6 +88,8 @@ public class PlayerLocomotion : MonoBehaviour
         CurrentMoveSpeed = _rb.linearVelocity.magnitude;
         isGrounded = false;
 
+        float localForwardVelocity = (transform.forward * Vector3.Dot(transform.forward, _rb.linearVelocity)).magnitude;
+
         int numberOfHits = Physics.SphereCastNonAlloc(
             _rb.position, 0.1f, transform.up * -1,
             raycastHits, 0.5f,
@@ -109,27 +111,21 @@ public class PlayerLocomotion : MonoBehaviour
 
         if (moveInputVector.sqrMagnitude > 0.001f)
         {
-            // 1) Rotate your joint toward the real X,Z vector:
             Quaternion desiredDir = Quaternion.LookRotation(
               new Vector3(moveInputVector.x * -1, 0, moveInputVector.z),
               Vector3.up
             );
 
-            //mainJoint.targetRotation = Quaternion.RotateTowards(
-            //  mainJoint.targetRotation,
-            //  desiredDir,
-            //  turnSpeed * Time.fixedDeltaTime
-            //);
             mainJoint.targetRotation = desiredDir;
 
-            // 2) Measure speed along your input direction:
             Vector3 norm = moveInputVector.normalized;
             float speedAlongInput = Vector3.Dot(_rb.linearVelocity, norm);
 
-            // 3) If you�re under top-speed, push along that same vector:
             if (speedAlongInput < maxSpeed)
                 _rb.AddForce(norm * MoveSpeed, ForceMode.Acceleration);
         }
+
+        ani.SetFloat("movementSpeed", localForwardVelocity * 0.4f);
 
         for (int i = 0; i < syncPhysicsObjects.Length; i++)
         {
