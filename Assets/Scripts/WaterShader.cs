@@ -8,17 +8,14 @@ using UnityEngine;
 */
 public class WaterShader : MonoBehaviour
 {
-    [SerializeField] private float speed = 0.1f;
-    [SerializeField] private Vector2 direction = new Vector2(0, -1);
+    [SerializeField] private float panSpeed = 0.1f;
 
     private Material waterMaterial;
 
     void Start()
     {
         waterMaterial = GetComponent<MeshRenderer>().material;
-        waterMaterial.SetFloat("_Speed", speed);
-        waterMaterial.SetVector("_Direction", direction);
-
+        waterMaterial.SetFloat("_Pan_Speed", panSpeed);
     }
 
 
