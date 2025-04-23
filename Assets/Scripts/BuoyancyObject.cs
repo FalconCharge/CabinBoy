@@ -60,4 +60,8 @@ public class BuoyancyObject : MonoBehaviour
             rb.angularDamping = airAngularDrag;
         }
     }
+
+    public bool IsUnderWater(){
+        return underWater;
+    }
 }

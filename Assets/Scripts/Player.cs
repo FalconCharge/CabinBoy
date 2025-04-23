@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     [SerializeField] private Transform startPosition;
 
     [SerializeField] private GameObject gameOverUI;
-    
+        
     private PlayerScore playerScore;
     private CountDownTimer countDownTimer;
 
@@ -27,6 +27,7 @@ public class Player : MonoBehaviour
         m_IsGameOver = false;
 
         gameOverUI.SetActive(false);
+
     }
 
     void Update()
@@ -36,6 +37,7 @@ public class Player : MonoBehaviour
         }else{
             // Enable Game over UI
             gameOverUI.SetActive(true);
+            FindFirstObjectByType<GameOverUI>().ShowGameOverUI();
         }
     }
 
@@ -53,4 +55,5 @@ public class Player : MonoBehaviour
     public void GameOver(){
         m_IsGameOver = true;
     }
+    
 }

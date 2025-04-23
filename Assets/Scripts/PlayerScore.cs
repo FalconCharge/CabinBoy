@@ -5,6 +5,9 @@ public class PlayerScore : MonoBehaviour
 {
     [SerializeField] private TextMeshProUGUI scoreText;
 
+    // Prob Should be handled another way
+    [SerializeField] private TextMeshProUGUI GameOverScore;
+
     private int score = 0;
 
     void Start()
@@ -28,5 +31,7 @@ public class PlayerScore : MonoBehaviour
     private void UpdateScoreText()
     {
         scoreText.text = "Score: " + score.ToString();
-    }
+
+        GameOverScore.text = scoreText.text;    // Porb should handle somewhere else
+    }   
 }

@@ -780,6 +780,8 @@ GameObject:
   - component: {fileID: 269467132}
   - component: {fileID: 269467131}
   - component: {fileID: 269467130}
+  - component: {fileID: 269467135}
+  - component: {fileID: 269467134}
   m_Layer: 5
   m_Name: GameOver
   m_TagString: Untagged
@@ -873,6 +875,32 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &269467134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 269467129}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b3261f6dec688e54da4825c5c4918aa5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  gameOverGroup: {fileID: 269467135}
+  fadeInDuration: 1.5
+--- !u!225 &269467135
+CanvasGroup:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 269467129}
+  m_Enabled: 1
+  m_Alpha: 1
+  m_Interactable: 1
+  m_BlocksRaycasts: 1
+  m_IgnoreParentGroups: 0
 --- !u!1 &417890191
 GameObject:
   m_ObjectHideFlags: 0
@@ -996,6 +1024,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   scoreText: {fileID: 77699059}
+  GameOverScore: {fileID: 1831465955}
 --- !u!4 &438895133
 Transform:
   m_ObjectHideFlags: 0
@@ -1843,7 +1872,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 2
-  m_Constraints: 0
+  m_Constraints: 10
   m_CollisionDetection: 1
 --- !u!65 &1572888735
 BoxCollider:
