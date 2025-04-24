@@ -171,4 +171,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 20
+  waterCurrentForce: 100
   waterCurrentDirection: {x: 0, y: 0, z: -1}
