@@ -49,7 +49,7 @@ public class PlayerLocomotion : MonoBehaviour
         syncPhysicsObjects = GetComponentsInChildren<SyncPhysicsObject>();
 
 
-        playerLayer = LayerMask.NameToLayer("player");
+        playerLayer = LayerMask.NameToLayer("Player");
         ignorePlayerLM = 1 << playerLayer;     // bit mask for just the player layer
         everythingButPlayerMask = ~ignorePlayerLM;
     }
