@@ -23,7 +23,7 @@ public class Cargo : MonoBehaviour
     {
         //Applies force to the cargo
         if(m_buoyancyObject.IsUnderWater()){
-            m_rb.AddForce(waterCurrentDirection.normalized * m_rb.mass, ForceMode.Acceleration);
+            m_rb.AddForce(waterCurrentDirection.normalized * waterCurrentForce * m_rb.mass/2f, ForceMode.Acceleration);
         }
         
     }

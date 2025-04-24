@@ -31,9 +31,9 @@ public class OceanManager : MonoBehaviour
 
         v += Time.time * waveSpeed;
 
-        // Clamp to prevent out-of-bounds access (if you're not using wrap mode)
-        u = Mathf.Clamp01(u);
-        v = Mathf.Clamp01(v);
+        // // Clamp to prevent out-of-bounds access (if you're not using wrap mode)
+        // u = Mathf.Clamp01(u);
+        // v = Mathf.Clamp01(v);
 
         // Sample the height from the red channel
         float heightSample = waveHeightMap.GetPixelBilinear(u, v).r * amplitude;
@@ -47,9 +47,11 @@ public class OceanManager : MonoBehaviour
 
 
     void UpdateMaterials(){
-        oceanMat.SetFloat("_Amptitude", amplitude);
-        oceanMat.SetFloat("_PanSpeed", waveSpeed);
-        oceanMat.SetFloat("_Frequency", tiling);
+        if(oceanMat != null){
+            oceanMat.SetFloat("_Amptitude", amplitude);
+            oceanMat.SetFloat("_PanSpeed", waveSpeed);
+            oceanMat.SetFloat("_Frequency", tiling);
+        }
     }
 
     void OnDisable()
