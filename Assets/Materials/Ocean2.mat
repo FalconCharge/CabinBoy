@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Ocean_mat
-  m_Shader: {fileID: -6465566751694194690, guid: 13d3a8423c54b8a4eb4e25bd55df1d47, type: 3}
+  m_Name: Ocean2
+  m_Shader: {fileID: -6465566751694194690, guid: d81d5e67126ff9143a3f6dbfa37bd2d0, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -44,12 +44,12 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _Displacement:
-        m_Texture: {fileID: 2800000, guid: 93255ed345fda7941a78d45088fda731, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - _EmissionMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _HeightMap:
+        m_Texture: {fileID: 2800000, guid: 93255ed345fda7941a78d45088fda731, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
@@ -76,10 +76,6 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
-    - _WavesDisplacement:
-        m_Texture: {fileID: 2800000, guid: 93255ed345fda7941a78d45088fda731, type: 3}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -97,7 +93,6 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Amptitude: 10
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -105,47 +100,44 @@ Material:
     - _ClearCoatSmoothness: 0
     - _Cull: 2
     - _Cutoff: 0.5
-    - _Depth_Distance: 1.05
-    - _Depth_Strength: 0.21
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EnvironmentReflections: 1
-    - _Frequency: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
-    - _NormalStrength: 0.208
-    - _Normal_Tiling: 0.69
+    - _NormalMapTiling: 0.01
+    - _NormalStrength: 0.51
     - _OcclusionStrength: 1
-    - _PanSpeed: 0
-    - _Pan_Speed: 0
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RefractStrength: 0.009
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _WaveSpeed: 1
     - _WorkflowMode: 1
     - _ZWrite: 1
+    - _depthFactor: 1
+    - _smoothness: 0.98
+    - _waveFrequency: 0.01
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BottomColor: {r: 0.31764707, g: 0.48235297, b: 0.7568628, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
+    - _Color1: {r: 0.20392159, g: 0.41176474, b: 0.56078434, a: 0}
+    - _Color2: {r: 0.3254902, g: 0.7843138, b: 0.93725497, a: 0}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _Tiling_and_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _TopColor: {r: 0.23137257, g: 0.7058824, b: 0.8470589, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &9100281565667033804
+--- !u!114 &1462210842525195382
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}

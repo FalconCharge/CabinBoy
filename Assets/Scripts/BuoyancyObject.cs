@@ -32,7 +32,7 @@ public class BuoyancyObject : MonoBehaviour
 
         floatersUnderWater = 0;
         for(int i = 0; i < floaters.Length; i++){
-            float difference = floaters[i].position.y - waterHeight;
+            float difference = floaters[i].position.y - oceanManager.WaterHeightAtPosition(floaters[i].position);
 
             if(difference < 0){
                 rb.AddForceAtPosition(Vector3.up * floatingPower * Math.Abs(difference), floaters[i].position, ForceMode.Force);
