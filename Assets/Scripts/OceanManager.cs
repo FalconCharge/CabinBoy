@@ -22,28 +22,35 @@ public class OceanManager : MonoBehaviour
         UpdateMaterials();
     }
 
-    public float WaterHeightAtPosition(Vector3 position)
+    public float WaterHeightAtPosition(Vector3 worldPos)
     {
-        // Vector3 localPos = position - ocean.transform.position;
+        if (waveHeightMap == null)
+        {
+            Debug.LogWarning("waveHeightMap is not assigned!");
+            return ocean.transform.position.y;
+        }
 
-        // // Apply tiling
-        // float u = localPos.x * tiling;
-        // float v = localPos.z * tiling;
+        // Convert worldPos to local position relative to the ocean
+        Vector3 localPos = ocean.transform.InverseTransformPoint(worldPos);
 
-        // // Apply pan/scrolling via time
-        // u += Time.time * panSpeed.x * waveSpeed;
-        // v += Time.time * panSpeed.y * waveSpeed;
+        // Normalize to UV coordinates (0-1 range)
+        // 125 is the size of the mesh that should be normalized (It should be correct)
+        float u = Mathf.Repeat(localPos.x / 125f + (Time.time * waveSpeed), 1f);
+        float v = Mathf.Repeat(localPos.z / 125f + (Time.time * waveSpeed), 1f);
 
-        // // Wrap UVs to 0–1 range
-        // u = u % 1f; if (u < 0f) u += 1f;
-        // v = v % 1f; if (v < 0f) v += 1f;
+        Debug.Log(u.ToString() + ", " + v.ToString());
 
-        // float raw = waveHeightMap.GetPixelBilinear(u, v).r;
-        // float height = (raw - 0.5f) * 4.25f * amplitude;
+        // Sample the displacement map
+        float heightSample = waveHeightMap.GetPixelBilinear(u, v).r * amplitude;
 
-        // return ocean.transform.position.y + height;
-        return 5;
+        Debug.Log(heightSample);
+        // Reconstruct world Y using ocean base height and wave height scaling
+        float height = ocean.transform.position.y + heightSample;
+
+        return height;
     }
+
+
 
 
 
@@ -64,6 +71,17 @@ public class OceanManager : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawSphere(samplePoint, 0.2f);
     }
+    // void OnDrawGizmos()
+    // {
+    //     Vector3 samplePos = transform.position;
+    //     float h = WaterHeightAtPosition(samplePos);
+    //     Gizmos.color = Color.cyan;
+    //     Gizmos.DrawLine(
+    //         samplePos + Vector3.up * (ocean.transform.position.y),     // base
+    //         samplePos + Vector3.up * h                                  // sampled surface
+    //     );
+    // }
+
 
     void OnValidate()
     {

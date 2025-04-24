@@ -35,6 +35,9 @@
         },
         {
             "m_Id": "79d63c42019d4751b9d858af016be88a"
+        },
+        {
+            "m_Id": "65a051640e454c4085f47094c51f2012"
         }
     ],
     "m_Keywords": [],
@@ -1753,7 +1756,7 @@
     "m_Title": "Normals",
     "m_Position": {
         "x": -1795.0,
-        "y": -732.0
+        "y": -731.9999389648438
     }
 }
 
@@ -2106,7 +2109,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_Space": 0,
+    "m_Space": 2,
     "m_PositionSource": 0
 }
 
@@ -4000,6 +4003,34 @@
 }
 
 {
+    "m_SGVersion": 1,
+    "m_Type": "UnityEditor.ShaderGraph.Internal.Vector2ShaderProperty",
+    "m_ObjectId": "65a051640e454c4085f47094c51f2012",
+    "m_Guid": {
+        "m_GuidSerialized": "149fc4c6-8f88-4e0a-8db8-7a4d3ded33e7"
+    },
+    "m_Name": "Tiling and Offset",
+    "m_DefaultRefNameVersion": 1,
+    "m_RefNameGeneratedByDisplayName": "Tiling and Offset",
+    "m_DefaultReferenceName": "_Tiling_and_Offset",
+    "m_OverrideReferenceName": "",
+    "m_GeneratePropertyBlock": true,
+    "m_UseCustomSlotLabel": false,
+    "m_CustomSlotLabel": "",
+    "m_DismissedVersion": 0,
+    "m_Precision": 0,
+    "overrideHLSLDeclaration": false,
+    "hlslDeclarationOverride": 0,
+    "m_Hidden": false,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 0.0
+    }
+}
+
+{
     "m_SGVersion": 0,
     "m_Type": "UnityEditor.ShaderGraph.SplitNode",
     "m_ObjectId": "6718be61f486458d98d62be7e0d8b04b",
@@ -4802,6 +4833,9 @@
         },
         {
             "m_Id": "79d63c42019d4751b9d858af016be88a"
+        },
+        {
+            "m_Id": "65a051640e454c4085f47094c51f2012"
         }
     ]
 }
@@ -5204,7 +5238,7 @@
     "m_Hidden": false,
     "m_ShaderOutputName": "X",
     "m_StageCapability": 3,
-    "m_Value": 0.30000001192092898,
+    "m_Value": 1.0,
     "m_DefaultValue": 0.0,
     "m_Labels": []
 }
@@ -5875,7 +5909,7 @@
     "m_Title": "Displacement",
     "m_Position": {
         "x": -1963.0,
-        "y": -1664.0
+        "y": -1663.9998779296875
     }
 }
 
@@ -6491,7 +6525,7 @@
     "m_Title": "Refract Depth",
     "m_Position": {
         "x": -1830.0,
-        "y": 467.0
+        "y": 466.9999694824219
     }
 }
 

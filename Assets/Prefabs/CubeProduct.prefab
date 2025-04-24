@@ -157,7 +157,7 @@ MonoBehaviour:
   airDrag: 0
   airAngularDrag: 0
   waterHeight: 5.5
-  floatingPower: 100
+  floatingPower: 300
 --- !u!114 &6991600369092187718
 MonoBehaviour:
   m_ObjectHideFlags: 0
