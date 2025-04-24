@@ -24,31 +24,23 @@ public class OceanManager : MonoBehaviour
 
     public float WaterHeightAtPosition(Vector3 worldPos)
     {
-        if (waveHeightMap == null)
-        {
-            Debug.LogWarning("waveHeightMap is not assigned!");
-            return ocean.transform.position.y;
-        }
 
-        // Convert worldPos to local position relative to the ocean
-        Vector3 localPos = ocean.transform.InverseTransformPoint(worldPos);
+        // Map from world space (-125 to +125) to UV space (0 to 1)
+        float u = (worldPos.x + 125f) / 250f;
+        float v = (worldPos.z + 125f) / 250f;
 
-        // Normalize to UV coordinates (0-1 range)
-        // 125 is the size of the mesh that should be normalized (It should be correct)
-        float u = Mathf.Repeat(localPos.x / 125f + (Time.time * waveSpeed), 1f);
-        float v = Mathf.Repeat(localPos.z / 125f + (Time.time * waveSpeed), 1f);
+        v += Time.time * waveSpeed;
 
-        Debug.Log(u.ToString() + ", " + v.ToString());
+        // Clamp to prevent out-of-bounds access (if you're not using wrap mode)
+        u = Mathf.Clamp01(u);
+        v = Mathf.Clamp01(v);
 
-        // Sample the displacement map
+        // Sample the height from the red channel
         float heightSample = waveHeightMap.GetPixelBilinear(u, v).r * amplitude;
 
-        Debug.Log(heightSample);
-        // Reconstruct world Y using ocean base height and wave height scaling
-        float height = ocean.transform.position.y + heightSample;
-
-        return height;
+        return ocean.transform.position.y + heightSample;
     }
+
 
 
 

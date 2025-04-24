@@ -1756,7 +1756,7 @@
     "m_Title": "Normals",
     "m_Position": {
         "x": -1795.0,
-        "y": -731.9999389648438
+        "y": -732.0
     }
 }
 
@@ -2109,7 +2109,7 @@
     "m_CustomColors": {
         "m_SerializableColors": []
     },
-    "m_Space": 2,
+    "m_Space": 0,
     "m_PositionSource": 0
 }
 
@@ -5909,7 +5909,7 @@
     "m_Title": "Displacement",
     "m_Position": {
         "x": -1963.0,
-        "y": -1663.9998779296875
+        "y": -1664.0
     }
 }
 
@@ -6525,7 +6525,7 @@
     "m_Title": "Refract Depth",
     "m_Position": {
         "x": -1830.0,
-        "y": 466.9999694824219
+        "y": 467.0
     }
 }
 
