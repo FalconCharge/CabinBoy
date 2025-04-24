@@ -11,7 +11,7 @@ public class BuoyancyObject : MonoBehaviour
     [SerializeField] private float airDrag = 0f;
     [SerializeField] private float airAngularDrag = 0f;
 
-    [SerializeField] private float waterHeight = 1f;
+    [SerializeField] private float waterHeightOffset = 1f;
 
     [SerializeField] private float floatingPower = 15f;
 
@@ -32,7 +32,8 @@ public class BuoyancyObject : MonoBehaviour
 
         floatersUnderWater = 0;
         for(int i = 0; i < floaters.Length; i++){
-            float difference = floaters[i].position.y - oceanManager.WaterHeightAtPosition(floaters[i].position);
+            float difference = floaters[i].position.y - oceanManager.WaterHeightAtPosition(floaters[i].position) + waterHeightOffset;
+            
 
             if(difference < 0){
                 rb.AddForceAtPosition(Vector3.up * floatingPower * Math.Abs(difference), floaters[i].position, ForceMode.Force);
