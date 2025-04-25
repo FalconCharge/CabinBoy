@@ -36,6 +36,7 @@ public class Player : MonoBehaviour
             ContinousPoints();
         }else{
             // Enable Game over UI
+            // TODO: Disable Normal UI (The score)
             gameOverUI.SetActive(true);
             FindFirstObjectByType<GameOverUI>().ShowGameOverUI();
         }

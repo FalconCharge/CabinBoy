@@ -4,11 +4,9 @@ public class OceanManager : MonoBehaviour
 {
     [SerializeField] private GameObject ocean;
     [SerializeField] private Texture2D waveHeightMap;
-    [SerializeField] private float tiling = 1f; // match shader's "Normal Tiling" which is freq
-    [SerializeField] private Vector2 panSpeed = new Vector2(0f, 0f); // from the shader
-    [SerializeField] private float amplitude = 1f; // match shader amplitude
-    [SerializeField] private float waveSpeed = 1f;
-
+    [SerializeField] private float tiling = 1f; // Please dont use I don't think it works
+    [SerializeField] private Vector2 panSpeed = new Vector2(0f, 0f); 
+    [SerializeField] private float amplitude = 1f; 
 
     private Material oceanMat;
 
@@ -28,12 +26,13 @@ public class OceanManager : MonoBehaviour
         // Map from world space (-125 to +125) to UV space (0 to 1)
         float u = (worldPos.x + 125f) / 250f;
         float v = (worldPos.z + 125f) / 250f;
+        
+        u += Time.time * panSpeed.x;
+        v += Time.time * panSpeed.y;
 
-        v += Time.time * waveSpeed;
-
-        // Clamp to prevent out-of-bounds access (if you're not using wrap mode)
-        u = Mathf.Clamp01(u);
-        v = Mathf.Clamp01(v);
+        // Wrap UVs so they stay between 0 and 1
+        u = Mathf.Repeat(u, 1f);
+        v = Mathf.Repeat(v, 1f);
 
         // Sample the height from the red channel
         float heightSample = waveHeightMap.GetPixelBilinear(u, v).r * amplitude;
@@ -44,17 +43,17 @@ public class OceanManager : MonoBehaviour
 
 
 
-
-
     void UpdateMaterials(){
-        oceanMat.SetFloat("_Amptitude", amplitude);
-        oceanMat.SetFloat("_PanSpeed", waveSpeed);
-        oceanMat.SetFloat("_Frequency", tiling);
+        if(oceanMat != null){
+            oceanMat.SetFloat("_Amptitude", amplitude);
+            oceanMat.SetFloat("_Frequency", tiling);
+            oceanMat.SetVector("_PanSpeed_1", panSpeed);
+        }
     }
 
     void OnDisable()
     {
-        oceanMat.SetFloat("_PanSpeed", 0f);
+        oceanMat.SetVector("_PanSpeed_1", Vector2.zero);
     }
 
     void OnDrawGizmos() {
