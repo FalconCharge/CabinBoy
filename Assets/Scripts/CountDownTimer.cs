@@ -37,4 +37,10 @@ public class CountDownTimer
         currentTime = startTime;
         isFinished = false;
     }
+
+    public void SetDuration(float duration){
+        startTime = Mathf.Max(duration, 0f);
+        currentTime = startTime;
+        isFinished = false;
+    }
 }
