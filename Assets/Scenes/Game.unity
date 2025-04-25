@@ -1126,7 +1126,7 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!43 &667375147
+--- !u!43 &760190596
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1874,7 +1874,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 2
-  m_Constraints: 10
+  m_Constraints: 42
   m_CollisionDetection: 1
 --- !u!65 &1572888735
 BoxCollider:
@@ -2209,7 +2209,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1837854064}
-  m_Mesh: {fileID: 667375147}
+  m_Mesh: {fileID: 760190596}
 --- !u!4 &1837854068
 Transform:
   m_ObjectHideFlags: 0
@@ -2357,6 +2357,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 746408127778233342, guid: 8e6fef3cbc8a7d544816e1f187402e43, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 32c3e6ad0925aa84cba373acdd05af4a, type: 2}
     - target: {fileID: 1744282170508116290, guid: 8e6fef3cbc8a7d544816e1f187402e43, type: 3}
       propertyPath: m_Name
       value: player
@@ -2365,6 +2369,10 @@ PrefabInstance:
       propertyPath: m_SlerpDrive.positionSpring
       value: 100
       objectReference: {fileID: 0}
+    - target: {fileID: 3380593390046719978, guid: 8e6fef3cbc8a7d544816e1f187402e43, type: 3}
+      propertyPath: camObj
+      value: 
+      objectReference: {fileID: 634765595}
     - target: {fileID: 4094050407352151709, guid: 8e6fef3cbc8a7d544816e1f187402e43, type: 3}
       propertyPath: m_SlerpDrive.positionSpring
       value: 100

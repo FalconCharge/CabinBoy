@@ -376,6 +376,7 @@ GameObject:
   - component: {fileID: 7692057636339185085}
   - component: {fileID: 8960844731916582519}
   - component: {fileID: 762307399150743672}
+  - component: {fileID: 3003650266803885866}
   m_Layer: 6
   m_Name: player
   m_TagString: Untagged
@@ -391,7 +392,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 709506340647814898}
   serializedVersion: 2
-  m_LocalRotation: {x: -4.039052e-12, y: -0.00021263352, z: -3.105169e-11, w: -1}
+  m_LocalRotation: {x: 0, y: 0.00020944304, z: 0, w: 1}
   m_LocalPosition: {x: 7.283577, y: -60.27446, z: -24.892296}
   m_LocalScale: {x: 6, y: 6, z: 6}
   m_ConstrainProportionsScale: 1
@@ -399,7 +400,7 @@ Transform:
   - {fileID: 8137780674461254141}
   - {fileID: 556303349305882125}
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0.024, z: 0}
 --- !u!54 &1715456375035283110
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -535,8 +536,8 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 700
-    positionDamper: 300
+    positionSpring: 2000
+    positionDamper: 500
     maximumForce: 3.4028233e+38
     useAcceleration: 1
   m_ProjectionMode: 0
@@ -613,6 +614,63 @@ MonoBehaviour:
   RotationObstruction: 0
   isSprinting: 0
   moveInputVector: {x: 0, y: 0, z: 0}
+--- !u!114 &3003650266803885866
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 709506340647814898}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4cd05d880481646ba1c834ebc5a8cd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  jointConfigs:
+  - jointName: player
+    joint: {fileID: 1626630054739450472}
+    positionSpring: 2000
+    positionDamper: 500
+  - jointName: mixamorig:LeftUpLeg
+    joint: {fileID: 5948028192027702148}
+    positionSpring: 1000
+    positionDamper: 0
+  - jointName: mixamorig:LeftLeg
+    joint: {fileID: 4152674160886906232}
+    positionSpring: 1000
+    positionDamper: 0
+  - jointName: mixamorig:RightUpLeg
+    joint: {fileID: 5625396151443255055}
+    positionSpring: 1000
+    positionDamper: 500
+  - jointName: mixamorig:RightLeg
+    joint: {fileID: 5401623125210333599}
+    positionSpring: 1000
+    positionDamper: 0
+  - jointName: mixamorig:Spine1
+    joint: {fileID: 4394126157777979342}
+    positionSpring: 2000
+    positionDamper: 0
+  - jointName: mixamorig:LeftArm
+    joint: {fileID: 7494780532569449501}
+    positionSpring: 300
+    positionDamper: 0
+  - jointName: mixamorig:LeftForeArm
+    joint: {fileID: 6610874066676861995}
+    positionSpring: 600
+    positionDamper: 0
+  - jointName: mixamorig:Head
+    joint: {fileID: 9170806187447707537}
+    positionSpring: 500
+    positionDamper: 0
+  - jointName: mixamorig:RightArm
+    joint: {fileID: 6698380404062899431}
+    positionSpring: 300
+    positionDamper: 0
+  - jointName: mixamorig:RightForeArm
+    joint: {fileID: 584318265961513687}
+    positionSpring: 600
+    positionDamper: 0
 --- !u!1 &824963161402528960
 GameObject:
   m_ObjectHideFlags: 0
@@ -786,7 +844,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 5000
+    positionSpring: 2000
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -1146,7 +1204,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 800
+    positionSpring: 1000
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -1230,7 +1288,7 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 74295b2387288c646a1cec35e049a40c, type: 2}
+  - {fileID: 2100000, guid: 32c3e6ad0925aa84cba373acdd05af4a, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1555,7 +1613,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 100
+    positionSpring: 300
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -1757,7 +1815,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 50
+    positionSpring: 600
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -2496,7 +2554,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 400
+    positionSpring: 1000
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -2803,8 +2861,8 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 800
-    positionDamper: 0
+    positionSpring: 1000
+    positionDamper: 500
     maximumForce: 3.4028233e+38
     useAcceleration: 0
   m_ProjectionMode: 0
@@ -3223,7 +3281,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 100
+    positionSpring: 300
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -3613,7 +3671,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 50
+    positionSpring: 600
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0
@@ -4096,7 +4154,7 @@ ConfigurableJoint:
     useAcceleration: 0
   m_SlerpDrive:
     serializedVersion: 4
-    positionSpring: 500
+    positionSpring: 1000
     positionDamper: 0
     maximumForce: 3.4028233e+38
     useAcceleration: 0

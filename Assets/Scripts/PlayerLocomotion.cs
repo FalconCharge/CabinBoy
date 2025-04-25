@@ -126,6 +126,7 @@ public class PlayerLocomotion : MonoBehaviour
         }
 
         ani.SetFloat("movementSpeed", localForwardVelocity * 0.4f);
+        ani.SetBool("grounded", isGrounded);
 
         for (int i = 0; i < syncPhysicsObjects.Length; i++)
         {
