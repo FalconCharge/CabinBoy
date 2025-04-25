@@ -97,7 +97,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Amptitude: 10
+    - _Amptitude: 15
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -117,7 +117,7 @@ Material:
     - _Glossiness: 0
     - _GlossyReflections: 0
     - _Metallic: 0
-    - _NormalStrength: 0.208
+    - _NormalStrength: 0.116
     - _Normal_Tiling: 0.69
     - _OcclusionStrength: 1
     - _PanSpeed: 0
@@ -137,12 +137,13 @@ Material:
     - _ZWrite: 1
     m_Colors:
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BottomColor: {r: 0.31764707, g: 0.48235297, b: 0.7568628, a: 0}
+    - _BottomColor: {r: 0.05490196, g: 0.59165174, b: 0.90588236, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _PanSpeed_1: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tiling_and_Offset: {r: 0, g: 0, b: 0, a: 0}
-    - _TopColor: {r: 0.23137257, g: 0.7058824, b: 0.8470589, a: 0}
+    - _TopColor: {r: 0, g: 0.972549, b: 0.7747899, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &9100281565667033804
