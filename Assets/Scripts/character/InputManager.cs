@@ -16,6 +16,8 @@ public class InputManager : MonoBehaviour
     public float verticalInput;
 
     public bool sprint_Input;
+    public bool left_Input;
+    public bool right_Input;
     public bool crouch_Input;
     public bool crouch_Pressed;
     public bool jump_Input = false;
@@ -40,6 +42,12 @@ public class InputManager : MonoBehaviour
             playerControls.PlayerActions.sprint.performed += i => sprint_Input = true;
             playerControls.PlayerActions.sprint.canceled += i => sprint_Input = false;
 
+            //Grabbing (Hold)
+            playerControls.PlayerActions.leftGrab.performed += i => left_Input = true;
+            playerControls.PlayerActions.leftGrab.canceled += i => left_Input = false;
+            playerControls.PlayerActions.rightGrab.performed += i => right_Input = true;
+            playerControls.PlayerActions.rightGrab.canceled += i => right_Input = false;
+
             /*
                         if(!playerMan.isInteracting){
                         playerControls.PlayerActions.crouch.performed += i => crouch_Input = true;
@@ -60,8 +68,21 @@ public class InputManager : MonoBehaviour
     {
         HandleMovementInput();
         HandleJumpingInput();
+        HandleGrabInput();
         //HandleSprintingInput();
         //HandleCrouchInput();
+    }
+    private void HandleGrabInput()
+    {
+        if(left_Input)
+        {
+
+        }
+        
+        if(right_Input)
+        {
+
+        }
     }
 
     private void HandleMovementInput()

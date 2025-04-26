@@ -310,6 +310,24 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""leftGrab"",
+                    ""type"": ""Button"",
+                    ""id"": ""62651ae2-ed5c-448f-a8b0-5bbb1d6bb0ca"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""rightGrab"",
+                    ""type"": ""Button"",
+                    ""id"": ""a2604f53-c1ac-459f-89de-14f9faf92d92"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -356,6 +374,50 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                     ""action"": ""sprint"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""992e5123-5ed8-43aa-92ab-b2b65a521d2a"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""leftGrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""bad8e74c-d499-4d0f-9088-9be3cc4f3f4f"",
+                    ""path"": ""<Gamepad>/leftTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""leftGrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e2855067-5a33-4140-bcde-9f1e86e5ee7b"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""rightGrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1f0cd3b3-b04d-4628-967f-967aa46aefbd"",
+                    ""path"": ""<Gamepad>/rightTrigger"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""rightGrab"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -370,6 +432,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         m_PlayerActions = asset.FindActionMap("PlayerActions", throwIfNotFound: true);
         m_PlayerActions_jump = m_PlayerActions.FindAction("jump", throwIfNotFound: true);
         m_PlayerActions_sprint = m_PlayerActions.FindAction("sprint", throwIfNotFound: true);
+        m_PlayerActions_leftGrab = m_PlayerActions.FindAction("leftGrab", throwIfNotFound: true);
+        m_PlayerActions_rightGrab = m_PlayerActions.FindAction("rightGrab", throwIfNotFound: true);
     }
 
     ~@PlayerControls()
@@ -560,6 +624,8 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
     private List<IPlayerActionsActions> m_PlayerActionsActionsCallbackInterfaces = new List<IPlayerActionsActions>();
     private readonly InputAction m_PlayerActions_jump;
     private readonly InputAction m_PlayerActions_sprint;
+    private readonly InputAction m_PlayerActions_leftGrab;
+    private readonly InputAction m_PlayerActions_rightGrab;
     /// <summary>
     /// Provides access to input actions defined in input action map "PlayerActions".
     /// </summary>
@@ -579,6 +645,14 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// Provides access to the underlying input action "PlayerActions/sprint".
         /// </summary>
         public InputAction @sprint => m_Wrapper.m_PlayerActions_sprint;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/leftGrab".
+        /// </summary>
+        public InputAction @leftGrab => m_Wrapper.m_PlayerActions_leftGrab;
+        /// <summary>
+        /// Provides access to the underlying input action "PlayerActions/rightGrab".
+        /// </summary>
+        public InputAction @rightGrab => m_Wrapper.m_PlayerActions_rightGrab;
         /// <summary>
         /// Provides access to the underlying input action map instance.
         /// </summary>
@@ -611,6 +685,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @sprint.started += instance.OnSprint;
             @sprint.performed += instance.OnSprint;
             @sprint.canceled += instance.OnSprint;
+            @leftGrab.started += instance.OnLeftGrab;
+            @leftGrab.performed += instance.OnLeftGrab;
+            @leftGrab.canceled += instance.OnLeftGrab;
+            @rightGrab.started += instance.OnRightGrab;
+            @rightGrab.performed += instance.OnRightGrab;
+            @rightGrab.canceled += instance.OnRightGrab;
         }
 
         /// <summary>
@@ -628,6 +708,12 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
             @sprint.started -= instance.OnSprint;
             @sprint.performed -= instance.OnSprint;
             @sprint.canceled -= instance.OnSprint;
+            @leftGrab.started -= instance.OnLeftGrab;
+            @leftGrab.performed -= instance.OnLeftGrab;
+            @leftGrab.canceled -= instance.OnLeftGrab;
+            @rightGrab.started -= instance.OnRightGrab;
+            @rightGrab.performed -= instance.OnRightGrab;
+            @rightGrab.canceled -= instance.OnRightGrab;
         }
 
         /// <summary>
@@ -704,5 +790,19 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
         /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
         /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
         void OnSprint(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "leftGrab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnLeftGrab(InputAction.CallbackContext context);
+        /// <summary>
+        /// Method invoked when associated input action "rightGrab" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+        /// </summary>
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+        /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+        void OnRightGrab(InputAction.CallbackContext context);
     }
 }

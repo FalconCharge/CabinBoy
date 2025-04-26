@@ -16,7 +16,7 @@ public class PlayerManager : MonoBehaviour
     }
 
     [SerializeField] private Animator ani;
-    InputManager inputManager;
+    [HideInInspector] public InputManager inputManager;
     PlayerLocomotion playerLocomotion;
     public string currentStatee;
     public bool isInteracting;
