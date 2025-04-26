@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 75663303063776659}
   - component: {fileID: 6991600369092187718}
   m_Layer: 0
-  m_Name: CubeProduct
+  m_Name: HeavyCargo
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -32,7 +32,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -68,7 +68,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 31321ba15b8f8eb4c954353edc038b1d, type: 2}
+  - {fileID: 2100000, guid: 4e873ffc67dce68419af1220fb311416, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -119,7 +119,7 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6135168412169155745}
   serializedVersion: 4
-  m_Mass: 1000
+  m_Mass: 1500
   m_Drag: 0
   m_AngularDrag: 0.05
   m_CenterOfMass: {x: 0, y: 0, z: 0}
@@ -170,6 +170,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 150
-  waterCurrentForce: 2
+  mass: 1000
+  waterCurrentForce: 1
   waterCurrentDirection: {x: 0, y: 0, z: 1}
