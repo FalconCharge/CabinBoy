@@ -38,6 +38,7 @@ public class Spawner : MonoBehaviour
 
         float xOff = Random.Range(minOffset, maxOffset);
         float zOff = Random.Range(minOffset, maxOffset);
+        
         Vector3 spawnPos = transform.position + new Vector3(xOff, 0f, zOff);
 
         Instantiate(prefab, spawnPos, Quaternion.identity);

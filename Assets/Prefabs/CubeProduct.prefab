@@ -157,7 +157,7 @@ MonoBehaviour:
   airDrag: 0
   airAngularDrag: 0
   waterHeightOffset: 0
-  floatingPower: 300
+  floatingPower: 1000
 --- !u!114 &6991600369092187718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,5 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 150
-  waterCurrentForce: 2
+  waterCurrentForce: 0.5
   waterCurrentDirection: {x: 0, y: 0, z: 1}
+  valueOfCargo: 5
+  killDistance: 40

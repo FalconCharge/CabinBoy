@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Cargo : MonoBehaviour
@@ -7,6 +8,10 @@ public class Cargo : MonoBehaviour
 
     [SerializeField] private float waterCurrentForce = 100.0f;
     [SerializeField] private Vector3 waterCurrentDirection;
+
+    [SerializeField] private int valueOfCargo = 5;
+
+    [SerializeField] private float killDistance = 40f;
 
     private Rigidbody m_rb;
     private BuoyancyObject m_buoyancyObject;
@@ -26,6 +31,18 @@ public class Cargo : MonoBehaviour
             m_rb.AddForce(waterCurrentDirection.normalized * waterCurrentForce * m_rb.mass/2f, ForceMode.Acceleration);
         }
         
+    }
+
+    public float GetValue(){
+        return valueOfCargo;
+    }
+
+    void Update()
+    {
+        if(transform.position.z > killDistance){
+            FindFirstObjectByType<PlayerScore>().ReducePoints(valueOfCargo);
+            Destroy(this.gameObject);
+        }
     }
 
 }

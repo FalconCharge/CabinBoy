@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: MedCargo
-  m_Shader: {fileID: -6465566751694194690, guid: 7f1c9bd820d275e498a432cd1ae3eee2, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 634ac39495a2c134c8ce955dc159ef56, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -117,6 +117,7 @@ Material:
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _HighLight: 1
     - _Max: 1
     - _Metallic: 0
     - _Min: 0.3
@@ -139,5 +140,6 @@ Material:
     - _Color: {r: 0.09947627, g: 0.5283019, b: 0.002491996, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
+    - _TextureTiling: {r: 1, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

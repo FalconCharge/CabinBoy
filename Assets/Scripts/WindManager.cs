@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class WindManager : MonoBehaviour
@@ -93,13 +94,13 @@ public class WindManager : MonoBehaviour
 
 
     public void StartGustWithDelay(float strength, float delay){
-        // Ignore If currently Making a Dust
-        if(hasWave) return;
+        // Ignore If already have a gust
+        if(Math.Abs(targetWind) > Mathf.Epsilon) return;
 
         timeToNextGust = delay;
-        targetWind = Mathf.Clamp(strength, -1, 1);
+        targetWind = Mathf.Clamp(strength, -1f, 1f);
 
-        if(Mathf.Abs(targetWind) < particlesAtStrength){     // WARNING MAGIC NUMBER!!
+        if(Mathf.Abs(targetWind) < particlesAtStrength){
             return;
         }else if(targetWind > 0){
             StartStarboardParticle();
@@ -116,7 +117,7 @@ public class WindManager : MonoBehaviour
 
     public void StopWave()
     {
-        if(targetWind < particlesAtStrength){
+        if(Math.Abs(targetWind) < particlesAtStrength){
             targetWind = 0.0f;
             return;
         }
