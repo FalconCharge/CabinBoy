@@ -26,7 +26,7 @@ public class PlayerManager : MonoBehaviour
 
     
     [SerializeField] private float layerBlendSpeed = 5f;
-    [SerializeField] private float armHeightSpeed = 1f;      // units per second
+    [SerializeField] private float armHeightSpeed = 1f;
     private int leftArmLayer, rightArmLayer;
 
     private void Awake()

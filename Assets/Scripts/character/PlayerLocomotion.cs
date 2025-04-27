@@ -14,9 +14,9 @@ public class PlayerLocomotion : MonoBehaviour
     [SerializeField]
     ConfigurableJoint mainJoint;
 
-    static int playerLayer;// = LayerMask.NameToLayer("Player");
-    static int ignorePlayerLM;// = 1 << playerLayer;     // bit mask for just the Player layer
-    static int everythingButPlayerMask;// = ~ignorePlayerLM;
+    static int playerLayer;
+    static int ignorePlayerLM;
+    static int everythingButPlayerMask;
 
     [Header("Stable Movement")]
     public float CurrentMoveSpeed = 0f;
@@ -27,6 +27,7 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Air Movement")]
     public bool isGrounded = false;
     public float jumpForce = 10f;
+    public float downForce = 10f;
 
     SyncPhysicsObject[] syncPhysicsObjects;
 
@@ -67,6 +68,7 @@ public class PlayerLocomotion : MonoBehaviour
         //velocity up
         if(isGrounded)
         {
+            _rb.AddForce(Vector3.up * jumpForce/3, ForceMode.Impulse);
             _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
         }
     }
@@ -107,7 +109,7 @@ public class PlayerLocomotion : MonoBehaviour
         }
         
         if (!isGrounded)
-            _rb.AddForce(Vector3.down * 10);
+            _rb.AddForce(Vector3.down * downForce);
 
         if (moveInputVector.sqrMagnitude > 0.001f)
         {
