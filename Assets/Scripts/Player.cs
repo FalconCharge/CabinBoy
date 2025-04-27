@@ -7,7 +7,7 @@ public class Player : MonoBehaviour
 
     [SerializeField] private GameObject gameOverUI;
         
-    private PlayerScore playerScore;
+    // private PlayerScore playerScore;
     private CountDownTimer countDownTimer;
 
     private bool m_IsGameOver;
@@ -15,7 +15,7 @@ public class Player : MonoBehaviour
     void Start()
     {
         // A ref to the Score Text
-        playerScore = GetComponent<PlayerScore>();
+        // playerScore = GetComponent<PlayerScore>();
         // Sets up the Continous Score
         countDownTimer = new CountDownTimer(0.5f);
 
@@ -38,7 +38,7 @@ public class Player : MonoBehaviour
             // Enable Game over UI
             // TODO: Disable Normal UI (The score)
             gameOverUI.SetActive(true);
-            FindFirstObjectByType<GameOverUI>().ShowGameOverUI();
+            FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
         }
     }
 
@@ -48,7 +48,7 @@ public class Player : MonoBehaviour
     {
         if (countDownTimer.IsReady())
         {
-            playerScore.AddPoints(1);
+            // playerScore.AddPoints(1);
             countDownTimer.Reset();
         }
     }

@@ -97,7 +97,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 6135168412169155745}
-  m_Material: {fileID: 13400000, guid: 62c98c027fe63bc49b889ca6a0844697, type: 2}
+  m_Material: {fileID: 13400000, guid: 2b9c0aedc2a68b842a73a270468e9baf, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -157,7 +157,7 @@ MonoBehaviour:
   airDrag: 0
   airAngularDrag: 0
   waterHeightOffset: 0
-  floatingPower: 8000
+  floatingPower: 50
 --- !u!114 &6991600369092187718
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -171,7 +171,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 10
-  waterCurrentForce: 0.03
+  waterCurrentForce: 5
   waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 20
   killDistance: 40

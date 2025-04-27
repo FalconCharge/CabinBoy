@@ -1,10 +1,14 @@
 using UnityEngine;
 using System.Collections;
+using TMPro;
 
 public class GameOverUI : MonoBehaviour
 {
     [SerializeField] private CanvasGroup gameOverGroup;
+    [SerializeField] private TextMeshProUGUI gameOverText;
     [SerializeField] private float fadeInDuration = 1.5f;
+
+    private bool isGameOver = false;
 
     void Start()
     {
@@ -13,11 +17,16 @@ public class GameOverUI : MonoBehaviour
         gameOverGroup.blocksRaycasts = false;   
     }
 
-    public void ShowGameOverUI(){
-        StartCoroutine(FadeIn());
+    public void ShowGameOverUI(bool winner){
+        if(!isGameOver){
+            gameOverText.text = winner ? "Winner!" : "Loser!";
+            StartCoroutine(FadeIn());
+        }
     }
 
     IEnumerator FadeIn(){
+
+        isGameOver = true;
         float elapsed = 0f;
         while(elapsed < fadeInDuration){
             elapsed += Time.deltaTime;

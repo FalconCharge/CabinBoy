@@ -1,6 +1,6 @@
+using System.Collections;
+using TMPro;
 using UnityEngine;
-using UnityEngine.AI;
-using UnityEngine.Rendering;
 
 public class GameManager : MonoBehaviour
 {
@@ -27,8 +27,23 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float timeToMaxWaterHeight = 100f;
     [SerializeField] private float waterHeightFactor = 0.01f;
 
+    [Header("Spawning")]
+    [SerializeField] private float spawnCratesTime = 5f;
+    [SerializeField] private TextMeshProUGUI cargoText;
+    [SerializeField] private TextMeshProUGUI timerText;
+
+    private float textDisappearTime = 3f;
+    private float textTimer = 0f;
+
+    private bool isCargoSpawned = false;
+
+
+    [Header("Timer")]
+    [SerializeField] private float timerDuration = 100f;
 
     private OceanManager oceanManager;
+    private CargoManager cargoManager;
+    private GameTimer gameTimer;
 
 
     // private vars
@@ -43,10 +58,10 @@ public class GameManager : MonoBehaviour
         oceanManager = GetComponent<OceanManager>();
         oceanManager.SetAmplitude(startWaterHeight);
 
-        // TODO :
-        // Init the spawn Manager
-        // Spawn in Cargo on the ship
+        cargoManager = GetComponent<CargoManager>();
+        cargoText.alpha = 0f;
 
+        gameTimer = GetComponent<GameTimer>();
     }
 
 
@@ -59,6 +74,12 @@ public class GameManager : MonoBehaviour
 
         // The Winds affecting the ship
         Gust();
+
+        // Handles Cargo Spawning
+        Cargo();
+
+        // Handles GameTimer
+        HandleGameTimer();
     }
 
     private void Gusting()
@@ -86,8 +107,16 @@ public class GameManager : MonoBehaviour
     private void FireRandomGust(){
         isGusting = true;
 
-        // Creates a gust with power with a relation to windPower and has a delay (particles spawn before the wind)                                        
-        windManager.StartGustWithDelay(Random.Range(-1.0f, 1.0f) * gustFactor, bigGustDelay);
+        // Creates a gust with power with a relation to windPower and has a delay (particles spawn before the wind)
+        float gustStrength;
+        if(Random.Range(0f, 1f) < 0.5f){
+            gustStrength = Random.Range(-1, -0.5f);
+        }else{
+            gustStrength = Random.Range(0.5f, 1f);
+        }
+
+                                             
+        windManager.StartGustWithDelay(gustStrength * gustFactor, bigGustDelay);
 
         // Get gust length
         currGustTime = Random.Range(gustTimeAlive.x, gustTimeAlive.y);
@@ -122,8 +151,76 @@ public class GameManager : MonoBehaviour
         Gusting();
     }
 
-    private void SpawnCargo(){
-        //TODO: Spawn a bunch or cargo on the ship at the start of the journey
+    private void Cargo()
+    {
+        if (totalTime > spawnCratesTime && !isCargoSpawned)
+        {
+            cargoManager.SpawnCrates();
+            isCargoSpawned = true;
+
+            // Start running the timer
+            gameTimer.StartTimer(timerDuration);
+
+            // Show the cargo text and start fading it in
+            StartCoroutine(FadeTextIn());
+        }
+
+        // Handle the text disappearing after a certain time
+        if (isCargoSpawned)
+        {
+            textTimer += Time.deltaTime;
+
+            if (textTimer >= textDisappearTime)
+            {
+                // Fade the text out
+                StartCoroutine(FadeTextOut());
+            }
+        }
     }
 
+    private void HandleGameTimer(){
+        if(gameTimer.IsDone()){
+            if(cargoManager.HasCargo()){
+                FindFirstObjectByType<GameOverUI>().ShowGameOverUI(true);
+            }else{
+                FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
+            }
+        }
+    }
+
+
+    // Coroutine to fade the text in
+    private IEnumerator FadeTextIn()
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 1f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            cargoText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+            timerText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        cargoText.alpha = 1f;
+        timerText.alpha = 1f;
+    }
+
+    // Coroutine to fade the text out
+    private IEnumerator FadeTextOut()
+    {
+        float elapsedTime = 0f;
+        float fadeDuration = 1f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            cargoText.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
+            elapsedTime += Time.deltaTime;
+            yield return null;
+        }
+
+        cargoText.alpha = 0f; 
+
+    }
 }

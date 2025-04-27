@@ -16,14 +16,14 @@ public class Cargo : MonoBehaviour
     private Rigidbody m_rb;
     private BuoyancyObject m_buoyancyObject;
 
-    private PlayerScore playerScore;
+    private CargoManager cargoManager;
 
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
         m_buoyancyObject = GetComponent<BuoyancyObject>();
         m_rb.mass = this.mass;
-        playerScore = FindAnyObjectByType<PlayerScore>();
+        cargoManager = FindAnyObjectByType<CargoManager>();
         
     }
 
@@ -43,7 +43,10 @@ public class Cargo : MonoBehaviour
     void Update()
     {
         if(transform.position.z > killDistance){
-            playerScore.ReducePoints(valueOfCargo);
+            cargoManager.LostCrate();
+            if(this.tag == "Player"){
+                cargoManager.LostPlayer();
+            }
             Destroy(this.gameObject);
         }
     }

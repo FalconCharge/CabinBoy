@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class Spawner : MonoBehaviour
+public class BasicSpawner : MonoBehaviour
 {
 
     [SerializeField] private GameObject[] products;
@@ -8,6 +8,7 @@ public class Spawner : MonoBehaviour
 
     [SerializeField] private float minOffset = -5f;
     [SerializeField] private float maxOffset = 5f;
+
 
     private CountDownTimer countDownTimer;
 
@@ -43,4 +44,6 @@ public class Spawner : MonoBehaviour
 
         Instantiate(prefab, spawnPos, Quaternion.identity);
     }
+
+
 }
