@@ -53,6 +53,10 @@ public class PlayerLocomotion : MonoBehaviour
         playerLayer = LayerMask.NameToLayer("Player");
         ignorePlayerLM = 1 << playerLayer;     // bit mask for just the player layer
         everythingButPlayerMask = ~ignorePlayerLM;
+
+        if(camObj == null){
+            Debug.LogError("Camera Transform not attached to Player");
+        }
     }
 
     public void HandleAllMovement()
