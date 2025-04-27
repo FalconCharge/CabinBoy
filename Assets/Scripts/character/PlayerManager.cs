@@ -24,21 +24,49 @@ public class PlayerManager : MonoBehaviour
     [SerializeField] private bool movement;
     [SerializeField] private bool visuals;
 
+    
+    [SerializeField] private float layerBlendSpeed = 5f;
+    [SerializeField] private float armHeightSpeed = 1f;      // units per second
+    private int leftArmLayer, rightArmLayer;
+
     private void Awake()
     {
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+        
+        leftArmLayer  = ani.GetLayerIndex("LeftArm");
+        rightArmLayer = ani.GetLayerIndex("RightArm");
     }
-    private void Start()
-    {
-    }
-
     private void Update()
     {
         if (inputs)
         {
             inputManager.HandleAllInputs();
+
+            float targetL = inputManager.left_Input  ? 1f : 0f;
+            float targetR = inputManager.right_Input ? 1f : 0f;
+
+            float wL = ani.GetLayerWeight(leftArmLayer);
+            float wR = ani.GetLayerWeight(rightArmLayer);
+
+            ani.SetLayerWeight(leftArmLayer,
+                Mathf.MoveTowards(wL, targetL, Time.deltaTime * layerBlendSpeed));
+            ani.SetLayerWeight(rightArmLayer,
+                Mathf.MoveTowards(wR, targetR, Time.deltaTime * layerBlendSpeed));
+
+            UpdateArmHeight();
         }
+    }
+    
+    private void UpdateArmHeight()
+    {
+        float current = ani.GetFloat("armHeight");
+        float deltaY = inputManager.lookInput.y;
+        
+        current += deltaY * armHeightSpeed * Time.deltaTime;
+        current = Mathf.Clamp01(current);
+        
+        ani.SetFloat("armHeight", current);
     }
 
     private void FixedUpdate()

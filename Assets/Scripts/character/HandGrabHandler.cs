@@ -6,6 +6,8 @@ public class HandGrabHandler : MonoBehaviour
 {
     
     [SerializeField] Animator anim;
+    
+    public bool leftArm = false;
 
     FixedJoint fixedJoint;
     Rigidbody rb;
@@ -23,24 +25,43 @@ public class HandGrabHandler : MonoBehaviour
         rb.solverIterations = 100;
     }
 
-    public void UpdateState()
+    void Update()
     {
-        //if shouldnt carry and is grabbing
+        attemptLetGo();
+    }
 
-        if(!player.inputManager.left_Input)
+    public void attemptLetGo()
+    {
+        if(leftArm)
         {
-            if(fixedJoint != null)
+            if(!player.inputManager.left_Input)
             {
-                if(fixedJoint.connectedBody != null)
+                if(fixedJoint != null)
                 {
-                    float f = 0.1f;
+                    if(fixedJoint.connectedBody != null)
+                    {
+                        float f = 0.1f;
 
-                    fixedJoint.connectedBody.AddForce((player.transform.forward + Vector3.up * 0.25f) * f,ForceMode.Impulse);
-                    Destroy(fixedJoint);
+                        fixedJoint.connectedBody.AddForce((player.transform.forward + Vector3.up * 0.25f) * f,ForceMode.Impulse);
+                        Destroy(fixedJoint);
+                    }
                 }
+            }
+        }
+        else
+        {
+            if(!player.inputManager.right_Input)
+            {
+                if(fixedJoint != null)
+                {
+                    if(fixedJoint.connectedBody != null)
+                    {
+                        float f = 0.1f;
 
-                anim.SetBool("isCarrying",false);
-                anim.SetBool("isGrabing",false);
+                        fixedJoint.connectedBody.AddForce((player.transform.forward + Vector3.up * 0.25f) * f,ForceMode.Impulse);
+                        Destroy(fixedJoint);
+                    }
+                }
             }
         }
     }
@@ -67,7 +88,6 @@ public class HandGrabHandler : MonoBehaviour
         fixedJoint.autoConfigureConnectedAnchor = false;
         fixedJoint.connectedAnchor = col.transform.InverseTransformPoint(col.GetContact(0).point);
 
-        anim.SetBool("isCarrying", true);
         return true;
     }
 
@@ -75,16 +95,10 @@ public class HandGrabHandler : MonoBehaviour
     {
         Debug.Log("COLLISION");
         
-        if(player.inputManager.left_Input)
+        if(player.inputManager.left_Input || player.inputManager.right_Input)
         {
             TryCarryObject(collision);  
         }
     }
-
-    void OnCollisionStay(Collision collision)
-    {
-        UpdateState();
-    }
-
 
 }

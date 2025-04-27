@@ -15,6 +15,8 @@ public class InputManager : MonoBehaviour
     public float horizontalInput;
     public float verticalInput;
 
+    public Vector2 lookInput;
+
     public bool sprint_Input;
     public bool left_Input;
     public bool right_Input;
@@ -36,6 +38,9 @@ public class InputManager : MonoBehaviour
 
             playerControls.PlayerMovement.Move.performed += i => movementInput = i.ReadValue<Vector2>();
             playerControls.PlayerMovement.Move.canceled += i => movementInput = Vector2.zero;
+
+            playerControls.PlayerMovement.Camera.performed += ctx => lookInput = ctx.ReadValue<Vector2>();
+            playerControls.PlayerMovement.Camera.canceled  += ctx => lookInput = Vector2.zero;
 
             playerControls.PlayerActions.jump.performed += i => jump_Input = true;
 
@@ -76,9 +81,9 @@ public class InputManager : MonoBehaviour
     {
         if(left_Input)
         {
-
+            
         }
-        
+
         if(right_Input)
         {
 
