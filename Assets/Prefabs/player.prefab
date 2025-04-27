@@ -570,6 +570,8 @@ MonoBehaviour:
   inputs: 1
   movement: 1
   visuals: 0
+  layerBlendSpeed: 5
+  armHeightSpeed: 1
 --- !u!114 &8960844731916582519
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -586,6 +588,7 @@ MonoBehaviour:
   moveSpeed: 0
   horizontalInput: 0
   verticalInput: 0
+  lookInput: {x: 0, y: 0}
   sprint_Input: 0
   left_Input: 0
   right_Input: 0
@@ -614,6 +617,7 @@ MonoBehaviour:
   turnSpeed: 20
   isGrounded: 0
   jumpForce: 500
+  downForce: 10
   RotationObstruction: 0
   isSprinting: 0
   moveInputVector: {x: 0, y: 0, z: 0}
@@ -1291,7 +1295,8 @@ SkinnedMeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 32c3e6ad0925aa84cba373acdd05af4a, type: 2}
+  - {fileID: 2100000, guid: d1f967f061af617438a81358fa599490, type: 2}
+  - {fileID: 2100000, guid: 3b2082246b5f44248b97452fa5b11fea, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

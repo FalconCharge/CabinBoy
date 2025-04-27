@@ -24,6 +24,8 @@ public class PlayerScore : MonoBehaviour
     public void ReducePoints(int points){
         if((score - points) < 0){
             score = 0;
+        }else{
+            score -= points;
         }
         UpdateScoreText();
     }

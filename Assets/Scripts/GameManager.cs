@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     private float currGustTime = 0f;
     private bool  isGusting    = false;
 
+    private float windPower = 0.0f;
+
     void Start()
     {
         windManager = GetComponent<WindManager>();
@@ -38,6 +40,10 @@ public class GameManager : MonoBehaviour
 
         if(totalTime > windStartTime){
             Gusting();
+        }
+
+        if(windPower <= 1){
+            windPower = windFullTime/totalTime;
         }
     }
 
@@ -65,8 +71,9 @@ public class GameManager : MonoBehaviour
     // Starts a random gust either Port/Starboard 
     private void FireRandomGust(){
         isGusting = true;
-        //                                            SHOULD BE -1, 1 UNLESS YA WANT HIGHER AVERAGE WAVES
-        windManager.StartGustWithDelay(Random.Range(-1.0f, 1.0f), bigGustDelay);
+
+        // Creates a gust with power with a relation to windPower and has a delay (particles spawn before the wind)                                        
+        windManager.StartGustWithDelay(Random.Range(-1.0f, 1.0f) * windPower, bigGustDelay);
 
         // Get gust length
         currGustTime = Random.Range(gustTimeAlive.x, gustTimeAlive.y);

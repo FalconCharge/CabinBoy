@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class Cargo : MonoBehaviour
 {
-    [Range(10, 1000)]
-    [SerializeField] private float mass = 20f;
+    [Range(1, 25)]
+    [SerializeField] private float mass = 1f;
 
     [SerializeField] private float waterCurrentForce = 100.0f;
     [SerializeField] private Vector3 waterCurrentDirection;
@@ -16,11 +16,14 @@ public class Cargo : MonoBehaviour
     private Rigidbody m_rb;
     private BuoyancyObject m_buoyancyObject;
 
+    private PlayerScore playerScore;
+
     void Start()
     {
         m_rb = GetComponent<Rigidbody>();
         m_buoyancyObject = GetComponent<BuoyancyObject>();
         m_rb.mass = this.mass;
+        playerScore = FindAnyObjectByType<PlayerScore>();
         
     }
 
@@ -40,7 +43,7 @@ public class Cargo : MonoBehaviour
     void Update()
     {
         if(transform.position.z > killDistance){
-            FindFirstObjectByType<PlayerScore>().ReducePoints(valueOfCargo);
+            playerScore.ReducePoints(valueOfCargo);
             Destroy(this.gameObject);
         }
     }
