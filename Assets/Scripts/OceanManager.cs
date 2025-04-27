@@ -79,4 +79,13 @@ public class OceanManager : MonoBehaviour
         UpdateMaterials();
     }
 
+    public void SetAmplitude(float p_amplitude){
+        if(p_amplitude >= 1){
+            this.amplitude = p_amplitude;
+        }else{
+            this.amplitude = 1f;
+        }
+        UpdateMaterials();
+    }
+
 }
