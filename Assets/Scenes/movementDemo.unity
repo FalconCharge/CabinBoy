@@ -2419,6 +2419,10 @@ PrefabInstance:
       propertyPath: downForce
       value: 1000
       objectReference: {fileID: 0}
+    - target: {fileID: 1626630054739450472, guid: 68bc96fd0d2ddf444b3d1052230bd291, type: 3}
+      propertyPath: m_SlerpDrive.positionSpring
+      value: 1500
+      objectReference: {fileID: 0}
     - target: {fileID: 1715456375035283110, guid: 68bc96fd0d2ddf444b3d1052230bd291, type: 3}
       propertyPath: m_Mass
       value: 20
@@ -2534,6 +2538,10 @@ PrefabInstance:
     - target: {fileID: 2979958228043165396, guid: 68bc96fd0d2ddf444b3d1052230bd291, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0.0004008368
+      objectReference: {fileID: 0}
+    - target: {fileID: 3003650266803885866, guid: 68bc96fd0d2ddf444b3d1052230bd291, type: 3}
+      propertyPath: jointConfigs.Array.data[0].positionSpring
+      value: 1500
       objectReference: {fileID: 0}
     - target: {fileID: 3024009767812312824, guid: 68bc96fd0d2ddf444b3d1052230bd291, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
