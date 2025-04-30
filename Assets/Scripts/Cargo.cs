@@ -18,7 +18,7 @@ public class Cargo : MonoBehaviour
 
     private CargoManager cargoManager;
 
-    void Start()
+    void Awake()
     {
         m_rb = GetComponent<Rigidbody>();
         m_buoyancyObject = GetComponent<BuoyancyObject>();
@@ -47,7 +47,10 @@ public class Cargo : MonoBehaviour
             if(this.tag == "Player"){
                 cargoManager.LostPlayer();
             }
-            Destroy(this.gameObject);
+            else
+            {
+                Destroy(this.gameObject);
+            }
         }
     }
 
