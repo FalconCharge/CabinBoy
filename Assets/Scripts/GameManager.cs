@@ -49,6 +49,8 @@ public class GameManager : MonoBehaviour
     // private vars
     private float totalTime = 0.0f;
 
+    private bool hasFadedout = false;
+
     void Start()
     {
         // Init the Wind Manager
@@ -166,7 +168,7 @@ public class GameManager : MonoBehaviour
         }
 
         // Handle the text disappearing after a certain time
-        if (isCargoSpawned)
+        if (isCargoSpawned && !hasFadedout)
         {
             textTimer += Time.deltaTime;
 
@@ -174,6 +176,7 @@ public class GameManager : MonoBehaviour
             {
                 // Fade the text out
                 StartCoroutine(FadeTextOut());
+                hasFadedout = true;
             }
         }
     }
@@ -213,6 +216,12 @@ public class GameManager : MonoBehaviour
         float elapsedTime = 0f;
         float fadeDuration = 1f;
 
+
+        if(cargoText.alpha < 0.05f){
+            cargoText.alpha = 0f;
+            yield return null;
+        }
+
         while (elapsedTime < fadeDuration)
         {
             cargoText.alpha = Mathf.Lerp(1f, 0f, elapsedTime / fadeDuration);
@@ -221,6 +230,7 @@ public class GameManager : MonoBehaviour
         }
 
         cargoText.alpha = 0f; 
+        
 
     }
 }
