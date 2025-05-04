@@ -29,7 +29,12 @@ public class Cargo : MonoBehaviour
         m_rb.mass = this.mass;
         cargoManager = FindAnyObjectByType<CargoManager>();
 
-        origColor = GetComponent<Renderer>().material.color;
+        // don't work on player
+        if(!CompareTag("Player")){
+            origColor = GetComponent<Renderer>().material.color;
+        }else{
+            origColor = new Color(0, 0, 0);
+        }
         
     }
 
@@ -50,7 +55,7 @@ public class Cargo : MonoBehaviour
     {
         if(transform.position.z > killDistance){
             cargoManager.LostCrate();
-            if(this.tag == "Player"){
+            if(CompareTag("Player")){
                 cargoManager.LostPlayer();
             }
             else

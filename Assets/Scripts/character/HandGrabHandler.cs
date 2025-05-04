@@ -4,18 +4,13 @@ using UnityEngine;
 
 public class HandGrabHandler : MonoBehaviour
 {
-    
-    [SerializeField] Animator anim;
-
-    
+    [SerializeField] Animator anim;   
     public bool leftArm = false;
 
     FixedJoint fixedJoint;
     Rigidbody rb;
-
     //player class
     PlayerManager player;
-
     private Cargo grabbedCargo;
     void Awake()
     {
