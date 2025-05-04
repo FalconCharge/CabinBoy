@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.InputSystem.Interactions;
 
 public class Cargo : MonoBehaviour
 {
@@ -13,6 +14,9 @@ public class Cargo : MonoBehaviour
 
     [SerializeField] private float killDistance = 40f;
 
+    private Color tint = new Color(0.15f, 0.15f, 0.15f);
+    private Color origColor;
+
     private Rigidbody m_rb;
     private BuoyancyObject m_buoyancyObject;
 
@@ -24,6 +28,8 @@ public class Cargo : MonoBehaviour
         m_buoyancyObject = GetComponent<BuoyancyObject>();
         m_rb.mass = this.mass;
         cargoManager = FindAnyObjectByType<CargoManager>();
+
+        origColor = GetComponent<Renderer>().material.color;
         
     }
 
@@ -52,6 +58,18 @@ public class Cargo : MonoBehaviour
                 Destroy(this.gameObject);
             }
         }
+    }
+
+    public void ApplyPickupColor(){
+        origColor = this.GetComponent<Renderer>().material.color;
+
+        Color pickupColor = this.GetComponent<Renderer>().material.color;
+
+        pickupColor += tint;
+        this.GetComponent<Renderer>().material.color = pickupColor;
+    }
+    public void ResetColor(){
+        this.GetComponent<Renderer>().material.color = origColor;
     }
 
 }

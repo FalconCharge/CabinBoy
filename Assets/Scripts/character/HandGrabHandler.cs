@@ -6,6 +6,7 @@ public class HandGrabHandler : MonoBehaviour
 {
     
     [SerializeField] Animator anim;
+
     
     public bool leftArm = false;
 
@@ -15,6 +16,7 @@ public class HandGrabHandler : MonoBehaviour
     //player class
     PlayerManager player;
 
+    private Cargo grabbedCargo;
     void Awake()
     {
         //get player class
@@ -32,6 +34,8 @@ public class HandGrabHandler : MonoBehaviour
 
     public void attemptLetGo()
     {
+
+
         if(leftArm)
         {
             if(!player.inputManager.left_Input)
@@ -40,6 +44,13 @@ public class HandGrabHandler : MonoBehaviour
                 {
                     if(fixedJoint.connectedBody != null)
                     {
+
+                        // Reset color on letgo
+                        Cargo cargo = fixedJoint.connectedBody.GetComponent<Cargo>();
+                        if(cargo != null){
+                            cargo.ResetColor();
+                        }
+
                         float f = 0.1f;
 
                         fixedJoint.connectedBody.AddForce((player.transform.forward + Vector3.up * 0.25f) * f,ForceMode.Impulse);
@@ -56,6 +67,11 @@ public class HandGrabHandler : MonoBehaviour
                 {
                     if(fixedJoint.connectedBody != null)
                     {
+
+                        Cargo cargo = fixedJoint.connectedBody.GetComponent<Cargo>();
+                        if(cargo != null){
+                            cargo.ResetColor();
+                        }
                         float f = 0.1f;
 
                         fixedJoint.connectedBody.AddForce((player.transform.forward + Vector3.up * 0.25f) * f,ForceMode.Impulse);
@@ -81,6 +97,13 @@ public class HandGrabHandler : MonoBehaviour
         if(!col.collider.TryGetComponent(out Rigidbody otherObjRb)) return false;
 
         Debug.Log("SHOULD GRAB");
+
+        //Cargo color changing
+        Cargo cargo = otherObjRb.GetComponent<Cargo>();
+        if(cargo != null){
+            cargo.ApplyPickupColor();
+            grabbedCargo = cargo;
+        }
 
         fixedJoint = transform.gameObject.AddComponent<FixedJoint>();
         fixedJoint.connectedBody = otherObjRb;
