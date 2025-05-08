@@ -34,8 +34,8 @@ public class PlayerManager : MonoBehaviour
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
         
-        leftArmLayer  = ani.GetLayerIndex("LeftArm");
-        rightArmLayer = ani.GetLayerIndex("RightArm");
+        // leftArmLayer  = ani.GetLayerIndex("LeftArm");
+        // rightArmLayer = ani.GetLayerIndex("RightArm");
     }
     private void Update()
     {
@@ -74,7 +74,7 @@ public class PlayerManager : MonoBehaviour
 
         if (movement)
         {
-            playerLocomotion.HandleAllMovement();
+            // playerLocomotion.HandleAllMovement();
         }
 
         if (visuals)

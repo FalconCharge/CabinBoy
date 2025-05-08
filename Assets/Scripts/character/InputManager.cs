@@ -100,14 +100,14 @@ public class InputManager : MonoBehaviour
 
     private void HandleSprintingInput()
     {
-        if (sprint_Input && moveSpeed > 0.35f)
-        {
-            playerLocomotion.isSprinting = true;
-        }
-        else
-        {
-            playerLocomotion.isSprinting = false;
-        }
+        // if (sprint_Input && moveSpeed > 0.35f)
+        // {
+        //     playerLocomotion.isSprinting = true;
+        // }
+        // else
+        // {
+        //     playerLocomotion.isSprinting = false;
+        // }
     }
     //private void HandleCrouchInput()
     //{
@@ -125,8 +125,8 @@ public class InputManager : MonoBehaviour
     {
         if (jump_Input)
         {
-            playerLocomotion.HandleJumping();
-            jump_Input = false;
+            // playerLocomotion.HandleJumping();
+            // jump_Input = false;
         }
     }
 }
