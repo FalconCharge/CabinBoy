@@ -125,8 +125,8 @@ public class InputManager : MonoBehaviour
     {
         if (jump_Input)
         {
-            // playerLocomotion.HandleJumping();
-            // jump_Input = false;
+            playerLocomotion.HandleJumping();
+            jump_Input = false;
         }
     }
 }

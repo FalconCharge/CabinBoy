@@ -1,58 +1,53 @@
+using Unity.Mathematics;
 using UnityEngine;
 
-[RequireComponent(typeof(Rigidbody))]
 public class PlayerLocomotion : MonoBehaviour
 {
+    #region Variables
+
     // References
     private InputManager _input;
     private PlayerManager _player;
     private Rigidbody _rb;
     public Transform camObj;
 
-    [Header("Floating Settings")]
-    public float rideHeight = 1f;
-    public float rideCheck = 1.5f;
-    public float rideSpringStrength = 300f;
-    public float rideSpringDamper = 25f;
-    public Vector3 downDir = Vector3.down;
-    public LayerMask groundMask;
-    public float downForce = 30f;
-    public Color debugRayColor = Color.yellow;
-
     [Header("Orientation Settings")]
     public float uprightSpringStrength = 150f;
     public float uprightSpringDamper = 20f;
     private Quaternion _uprightTargetRot;
 
+
+    [Header("Hover Settings")]
+    public float RideSpringStrength = 10.0f;
+    public float RideSpringDamper = 5.0f;
+    public float rideHeight = 2.0f;
+    public float rayLen = 2.0f;
+
+
+    [Header("Jump Settings")]
+    public float jumpForce = 10.0f;
+
+    
     [Header("Movement Settings")]
     public float MaxSpeed = 8f;
-    public float Acceleration = 200f;
-    public AnimationCurve AccelerationFactorFromDot = AnimationCurve.Linear(-1, 1, 1, 1);
-    public float MaxAccelForce = 150f;
-    public AnimationCurve MaxAccelForceFactorFromDot = AnimationCurve.Linear(-1, 1, 1, 1);
+    public float Acceleration = 20f;
+    public AnimationCurve AccelerationFactorFromDot = AnimationCurve.Linear(-1, 2, 1, 1);
+    public float MaxAccelForce = 120f;
+    public AnimationCurve MaxAccelForceFactorFromDot  = AnimationCurve.Linear(-1, 2, 1, 1);
     public float MaxAccelForceFactor = 1f;
     public Vector3 ForceScale = new Vector3(1f, 0f, 1f);
 
     private Vector3 m_UnitGoal;
     private Vector3 m_GoalVel;
 
-    [Header("Gravity Scale Drop")]
-    public float GravityScaleDrop = 10f;
+    public Vector3 downDir = Vector3.down;
+    public LayerMask groundMask;
 
-    [Header("Jump Settings")]
-    public float JumpUpVel = 7.5f;
-    public bool isGrounded;
-    public AnimationCurve JumpUpVelFactorFromExistingY = AnimationCurve.Linear(0, 1, 1, 1);
-    public AnimationCurve AnalogJumpUpForce = AnimationCurve.Linear(0, 0, 1, 1);
-    public float JumpTerminalVelocity = 22.5f;
-    public float JumpDuration = 0.6667f;
-    public float coyoteTime = 0.2f;
-    public float jumpBufferTime = 0.1f;
-
-    private float _lastGroundedTime;
-    private float _lastJumpPressTime;
-    private bool _jumpPressed;
-
+    
+    [Header("Debug Settings")]
+    public bool showRay = false;
+    public Color debugRayColor = Color.red;
+    
     void Awake()
     {
         _input = GetComponent<InputManager>();
@@ -60,134 +55,135 @@ public class PlayerLocomotion : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _rb.angularDamping = uprightSpringDamper;
         _uprightTargetRot = transform.rotation;
-        m_GoalVel = Vector3.zero;
+        // m_GoalVel = Vector3.zero;
     }
 
-    /// <summary>
-    /// Apply torque to restore upright orientation and face the movement target.
-    /// </summary>
-    public void UpdateUprightForce(float elapsed)
+    #endregion
+    public void HandleAllMovement()
     {
-        Quaternion characterCurrent = transform.rotation;
-        Quaternion toGoal = _uprightTargetRot * Quaternion.Inverse(characterCurrent);
+        ReadInput();
+        HoverRay();
+        Locomotion();
+        UpdateUprightForce();
 
-        toGoal.ToAngleAxis(out float rotDegrees, out Vector3 rotAxis);
-        if (rotDegrees > 180f) rotDegrees -= 360f;
-        rotAxis.Normalize();
-        float rotRad = rotDegrees * Mathf.Deg2Rad;
+    }
+    private void ReadInput()
+    {
+        // Convert 2D movement input into world‐space direction
+        Vector3 raw = new Vector3(_input.horizontalInput, 0f, _input.verticalInput);
+        Vector3 dir = camObj.TransformDirection(raw);
+        dir.y = 0f;
 
-        Vector3 torque = rotAxis * (rotRad * uprightSpringStrength)
-                         - _rb.angularVelocity * uprightSpringDamper;
-        _rb.AddTorque(torque, ForceMode.Force);
+        m_UnitGoal = dir.sqrMagnitude > 1f ? dir.normalized : dir;
+
     }
 
-    private void Update()
+    private void Locomotion()
     {
-        // Player input
-        Vector3 rawInput = new Vector3(_input.horizontalInput, 0f, _input.verticalInput);
-        Vector3 move = camObj.TransformDirection(rawInput);
-        if (move.magnitude > 1f) move.Normalize();
-        m_UnitGoal = move;
+        Vector3 unitVel = m_GoalVel.normalized;
 
-        // Jump buffering
-        if (_input.jump_Input)
-        {
-            _lastJumpPressTime = Time.time;
-            _input.jump_Input = false;
-            _jumpPressed = true;
-        }
-    }
+        float velDot = Vector3.Dot(m_UnitGoal, unitVel);
+        float accel = Acceleration * AccelerationFactorFromDot.Evaluate(velDot);
+        
+        Vector3 goalVel = m_UnitGoal * MaxSpeed;// * speedFactor;
 
-    private void FixedUpdate()
-    {
-        if (_player.isInteracting)
-            return;
+        m_GoalVel = Vector3.MoveTowards(m_GoalVel,
+                                        (goalVel),// + (groundVel),
+                                        accel * Time.fixedDeltaTime);
 
-        // --- Rotate to face movement direction ---
+        Vector3 neededAccel = (m_GoalVel - _rb.linearVelocity) / Time.fixedDeltaTime;
+
+        float maxAccel = MaxAccelForce * MaxAccelForceFactorFromDot.Evaluate(velDot) * MaxAccelForceFactor;
+
+        neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccel);
+
+        
         Vector3 flatVelDir = _rb.linearVelocity;
         flatVelDir.y = 0f;
         if (flatVelDir.sqrMagnitude > 0.0001f)
             _uprightTargetRot = Quaternion.LookRotation(flatVelDir.normalized, Vector3.up);
 
-        // --- Floating Capsule (Ground Spring) ---
+        _rb.AddForce(Vector3.Scale(neededAccel * _rb.mass, ForceScale));
+    }
+
+
+    private void UpdateUprightForce()
+    {
+        Quaternion curr = transform.rotation;
+        // Quaternion goal = _uprightTargetRot * Quaternion.Inverse(curr); //UtilsMath.ShortestRotation;
+        Quaternion goal = ShortestRotation(curr, _uprightTargetRot);
+        // Quaternion goal = _uprightTargetRot * Quaternion.Inverse(curr);
+
+        goal.ToAngleAxis(out float rotDegrees, out Vector3 rotAxis);
+        rotAxis.Normalize();
+
+        float rotRadians = rotDegrees * Mathf.Deg2Rad;
+
+        _rb.AddTorque(rotAxis * (rotRadians * uprightSpringStrength) - (_rb.angularVelocity * uprightSpringDamper));
+    }
+    private void HoverRay()
+    {
+
         RaycastHit hit;
-        Vector3 worldDown = downDir;
-        Debug.DrawRay(transform.position, worldDown * rideCheck, debugRayColor);
 
-        isGrounded = false;
-        if (Physics.Raycast(transform.position, worldDown, out hit, rideCheck, groundMask))
+        if(showRay)
+            Debug.DrawRay(transform.position, downDir * rayLen, debugRayColor);
+
+        if (Physics.Raycast(transform.position, downDir, out hit, rayLen, groundMask))
         {
-            isGrounded = true;
-
-            // relative spring velocity
             Vector3 vel = _rb.linearVelocity;
-            Vector3 otherVel = hit.rigidbody != null ? hit.rigidbody.linearVelocity : Vector3.zero;
-            float relVel = Vector3.Dot(worldDown, vel) - Vector3.Dot(worldDown, otherVel);
+            Vector3 rayDir = transform.TransformDirection(downDir);
 
-            // spring displacement
+            Vector3 otherVel = Vector3.zero;
+            Rigidbody hitBody = hit.rigidbody;
+            if(hitBody != null)
+            {
+                otherVel = hitBody.linearVelocity;
+            }
+
+            float rayDirVel = Vector3.Dot(rayDir, vel);
+            float otherVelVel = Vector3.Dot(rayDir, otherVel);
+
+            float relVel = rayDirVel - otherVelVel;
             float x = hit.distance - rideHeight;
-            float springForce = (x * rideSpringStrength) - (relVel * rideSpringDamper);
+            float springForce = (x * RideSpringStrength) - (relVel * RideSpringDamper);
 
-            // apply spring force
-            _rb.AddForce(worldDown * springForce, ForceMode.Force);
-            if (hit.rigidbody != null)
-                hit.rigidbody.AddForceAtPosition(-worldDown * springForce, hit.point, ForceMode.Force);
+            _rb.AddForce(rayDir * springForce);
 
-            _lastGroundedTime = Time.time;
+            if(hitBody != null)
+            {
+                hitBody.AddForceAtPosition(rayDir * -springForce, hit.point);
+            }
         }
-        else
-        {
-            // fall faster when off the ground
-            _rb.AddForce(worldDown * downForce, ForceMode.Acceleration);
-        }
+    }
+    public void HandleJumping()
+    {
+        _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); //AnalogJumpUpForce.Evaluate(1f)
 
-        // --- Upright Orientation ---
-        UpdateUprightForce(Time.fixedDeltaTime);
+        // bool canBuffer = _jumpPressed && (Time.time - _lastJumpPressTime <= jumpBufferTime);
+        // bool canCoyote = Time.time - _lastGroundedTime <= coyoteTime;
+        // if (canBuffer && canCoyote && isGrounded)
+        // {
+            // _rb.linearVelocity = new Vector3(
+            //     _rb.linearVelocity.x,
+            //     JumpUpVel * JumpUpVelFactorFromExistingY.Evaluate(_rb.linearVelocity.y),
+            //     _rb.linearVelocity.z
+            // );
+            // _rb.AddForce(Vector3.up * AnalogJumpUpForce.Evaluate(1f), ForceMode.Impulse);
+        //     _jumpPressed = false;
+        //     _lastGroundedTime = -999f;
+        // }
+    }
 
-        // --- Physics-Driven Running ---
-        // 1) Ramp Goal Velocity toward desired input
-        float velDot2 = flatVelDir.sqrMagnitude > 0.0001f
-            ? Vector3.Dot(m_UnitGoal, flatVelDir.normalized)
-            : 1f;
-        Vector3 desiredVel = m_UnitGoal * MaxSpeed;
-        m_GoalVel = Vector3.MoveTowards(
-            m_GoalVel,
-            desiredVel,
-            Acceleration * AccelerationFactorFromDot.Evaluate(velDot2) * Time.fixedDeltaTime
-        );
+    private static Quaternion ShortestRotation(Quaternion from, Quaternion to)
+    {
+        // If the dot product is negative, the quaternions
+        // have opposite handedness and the long way around
+        // will be chosen.  Flip one to ensure the short way.
+        if (Quaternion.Dot(from, to) < 0f)
+            to = new Quaternion(-to.x, -to.y, -to.z, -to.w);
 
-        // 2) Compute required acceleration and clamp
-        Vector3 neededAccel = (m_GoalVel - _rb.linearVelocity) / Time.fixedDeltaTime;
-        float maxAccel = MaxAccelForce
-            * MaxAccelForceFactorFromDot.Evaluate(velDot2)
-            * MaxAccelForceFactor;
-        neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccel);
-
-        // 3) Apply mass-scaled force with per-axis scaling
-        Vector3 appliedForce = Vector3.Scale(neededAccel * _rb.mass, ForceScale);
-        _rb.AddForce(appliedForce, ForceMode.Force);
-
-        // --- Jumping (Coyote Time & Buffer) ---
-        bool canBuffer = _jumpPressed && (Time.time - _lastJumpPressTime <= jumpBufferTime);
-        bool canCoyote = Time.time - _lastGroundedTime <= coyoteTime;
-        if (canBuffer && canCoyote && isGrounded)
-        {
-            _rb.linearVelocity = new Vector3(
-                _rb.linearVelocity.x,
-                JumpUpVel * JumpUpVelFactorFromExistingY.Evaluate(_rb.linearVelocity.y),
-                _rb.linearVelocity.z
-            );
-            _rb.AddForce(Vector3.up * AnalogJumpUpForce.Evaluate(1f), ForceMode.Impulse);
-            _jumpPressed = false;
-            _lastGroundedTime = -999f;
-        }
-
-        // --- Gravity Scale Drop for Faster Falls ---
-        if (_rb.linearVelocity.y < 0f)
-            _rb.AddForce(Vector3.up * Physics.gravity.y * (GravityScaleDrop - 1f), ForceMode.Acceleration);
-
-        // --- Cap Downward Velocity ---
-        if (_rb.linearVelocity.y < -JumpTerminalVelocity)
-            _rb.linearVelocity = new Vector3(_rb.linearVelocity.x, -JumpTerminalVelocity, _rb.linearVelocity.z);
+        // Delta = target * inverse(current)
+        return to * Quaternion.Inverse(from);
     }
 }

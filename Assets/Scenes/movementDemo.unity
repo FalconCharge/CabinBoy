@@ -144,7 +144,7 @@ Transform:
   m_GameObject: {fileID: 6294284}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.00020983047, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -529,7 +529,7 @@ GameObject:
   m_Component:
   - component: {fileID: 131355113}
   - component: {fileID: 131355110}
-  - component: {fileID: 131355114}
+  - component: {fileID: 131355119}
   - component: {fileID: 131355117}
   - component: {fileID: 131355116}
   - component: {fileID: 131355115}
@@ -563,7 +563,7 @@ CapsuleCollider:
   m_Radius: 0.5
   m_Height: 2
   m_Direction: 1
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!4 &131355113
 Transform:
   m_ObjectHideFlags: 0
@@ -573,7 +573,7 @@ Transform:
   m_GameObject: {fileID: 131355109}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 3, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 1
   m_Children:
@@ -581,33 +581,6 @@ Transform:
   - {fileID: 1345624934}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!54 &131355114
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 131355109}
-  serializedVersion: 4
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_CenterOfMass: {x: 0, y: 0, z: 0}
-  m_InertiaTensor: {x: 1, y: 1, z: 1}
-  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 64
-  m_ImplicitCom: 1
-  m_ImplicitTensor: 1
-  m_UseGravity: 1
-  m_IsKinematic: 0
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!114 &131355115
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -621,63 +594,58 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camObj: {fileID: 330585546}
-  rideHeight: 4
-  rideCheck: 4.5
-  rideSpringStrength: 150
-  rideSpringDamper: 100
-  downDir: {x: 0, y: -1, z: 0}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 183
-  downForce: 30
-  debugRayColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   uprightSpringStrength: 150
   uprightSpringDamper: 20
-  MaxSpeed: 10
+  RideSpringStrength: 50
+  RideSpringDamper: 5
+  rideHeight: 2
+  rayLen: 2
+  jumpForce: 10
+  MaxSpeed: 8
   Acceleration: 20
   AccelerationFactorFromDot:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
+      time: -1
+      value: 2
       inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      outSlope: -0.5
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
+      inSlope: -0.5
       outSlope: 0
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  MaxAccelForce: 100
+  MaxAccelForce: 120
   MaxAccelForceFactorFromDot:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
-      time: 0
-      value: 1
+      time: -1
+      value: 2
       inSlope: 0
-      outSlope: 0
-      tangentMode: 34
+      outSlope: -0.5
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
+      inSlope: -0.5
       outSlope: 0
-      tangentMode: 34
+      tangentMode: 0
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -686,61 +654,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   MaxAccelForceFactor: 1
   ForceScale: {x: 1, y: 0, z: 1}
-  GravityScaleDrop: 10
-  JumpUpVel: 7.5
-  isGrounded: 0
-  JumpUpVelFactorFromExistingY:
+  downDir: {x: 0, y: -1, z: 0}
+  groundMask:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  AnalogJumpUpForce:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  JumpTerminalVelocity: 22.5
-  JumpDuration: 0.6667
-  coyoteTime: 0.2
-  jumpBufferTime: 0.1
+    m_Bits: 183
+  showRay: 0
+  debugRayColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &131355116
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -842,6 +761,33 @@ MonoBehaviour:
     joint: {fileID: 0}
     positionSpring: 600
     positionDamper: 20
+--- !u!54 &131355119
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131355109}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 1
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!1 &131866179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1083,28 +1029,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camObj: {fileID: 330585546}
-  rideHeight: 1
-  rideCheck: 1.5
-  rideSpringStrength: 300
-  rideSpringDamper: 25
-  downDir: {x: 0, y: -1, z: 0}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 0
-  downForce: 10
-  debugRayColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   uprightSpringStrength: 150
   uprightSpringDamper: 20
-  MaxSpeed: 5
+  RideSpringStrength: 10
+  RideSpringDamper: 5
+  rideHeight: 2
+  rayLen: 2
+  jumpForce: 10
+  MaxSpeed: 8
   Acceleration: 20
   AccelerationFactorFromDot:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: -1
-      value: 1
+      value: 2
       inSlope: 0
-      outSlope: 0
+      outSlope: -0.5
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -1112,7 +1053,7 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
+      inSlope: -0.5
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
@@ -1121,15 +1062,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  MaxAccelForce: 100
+  MaxAccelForce: 120
   MaxAccelForceFactorFromDot:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: -1
-      value: 1
+      value: 2
       inSlope: 0
-      outSlope: 0
+      outSlope: -0.5
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -1137,7 +1078,7 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
+      inSlope: -0.5
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
@@ -1148,61 +1089,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   MaxAccelForceFactor: 1
   ForceScale: {x: 1, y: 0, z: 1}
-  GravityScaleDrop: 10
-  JumpUpVel: 7.5
-  isGrounded: 0
-  JumpUpVelFactorFromExistingY:
+  downDir: {x: 0, y: -1, z: 0}
+  groundMask:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  AnalogJumpUpForce:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  JumpTerminalVelocity: 22.5
-  JumpDuration: 0.6667
-  coyoteTime: 0.2
-  jumpBufferTime: 0.1
+    m_Bits: 0
+  showRay: 0
+  debugRayColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &161502102
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1717,7 +1609,7 @@ ConfigurableJoint:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 165827164}
   serializedVersion: 4
-  m_ConnectedBody: {fileID: 131355114}
+  m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
@@ -2230,7 +2122,7 @@ ConfigurableJoint:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 195523376}
   serializedVersion: 4
-  m_ConnectedBody: {fileID: 131355114}
+  m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
@@ -3102,7 +2994,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0013145596, y: 0.00000000617226, z: -8.11381e-12, w: 0.99999917}
-  m_LocalPosition: {x: 0, y: 3.026202, z: -9.965628}
+  m_LocalPosition: {x: 0, y: 0.026201904, z: -9.965628}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3232,7 +3124,7 @@ Transform:
   m_GameObject: {fileID: 331463655}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: 0.00020983047, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -1.5, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 2.5, y: 2.5, z: 2.5}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -4865,8 +4757,9 @@ GameObject:
   m_IsActive: 1
 --- !u!4 &623914701
 Transform:
-  m_CorrespondingSourceObject: {fileID: 556303349305882125, guid: 68bc96fd0d2ddf444b3d1052230bd291, type: 3}
-  m_PrefabInstance: {fileID: 663474139}
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 623914700}
   serializedVersion: 2
@@ -7501,7 +7394,7 @@ Transform:
   m_GameObject: {fileID: 1197058843}
   serializedVersion: 2
   m_LocalRotation: {x: 0.0013145593, y: 0.000000006172259, z: -8.113649e-12, w: 0.99999917}
-  m_LocalPosition: {x: 0, y: 3.026202, z: -9.965628}
+  m_LocalPosition: {x: 0, y: 0.026201904, z: -9.965628}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -8383,7 +8276,7 @@ ConfigurableJoint:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1306637361}
   serializedVersion: 4
-  m_ConnectedBody: {fileID: 131355114}
+  m_ConnectedBody: {fileID: 0}
   m_ConnectedArticulationBody: {fileID: 0}
   m_Anchor: {x: 0, y: 0, z: 0}
   m_Axis: {x: 1, y: 0, z: 0}
@@ -8635,7 +8528,7 @@ Transform:
   m_GameObject: {fileID: 1345624933}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -9410,28 +9303,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   camObj: {fileID: 330585546}
-  rideHeight: 1
-  rideCheck: 1.5
-  rideSpringStrength: 300
-  rideSpringDamper: 25
-  downDir: {x: 0, y: -1, z: 0}
-  groundMask:
-    serializedVersion: 2
-    m_Bits: 0
-  downForce: 10
-  debugRayColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
   uprightSpringStrength: 150
   uprightSpringDamper: 20
-  MaxSpeed: 5
+  RideSpringStrength: 10
+  RideSpringDamper: 5
+  rideHeight: 2
+  rayLen: 2
+  jumpForce: 10
+  MaxSpeed: 8
   Acceleration: 20
   AccelerationFactorFromDot:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: -1
-      value: 1
+      value: 2
       inSlope: 0
-      outSlope: 0
+      outSlope: -0.5
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -9439,7 +9327,7 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
+      inSlope: -0.5
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
@@ -9448,15 +9336,15 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
-  MaxAccelForce: 100
+  MaxAccelForce: 120
   MaxAccelForceFactorFromDot:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: -1
-      value: 1
+      value: 2
       inSlope: 0
-      outSlope: 0
+      outSlope: -0.5
       tangentMode: 0
       weightedMode: 0
       inWeight: 0
@@ -9464,7 +9352,7 @@ MonoBehaviour:
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 0
+      inSlope: -0.5
       outSlope: 0
       tangentMode: 0
       weightedMode: 0
@@ -9475,61 +9363,12 @@ MonoBehaviour:
     m_RotationOrder: 4
   MaxAccelForceFactor: 1
   ForceScale: {x: 1, y: 0, z: 1}
-  GravityScaleDrop: 10
-  JumpUpVel: 7.5
-  isGrounded: 0
-  JumpUpVelFactorFromExistingY:
+  downDir: {x: 0, y: -1, z: 0}
+  groundMask:
     serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  AnalogJumpUpForce:
-    serializedVersion: 2
-    m_Curve:
-    - serializedVersion: 3
-      time: 0
-      value: 0
-      inSlope: 0
-      outSlope: 1
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    - serializedVersion: 3
-      time: 1
-      value: 1
-      inSlope: 1
-      outSlope: 0
-      tangentMode: 0
-      weightedMode: 0
-      inWeight: 0
-      outWeight: 0
-    m_PreInfinity: 2
-    m_PostInfinity: 2
-    m_RotationOrder: 4
-  JumpTerminalVelocity: 22.5
-  JumpDuration: 0.6667
-  coyoteTime: 0.2
-  jumpBufferTime: 0.1
+    m_Bits: 0
+  showRay: 0
+  debugRayColor: {r: 1, g: 0, b: 0, a: 1}
 --- !u!114 &1447389083
 MonoBehaviour:
   m_ObjectHideFlags: 0

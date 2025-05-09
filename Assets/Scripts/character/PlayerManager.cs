@@ -71,10 +71,10 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         if (movement)
         {
-            // playerLocomotion.HandleAllMovement();
+            Debug.Log("Movement");
+            playerLocomotion.HandleAllMovement();
         }
 
         if (visuals)
