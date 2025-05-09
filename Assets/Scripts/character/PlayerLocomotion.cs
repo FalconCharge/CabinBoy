@@ -37,8 +37,8 @@ public class PlayerLocomotion : MonoBehaviour
     public float MaxAccelForceFactor = 1f;
     public Vector3 ForceScale = new Vector3(1f, 0f, 1f);
 
-    private Vector3 m_UnitGoal;
-    private Vector3 m_GoalVel;
+    public Vector3 m_UnitGoal;
+    public Vector3 m_GoalVel;
 
     public Vector3 downDir = Vector3.down;
     public LayerMask groundMask;
@@ -95,7 +95,7 @@ public class PlayerLocomotion : MonoBehaviour
         float velDot = Vector3.Dot(m_UnitGoal, unitVel);
         float accel = Acceleration * AccelerationFactorFromDot.Evaluate(velDot);
         
-        Vector3 goalVel = m_UnitGoal * MaxSpeed;// * speedFactor;
+        Vector3 goalVel = m_UnitGoal * MaxSpeed * _input.moveSpeed;// * speedFactor;
 
         m_GoalVel = Vector3.MoveTowards(m_GoalVel,
                                         (goalVel),// + (groundVel),
@@ -106,10 +106,10 @@ public class PlayerLocomotion : MonoBehaviour
         float maxAccel = MaxAccelForce * MaxAccelForceFactorFromDot.Evaluate(velDot) * MaxAccelForceFactor;
 
         neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccel);
-
         
         Vector3 flatVelDir = _rb.linearVelocity;
         flatVelDir.y = 0f;
+
         if (flatVelDir.sqrMagnitude > 0.0001f)
             _uprightTargetRot = Quaternion.LookRotation(flatVelDir.normalized, Vector3.up);
 

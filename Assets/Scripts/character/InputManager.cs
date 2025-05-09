@@ -92,9 +92,11 @@ public class InputManager : MonoBehaviour
 
     private void HandleMovementInput()
     {
+        
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
 
+        // moveSpeed = movementInput.magnitude;
         moveSpeed = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
     }
 
