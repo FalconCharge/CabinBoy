@@ -17,7 +17,8 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private Animator ani;
     [HideInInspector] public InputManager inputManager;
-    PlayerLocomotion playerLocomotion;
+    [HideInInspector] PlayerLocomotion playerLocomotion;
+    [HideInInspector] ProceduralMovement proceduralMovement;
     public string currentStatee;
     public bool isInteracting;
     [SerializeField] private bool inputs;
@@ -33,6 +34,7 @@ public class PlayerManager : MonoBehaviour
     {
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+        proceduralMovement = GetComponent<ProceduralMovement>();
         
         // leftArmLayer  = ani.GetLayerIndex("LeftArm");
         // rightArmLayer = ani.GetLayerIndex("RightArm");
@@ -79,6 +81,7 @@ public class PlayerManager : MonoBehaviour
 
         if (visuals)
         {
+            proceduralMovement.HandleAnims();
             //proceduralAnimate.HandleAllVisuals();
         }
     }

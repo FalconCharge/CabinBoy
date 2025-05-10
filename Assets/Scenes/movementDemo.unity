@@ -533,6 +533,7 @@ GameObject:
   - component: {fileID: 131355117}
   - component: {fileID: 131355116}
   - component: {fileID: 131355115}
+  - component: {fileID: 131355121}
   - component: {fileID: 131355118}
   m_Layer: 6
   m_Name: player
@@ -575,9 +576,12 @@ MonoBehaviour:
   uprightSpringDamper: 20
   RideSpringStrength: 50
   RideSpringDamper: 5
-  rideHeight: 1
+  rideHeight: 1.2
+  groundedTolerance: 0.1
   rayLen: 1.5
   jumpForce: 10
+  coyoteTime: 0.2
+  isGrounded: 0
   MaxSpeed: 8
   Acceleration: 50
   AccelerationFactorFromDot:
@@ -662,6 +666,8 @@ MonoBehaviour:
   crouch_Input: 0
   crouch_Pressed: 0
   jump_Input: 0
+  jumpBufferTime: 0.1
+  lastJumpPressTime: -999
 --- !u!114 &131355117
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,7 +686,7 @@ MonoBehaviour:
   isInteracting: 0
   inputs: 1
   movement: 1
-  visuals: 0
+  visuals: 1
   layerBlendSpeed: 5
   armHeightSpeed: 1
 --- !u!114 &131355118
@@ -786,8 +792,24 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.5
-  m_Center: {x: 0, y: 0.5, z: 0}
+  m_Radius: 0.35
+  m_Center: {x: 0, y: 0.35, z: 0}
+--- !u!114 &131355121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 131355109}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a07e2603142fc434f9bb920e5c856d87, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 331463656}
+  torsoBone: {fileID: 1569726831}
+  maxTorsoTilt: 20
+  torsoTiltSpeed: 5
 --- !u!1 &131866179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1034,8 +1056,11 @@ MonoBehaviour:
   RideSpringStrength: 10
   RideSpringDamper: 5
   rideHeight: 2
+  groundedTolerance: 0.1
   rayLen: 2
   jumpForce: 10
+  coyoteTime: 0.2
+  isGrounded: 0
   MaxSpeed: 8
   Acceleration: 20
   AccelerationFactorFromDot:
@@ -1120,6 +1145,8 @@ MonoBehaviour:
   crouch_Input: 0
   crouch_Pressed: 0
   jump_Input: 0
+  jumpBufferTime: 0.1
+  lastJumpPressTime: -999
 --- !u!114 &161502103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2996,8 +3023,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0013145596, y: 0.00000000617226, z: -8.11381e-12, w: 0.99999917}
-  m_LocalPosition: {x: 0, y: 2.026202, z: -9.965628}
+  m_LocalRotation: {x: 0.0020917952, y: -9.153865e-13, z: 1.9148048e-15, w: 0.99999785}
+  m_LocalPosition: {x: 0, y: 2.026202, z: -6.262993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -7244,7 +7271,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1197058843}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a076c17fe76165e4f8ed21498b877bf9, type: 3}
   m_Name: 
@@ -7308,7 +7335,7 @@ MonoBehaviour:
       Radius: 2
       Height: 9.21
     Center:
-      Radius: 10
+      Radius: 6.28
       Height: 0.48
     Bottom:
       Radius: 2.03
@@ -7396,8 +7423,8 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1197058843}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.0013145593, y: 0.000000006172259, z: -8.113649e-12, w: 0.99999917}
-  m_LocalPosition: {x: 0, y: 2.026202, z: -9.965628}
+  m_LocalRotation: {x: 0.0020917947, y: -9.153863e-13, z: 1.9187295e-15, w: 0.99999785}
+  m_LocalPosition: {x: 0, y: 2.026202, z: -6.262993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -9310,8 +9337,11 @@ MonoBehaviour:
   RideSpringStrength: 10
   RideSpringDamper: 5
   rideHeight: 2
+  groundedTolerance: 0.1
   rayLen: 2
   jumpForce: 10
+  coyoteTime: 0.2
+  isGrounded: 0
   MaxSpeed: 8
   Acceleration: 20
   AccelerationFactorFromDot:
@@ -9396,6 +9426,8 @@ MonoBehaviour:
   crouch_Input: 0
   crouch_Pressed: 0
   jump_Input: 0
+  jumpBufferTime: 0.1
+  lastJumpPressTime: -999
 --- !u!114 &1447389084
 MonoBehaviour:
   m_ObjectHideFlags: 0

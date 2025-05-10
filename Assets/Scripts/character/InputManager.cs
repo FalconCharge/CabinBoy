@@ -124,20 +124,11 @@ public class InputManager : MonoBehaviour
     //    }
     //}
     private void HandleJumpingInput()
-    //jump buffer
     {
         if (jump_Input)
         {
             lastJumpPressTime = Time.time;
             jump_Input = false;
         }
-
-        // if (Time.time - lastJumpPressTime <= jumpBufferTime)
-        // {
-        //     if (playerLocomotion.HandleJumping())
-        //     {
-        //         lastJumpPressTime = -999f;
-        //     }
-        // }
     }
 }

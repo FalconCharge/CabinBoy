@@ -194,28 +194,13 @@ public class PlayerLocomotion : MonoBehaviour
 
         if (canCoyote && didBuffer)
         {
-            Debug.Log("Jump");
-            // perform the jump
             Vector3 shit = _rb.linearVelocity;
-            shit.x = 0; shit.z = 0; shit.y *= -1;
+            shit.x = 0; shit.z = 0; shit.y *= -1; //to cancel current y axis velocity 
             _rb.AddForce(shit + Vector3.up * jumpForce, ForceMode.Impulse);
 
-            // consume both windows
             _lastGroundedTime       = -999f;
             _input.lastJumpPressTime = -999f;
         }
-    }
-
-    public bool HandleJumping()
-    {
-        if(isGrounded && Time.time - _lastGroundedTime <= coyoteTime)
-        {
-            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); //AnalogJumpUpForce.Evaluate(1f)
-            isGrounded = false;
-            _lastGroundedTime = -999f;
-            return true;
-        }
-        return false;
     }
 
     private static Quaternion ShortestRotation(Quaternion from, Quaternion to)
