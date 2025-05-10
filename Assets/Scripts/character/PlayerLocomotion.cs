@@ -13,6 +13,7 @@ public class PlayerLocomotion : MonoBehaviour
     public Transform camObj;
 
     [Header("Orientation Settings")]
+    public float grabTurnFactor = 0.5f;
     public float uprightSpringStrength = 150f;
     public float uprightSpringDamper = 20f;
     private Quaternion _uprightTargetRot;
@@ -90,6 +91,9 @@ public class PlayerLocomotion : MonoBehaviour
         //     _jumpPressed        = true;
         // }
     }
+    
+    private bool IsCarrying => _input.left_Input || _input.right_Input;
+
     private void Locomotion()
     {
         // Vector3 inputVel = _input.movementInput;
@@ -112,16 +116,22 @@ public class PlayerLocomotion : MonoBehaviour
 
         neededAccel = Vector3.ClampMagnitude(neededAccel, maxAccel);
         
-        Vector3 flatVelDir = _rb.linearVelocity;
-        flatVelDir.y = 0f;
 
-        if (flatVelDir.sqrMagnitude > 0.0001f)
-            _uprightTargetRot = Quaternion.LookRotation(flatVelDir.normalized, Vector3.up);
+        // if(!IsCarrying)
+        // {
+            Vector3 flatVelDir = _rb.linearVelocity;
+            flatVelDir.y = 0f;
+
+            if (flatVelDir.sqrMagnitude > 0.0001f)
+                _uprightTargetRot = Quaternion.LookRotation(flatVelDir.normalized, Vector3.up);
+        // }
 
         _rb.AddForce(Vector3.Scale(neededAccel * _rb.mass, ForceScale));
     }
     private void UpdateUprightForce()
     {
+        float spring = uprightSpringStrength * (IsCarrying? grabTurnFactor : 1f);
+
         Quaternion curr = transform.rotation;
         // Quaternion goal = _uprightTargetRot * Quaternion.Inverse(curr); //UtilsMath.ShortestRotation;
         Quaternion goal = ShortestRotation(curr, _uprightTargetRot);
@@ -132,7 +142,9 @@ public class PlayerLocomotion : MonoBehaviour
 
         float rotRadians = rotDegrees * Mathf.Deg2Rad;
 
-        _rb.AddTorque(rotAxis * (rotRadians * uprightSpringStrength) - (_rb.angularVelocity * uprightSpringDamper));
+        _rb.AddTorque(rotAxis *
+        (rotRadians * spring) - (_rb.angularVelocity * uprightSpringDamper)
+        , ForceMode.Force);
     }
     private void HoverRay()
     {

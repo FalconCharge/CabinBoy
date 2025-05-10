@@ -89,7 +89,6 @@ public class ProceduralMovement : MonoBehaviour
         BlendArmLayer(leftArmLayer,  leftGrab);
         BlendArmLayer(rightArmLayer, rightGrab);
 
-        // 4) Procedural arm height (Human: Fall Flat style)
         float lookY = inputManager.lookInput.y;
         armHeight = Mathf.Clamp(
             armHeight + lookY * armHeightSpeed * Time.deltaTime,
@@ -97,8 +96,8 @@ public class ProceduralMovement : MonoBehaviour
             armHeightLimits.y
         );
         animator.SetFloat(hashArmHeight, armHeight);
+        
 
-        // 5) Torso tilt when grabbing
         float tiltInput = isCarrying ? inputManager.horizontalInput : 0f;
         UpdateTorsoTilt(tiltInput);
     }

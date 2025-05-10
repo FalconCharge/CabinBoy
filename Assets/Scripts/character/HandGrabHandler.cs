@@ -55,7 +55,7 @@ public class HandGrabHandler : MonoBehaviour
             grabbedCargo = null;
 
             // Animator grab-off
-            anim.SetBool(leftArm ? "LeftGrab" : "RightGrab", false);
+            // anim.SetBool(leftArm ? "LeftGrab" : "RightGrab", false);
         }
     }
 
