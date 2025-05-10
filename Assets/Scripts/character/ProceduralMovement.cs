@@ -1,15 +1,12 @@
-using UnityEditor.Search;
 using UnityEngine;
 
+[RequireComponent(typeof(Animator))]
 public class ProceduralMovement : MonoBehaviour
 {
     [Header("References")]
-    [Tooltip("Animator component controlling your character")] 
     [SerializeField] private Animator animator;
-    [Tooltip("InputManager for reading stick/buttons")] 
-    private InputManager input;
-    [Tooltip("PlayerLocomotion for grounded state and max speed")] 
-    private PlayerLocomotion locomotion;
+    [SerializeField] private InputManager inputManager;
+    [SerializeField] private PlayerLocomotion locomotion;
     [Tooltip("Bone transform used to tilt torso when grabbing")] 
     [SerializeField] private Transform torsoBone;
 
@@ -19,78 +16,113 @@ public class ProceduralMovement : MonoBehaviour
     [Tooltip("Speed at which torso tilts toward target angle")] 
     [SerializeField] private float torsoTiltSpeed = 5f;
 
-    private SyncPhysicsObject[] _syncBones;
+    [Header("Arm Grab Settings")]
+    [Tooltip("How fast the arm layers blend on grab/ungrab")] 
+    [SerializeField] private float armLayerBlendSpeed = 5f;
+    private int leftArmLayer, rightArmLayer;
 
+    [Header("Arm Height Settings")]
+    [Tooltip("Speed at which arm height moves based on vertical look input")] 
+    [SerializeField] private float armHeightSpeed = 1f;
+    [Tooltip("Minimum and maximum arm height in animator (0-1)")]
+    [SerializeField] private Vector2 armHeightLimits = new Vector2(0f, 1f);
+    private float armHeight;
 
-    private Rigidbody _rb;
+    private SyncPhysicsObject[] syncBones;
+    private Quaternion torsoDefaultRotation;
+    private Rigidbody rb;
 
-    // cached default rotation of the torso bone
-    private Quaternion _torsoDefaultRot;
-
-    private static readonly int _hashMoveSpeed   = Animator.StringToHash("movementSpeed");
-    private static readonly int _hashGrounded    = Animator.StringToHash("grounded");
-    private static readonly int _hashIsCarrying  = Animator.StringToHash("isCarrying");
-    private static readonly int _hashArmHeight   = Animator.StringToHash("armHeight");
+    private static readonly int hashMoveSpeed  = Animator.StringToHash("movementSpeed");
+    private static readonly int hashGrounded   = Animator.StringToHash("grounded");
+    private static readonly int hashIsCarrying = Animator.StringToHash("isCarrying");
+    private static readonly int hashArmHeight  = Animator.StringToHash("armHeight");
 
     private void Awake()
     {
-        _syncBones = GetComponentsInChildren<SyncPhysicsObject>();
+        // Cache sync-bone components
+        syncBones = GetComponentsInChildren<SyncPhysicsObject>();
 
-        if (input    == null) input    = GetComponent<InputManager>();
-        if (locomotion == null) locomotion = GetComponent<PlayerLocomotion>();
+        // Auto-assign references if missing
+        if (animator     == null) animator     = GetComponent<Animator>();
+        if (inputManager == null) inputManager = GetComponent<InputManager>();
+        if (locomotion   == null) locomotion   = GetComponent<PlayerLocomotion>();
+
         if (torsoBone != null)
-            _torsoDefaultRot = torsoBone.localRotation;
-            
-        _rb = GetComponent<Rigidbody>();
+            torsoDefaultRotation = torsoBone.localRotation;
+
+        rb = GetComponent<Rigidbody>();
+
+        // Prepare arm layers for grabbing
+        leftArmLayer  = animator.GetLayerIndex("LeftArm");
+        rightArmLayer = animator.GetLayerIndex("RightArm");
+
+        // Initialize arm height
+        armHeight = (armHeightLimits.x + armHeightLimits.y) * 0.5f;
     }
 
-    void LateUpdate()
+    private void LateUpdate()
     {
-        foreach (var x in _syncBones)
-        {
-            x.UpdateJointFromAnimation();
-        }
-    }
-
-    public void HandleAnims()
-    {
-        // 1) Send movement speed (0-1 analog) to animator
-        float speedNorm = _rb.linearVelocity.magnitude;
-        animator.SetFloat("movementSpeed", speedNorm);
-
-        // 2) Grounded flag from locomotion
-        bool grounded = locomotion.isGrounded;
-        animator.SetBool("grounded", grounded);
-
-        // 3) Grabbing state if either grab input is held
-        bool carrying = input.left_Input || input.right_Input;
-        animator.SetBool("isCarrying", carrying);
-
-        // 4) Arm height from vertical look input
-        float armHeight = input.lookInput.y;
-        animator.SetFloat("armHeight", armHeight);
-
-        // 5) Tilt torso when grabbing
-        if (torsoBone != null)
-            UpdateTorsoTilt(carrying);
+        // Sync ragdoll joints after animation updates
+        foreach (var bone in syncBones)
+            bone.UpdateJointFromAnimation();
     }
 
     /// <summary>
-    /// Smoothly tilts the torso bone around its local Z axis based on input horizontal
-    /// only when carrying; otherwise returns to default rotation.
+    /// Call this once per frame to push parameters & procedural tilts.
     /// </summary>
-    private void UpdateTorsoTilt(bool carrying)
+    public void HandleAnims()
     {
-        // target local rotation
-        Quaternion target = _torsoDefaultRot;
-        if (carrying)
-        {
-            float tiltAngle = input.horizontalInput * maxTorsoTilt;
-            // negative tilt so positive input tilts right shoulder down
-            target = _torsoDefaultRot * Quaternion.Euler(0f, 0f, -tiltAngle);
-        }
+        // 1) Movement speed (magnitude of horizontal velocity)
+        float speedNorm = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude;
+        animator.SetFloat(hashMoveSpeed, speedNorm);
 
-        // lerp current toward target
+        // 2) Grounded flag from locomotion
+        animator.SetBool(hashGrounded, locomotion.isGrounded);
+
+        // 3) Grabbing state for animation and layers
+        bool leftGrab   = inputManager.left_Input;
+        bool rightGrab  = inputManager.right_Input;
+        bool isCarrying = leftGrab || rightGrab;
+        animator.SetBool(hashIsCarrying, isCarrying);
+
+        // Blend animator layers for left/right grabs
+        BlendArmLayer(leftArmLayer,  leftGrab);
+        BlendArmLayer(rightArmLayer, rightGrab);
+
+        // 4) Procedural arm height (Human: Fall Flat style)
+        float lookY = inputManager.lookInput.y;
+        armHeight = Mathf.Clamp(
+            armHeight + lookY * armHeightSpeed * Time.deltaTime,
+            armHeightLimits.x,
+            armHeightLimits.y
+        );
+        animator.SetFloat(hashArmHeight, armHeight);
+
+        // 5) Torso tilt when grabbing
+        float tiltInput = isCarrying ? inputManager.horizontalInput : 0f;
+        UpdateTorsoTilt(tiltInput);
+    }
+
+    private void BlendArmLayer(int layerIndex, bool active)
+    {
+        float target = active ? 1f : 0f;
+        float current = animator.GetLayerWeight(layerIndex);
+        animator.SetLayerWeight(
+            layerIndex,
+            Mathf.MoveTowards(current, target, armLayerBlendSpeed * Time.deltaTime)
+        );
+    }
+
+    /// <summary>
+    /// Smoothly tilts the torso bone around local Z for a grabbing pose.
+    /// </summary>
+    private void UpdateTorsoTilt(float inputX)
+    {
+        if (torsoBone == null) return;
+
+        float tilt = -inputX * maxTorsoTilt;
+        Quaternion target = torsoDefaultRotation * Quaternion.Euler(0f, 0f, tilt);
+
         torsoBone.localRotation = Quaternion.Slerp(
             torsoBone.localRotation,
             target,

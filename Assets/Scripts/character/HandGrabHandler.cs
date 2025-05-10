@@ -1,122 +1,115 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(Rigidbody))]
 public class HandGrabHandler : MonoBehaviour
 {
-    [SerializeField] Animator anim;   
-    public bool leftArm = false;
+    [Header("References")]
+    [Tooltip("Player's root manager")] public PlayerManager player;
+    [Tooltip("Animator for grabbing feedback")] public Animator anim;
+    [Tooltip("Is this the left arm? (else right)")] public bool leftArm = false;
 
-    FixedJoint fixedJoint;
-    Rigidbody rb;
-    //player class
-    PlayerManager player;
+    [Header("Joint Settings")]
+    [Tooltip("Spring strength for rotation drive")] [SerializeField] private float rotationalSpring = 1000f;
+    [Tooltip("Damping for rotation drive")] [SerializeField] private float rotationalDamper = 50f;
+    [Tooltip("Limit angle (degrees) on the configurable joint)")] [SerializeField] private float limitAngle = 15f;
+    [Tooltip("Mass scale to make object lightweight on hand")] [SerializeField] private float connectedMassScale = 0.01f;
+
+    private ConfigurableJoint cfgJoint;
+    private Rigidbody rb;
     private Cargo grabbedCargo;
-    void Awake()
+
+    private void Awake()
     {
-        //get player class
         player = transform.root.GetComponent<PlayerManager>();
         rb = GetComponent<Rigidbody>();
-
-        //cahnging solver iterations
-        rb.solverIterations = 100;
+        rb.solverIterations = 50;
     }
 
-    void Update()
+    private void Update()
     {
-        attemptLetGo();
+        TryLetGo();
     }
 
-    public void attemptLetGo()
+    private void OnCollisionEnter(Collision collision)
     {
+        if (player.inputManager.left_Input || player.inputManager.right_Input)
+            TryGrab(collision);
+    }
 
-
-        if(leftArm)
+    private void TryLetGo()
+    {
+        bool isHolding = cfgJoint != null;
+        bool release = leftArm ? !player.inputManager.left_Input : !player.inputManager.right_Input;
+        if (isHolding && release)
         {
-            if(!player.inputManager.left_Input)
-            {
-                if(fixedJoint != null)
-                {
-                    if(fixedJoint.connectedBody != null)
-                    {
+            // Reset color
+            if (grabbedCargo != null)
+                grabbedCargo.ResetColor();
 
-                        // Reset color on letgo
-                        Cargo cargo = fixedJoint.connectedBody.GetComponent<Cargo>();
-                        if(cargo != null){
-                            cargo.ResetColor();
-                        }
+            // Apply small throw impulse
+            Rigidbody otherRb = cfgJoint.connectedBody;
+            otherRb.AddForce((player.transform.forward + Vector3.up * 0.25f) * 0.1f, ForceMode.Impulse);
 
-                        float f = 0.1f;
+            Destroy(cfgJoint);
+            cfgJoint = null;
+            grabbedCargo = null;
 
-                        fixedJoint.connectedBody.AddForce((player.transform.forward + Vector3.up * 0.25f) * f,ForceMode.Impulse);
-                        Destroy(fixedJoint);
-                    }
-                }
-            }
-        }
-        else
-        {
-            if(!player.inputManager.right_Input)
-            {
-                if(fixedJoint != null)
-                {
-                    if(fixedJoint.connectedBody != null)
-                    {
-
-                        Cargo cargo = fixedJoint.connectedBody.GetComponent<Cargo>();
-                        if(cargo != null){
-                            cargo.ResetColor();
-                        }
-                        float f = 0.1f;
-
-                        fixedJoint.connectedBody.AddForce((player.transform.forward + Vector3.up * 0.25f) * f,ForceMode.Impulse);
-                        Destroy(fixedJoint);
-                    }
-                }
-            }
+            // Animator grab-off
+            anim.SetBool(leftArm ? "LeftGrab" : "RightGrab", false);
         }
     }
 
-    bool TryCarryObject(Collision col)
+    private void TryGrab(Collision collision)
     {
-        //if has authority
+        if (cfgJoint != null) return; // already holding
+        if (collision.transform.root == player.transform) return;
+        if (!collision.collider.TryGetComponent<Rigidbody>(out var otherRb)) return;
 
-        //if player is not active ragdoll
-
-        //if not already carrying object
-        if(fixedJoint != null) return false;
-
-        //dont grab ourselves
-        if(col.transform.root == player.transform) return false;
-
-        if(!col.collider.TryGetComponent(out Rigidbody otherObjRb)) return false;
-
-        Debug.Log("SHOULD GRAB");
-
-        //Cargo color changing
-        Cargo cargo = otherObjRb.GetComponent<Cargo>();
-        if(cargo != null){
+        // Record cargo
+        if (collision.collider.TryGetComponent<Cargo>(out var cargo))
+        {
             cargo.ApplyPickupColor();
             grabbedCargo = cargo;
         }
 
-        fixedJoint = transform.gameObject.AddComponent<FixedJoint>();
-        fixedJoint.connectedBody = otherObjRb;
+        // Create ConfigurableJoint
+        cfgJoint = gameObject.AddComponent<ConfigurableJoint>();
+        cfgJoint.connectedBody = otherRb;
+        cfgJoint.autoConfigureConnectedAnchor = false;
+        // anchor at hand's local origin, connected at contact point
+        cfgJoint.anchor = Vector3.zero;
+        cfgJoint.connectedAnchor = transform.InverseTransformPoint(collision.GetContact(0).point);
 
-        fixedJoint.autoConfigureConnectedAnchor = false;
-        fixedJoint.connectedAnchor = col.transform.InverseTransformPoint(col.GetContact(0).point);
+        // Lock linear motion
+        cfgJoint.xMotion = ConfigurableJointMotion.Locked;
+        cfgJoint.yMotion = ConfigurableJointMotion.Locked;
+        cfgJoint.zMotion = ConfigurableJointMotion.Locked;
 
-        return true;
-    }
+        // Limit angular motion with small cone
+        SoftJointLimit limit = new SoftJointLimit { limit = limitAngle };
+        cfgJoint.angularXMotion = ConfigurableJointMotion.Limited;
+        cfgJoint.angularYMotion = ConfigurableJointMotion.Limited;
+        cfgJoint.angularZMotion = ConfigurableJointMotion.Limited;
+        cfgJoint.lowAngularXLimit = limit;
+        cfgJoint.highAngularXLimit = limit;
+        cfgJoint.angularYLimit = limit;
+        cfgJoint.angularZLimit = limit;
 
-    void OnCollisionEnter(Collision collision)
-    {
-        Debug.Log("COLLISION");
-        
-        if(player.inputManager.left_Input || player.inputManager.right_Input)
+        // Setup Slerp drive for smooth rotation
+        JointDrive slerpDrive = new JointDrive
         {
-            TryCarryObject(collision);  
-        }
-    }
+            positionSpring = rotationalSpring,
+            positionDamper = rotationalDamper,
+            maximumForce   = Mathf.Infinity
+        };
+        cfgJoint.slerpDrive = slerpDrive;
+        cfgJoint.rotationDriveMode = RotationDriveMode.Slerp;
 
+        // Reduce mass effect
+        cfgJoint.connectedMassScale = connectedMassScale;
+        cfgJoint.massScale = connectedMassScale;
+
+        // Animator grab-on
+        anim.SetBool(leftArm ? "LeftGrab" : "RightGrab", true);
+    }
 }
