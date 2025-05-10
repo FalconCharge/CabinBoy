@@ -15,7 +15,21 @@ public class ProceduralMovement : MonoBehaviour
     [SerializeField] private Transform   leftHandTransform;
     [SerializeField] private Transform   rightHandTransform;
     [Tooltip("Speed at which the hand moves to the grab point")]
+
+    [SerializeField] private Rigidbody leftHandRb;
+    [SerializeField] private Rigidbody rightHandRb;
+
+
     [SerializeField] private float       pullSpeed     = 5f;
+    
+    private Rigidbody                        closestObject;
+    private Vector3                          closestPoint;
+    
+    [Header("Limb Pull Settings")]
+    [SerializeField] private float     limbPullForce   = 35f;
+    [SerializeField] private float     maxPullDistance = 3f;
+    [SerializeField] private float     velocityDamper  = 0.85f;
+    [SerializeField] private float     angularDragBoost= 2f;
 #region  other
     [Header("References")]
     [SerializeField] private Animator animator;
@@ -99,48 +113,36 @@ public class ProceduralMovement : MonoBehaviour
 
         float tiltInput = isCarrying ? inputManager.horizontalInput : 0f;
         UpdateTorsoTilt(tiltInput);
+
+        
+        HandleLimbPulling();
     }
 
     private void ProcessGrabDetection()
     {
-        // 1) Compute world-space box center & half-extents
+        closestObject = null;
+
+        // 1) Compute box in world-space
         Vector3 worldCenter = transform.TransformPoint(grabBoxCenter);
         Vector3 halfExtents = grabBoxSize * 0.5f;
         Quaternion worldRot = transform.rotation;
 
-        // 2) OverlapBox to find any grabbable colliders
+        // 2) Find any candidate
         Collider[] hits = Physics.OverlapBox(worldCenter, halfExtents, worldRot, grabbableLayer);
         foreach (var col in hits)
         {
-            Rigidbody body = col.attachedRigidbody;
+            var body = col.attachedRigidbody;
             if (body == null) continue;
 
-            // 3) Find the closest point on the collider volume
-            Vector3 grabPoint = col.ClosestPoint(worldCenter);
+            // 3) Closest point on that collider
+            Vector3 pt = col.ClosestPoint(worldCenter);
+            closestObject = body;
+            closestPoint  = pt;
 
-            // 4) Draw debug lines from each hand
-            Debug.DrawLine(leftHandTransform.position,  grabPoint, Color.green);
-            Debug.DrawLine(rightHandTransform.position, grabPoint, Color.green);
+            // 4) Debug lines
+            Debug.DrawLine(leftHandTransform.position,  pt, Color.green);
+            Debug.DrawLine(rightHandTransform.position, pt, Color.green);
 
-            // 5) If left grab held, pull left hand; same for right
-            if (inputManager.left_Input)
-            {
-                leftHandTransform.position = Vector3.MoveTowards(
-                    leftHandTransform.position,
-                    grabPoint,
-                    pullSpeed * Time.deltaTime
-                );
-            }
-            if (inputManager.right_Input)
-            {
-                rightHandTransform.position = Vector3.MoveTowards(
-                    rightHandTransform.position,
-                    grabPoint,
-                    pullSpeed * Time.deltaTime
-                );
-            }
-
-            // only process the first valid hit
             break;
         }
          // 6) (Optional) visualize the grab-box in the editor
@@ -178,6 +180,90 @@ public class ProceduralMovement : MonoBehaviour
                            worldCenter + worldRot * cornerB, Color.yellow);
         }
         #endif
+    }
+
+    private void HandleLimbPulling()
+    {
+        if (closestObject == null) return;
+
+        // Move the left‐hand RigidBody toward the grab point
+        if (inputManager.left_Input)
+        {
+            Vector3 nextPos = Vector3.MoveTowards(
+                leftHandRb.position,
+                closestPoint,
+                pullSpeed * Time.fixedDeltaTime
+            );
+            leftHandRb.MovePosition(nextPos);
+        }
+
+        // Move the right‐hand RigidBody toward the grab point
+        if (inputManager.right_Input)
+        {
+            Vector3 nextPos = Vector3.MoveTowards(
+                rightHandRb.position,
+                closestPoint,
+                pullSpeed * Time.fixedDeltaTime
+            );
+            rightHandRb.MovePosition(nextPos);
+        }
+
+        /*
+        if (closestObject != null)
+        {
+            if (inputManager.left_Input)
+            {
+                leftHandTransform.position = Vector3.MoveTowards(
+                    leftHandTransform.position,
+                    closestPoint,
+                    pullSpeed * Time.deltaTime
+                );
+            }
+
+            if (inputManager.right_Input)
+            {
+                rightHandTransform.position = Vector3.MoveTowards(
+                    rightHandTransform.position,
+                    closestPoint,
+                    pullSpeed * Time.deltaTime
+                );
+            }
+        }
+        */
+        /*
+        bool anyPull = false;
+        float origAD = rb.angularDamping;
+
+        // Left arm pull
+        if (inputManager.left_Input && closestObject != null)
+        {
+            Vector3 dir  = (closestPoint - leftHandTransform.position).normalized;
+            float dist   = Vector3.Distance(leftHandTransform.position, closestPoint);
+            float t      = Mathf.Clamp01(dist / maxPullDistance);
+            rb.AddForce(dir * limbPullForce * (1 - t));
+            anyPull = true;
+        }
+
+        // Right arm pull
+        if (inputManager.right_Input && closestObject != null)
+        {
+            Vector3 dir  = (closestPoint - rightHandTransform.position).normalized;
+            float dist   = Vector3.Distance(rightHandTransform.position, closestPoint);
+            float t      = Mathf.Clamp01(dist / maxPullDistance);
+            rb.AddForce(dir * limbPullForce * (1 - t));
+            anyPull = true;
+        }
+
+        // Stabilize when pulling
+        if (anyPull)
+        {
+            rb.angularDamping = angularDragBoost;
+            rb.linearVelocity   *= velocityDamper;
+        }
+        else
+        {
+            rb.angularDamping = origAD;
+        }*/
     }
 
     private void BlendArmLayer(int layerIndex, bool active)

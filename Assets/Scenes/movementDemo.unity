@@ -3865,6 +3865,11 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5807594628965171638, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
   m_PrefabInstance: {fileID: 6669663731868869419}
   m_PrefabAsset: {fileID: 0}
+--- !u!54 &979934381 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 8618443564534488342, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+  m_PrefabInstance: {fileID: 6669663731868869419}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1007851259
 GameObject:
   m_ObjectHideFlags: 0
@@ -4316,6 +4321,11 @@ CapsuleCollider:
 --- !u!4 &1186094805 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 1599436959053540317, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+  m_PrefabInstance: {fileID: 6669663731868869419}
+  m_PrefabAsset: {fileID: 0}
+--- !u!54 &1186094809 stripped
+Rigidbody:
+  m_CorrespondingSourceObject: {fileID: 4485463673120442762, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
   m_PrefabInstance: {fileID: 6669663731868869419}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1197058843
@@ -7049,12 +7059,20 @@ PrefabInstance:
       objectReference: {fileID: 979934377}
     - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: pullSpeed
-      value: 5
+      value: 90
       objectReference: {fileID: 0}
     - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: rightHand
       value: 
       objectReference: {fileID: 1186094805}
+    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+      propertyPath: leftHandRb
+      value: 
+      objectReference: {fileID: 979934381}
+    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+      propertyPath: rightHandRb
+      value: 
+      objectReference: {fileID: 1186094809}
     - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: grabBoxSize.x
       value: 8
@@ -7090,6 +7108,10 @@ PrefabInstance:
     - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: grabbableLayer.m_Bits
       value: 183
+      objectReference: {fileID: 0}
+    - target: {fileID: 4280580982445153641, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+      propertyPath: connectedMassScale
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 4573625933123052722, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -7170,6 +7192,10 @@ PrefabInstance:
     - target: {fileID: 8200891627649929609, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: uprightSpringStrength
       value: 55
+      objectReference: {fileID: 0}
+    - target: {fileID: 8559926422968719896, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+      propertyPath: connectedMassScale
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 8559926422968719896, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: grabbableMask.m_Bits

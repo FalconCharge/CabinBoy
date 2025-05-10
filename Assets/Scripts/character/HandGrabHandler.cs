@@ -110,6 +110,6 @@ public class HandGrabHandler : MonoBehaviour
         cfgJoint.massScale = connectedMassScale;
 
         // Animator grab-on
-        anim.SetBool(leftArm ? "LeftGrab" : "RightGrab", true);
+        // anim.SetBool(leftArm ? "LeftGrab" : "RightGrab", true);
     }
 }
