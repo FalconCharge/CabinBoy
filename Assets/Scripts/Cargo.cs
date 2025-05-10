@@ -54,14 +54,11 @@ public class Cargo : MonoBehaviour
     void Update()
     {
         if(transform.position.z > killDistance){
-            cargoManager.LostCrate();
-            if(CompareTag("Player")){
-                cargoManager.LostPlayer();
-            }
-            else
-            {
-                Destroy(this.gameObject);
-            }
+            cargoManager.LostCargo(this.gameObject);
+
+            //I think I should destroy here but I'm not sure
+            // Destroy gameObject because it's no longer used
+            Destroy(this.gameObject);
         }
     }
 
