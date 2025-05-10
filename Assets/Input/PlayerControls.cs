@@ -169,7 +169,7 @@ public partial class @PlayerControls: IInputActionCollection2, IDisposable
                 {
                     ""name"": ""Left Stick"",
                     ""id"": ""bab26b1e-d4bf-44a9-8000-3f3dae47ff8d"",
-                    ""path"": ""2DVector"",
+                    ""path"": ""2DVector(mode=2)"",
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": """",
