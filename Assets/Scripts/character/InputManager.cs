@@ -23,6 +23,8 @@ public class InputManager : MonoBehaviour
     public bool crouch_Input;
     public bool crouch_Pressed;
     public bool jump_Input = false;
+    public float jumpBufferTime = 0.1f;
+    private float _lastJumpPressTime = -999f;
 
     private void Awake()
     {
@@ -66,7 +68,6 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         playerControls.Disable();
-
     }
 
     public void HandleAllInputs()
@@ -92,7 +93,6 @@ public class InputManager : MonoBehaviour
 
     private void HandleMovementInput()
     {
-        
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
 
@@ -124,11 +124,20 @@ public class InputManager : MonoBehaviour
     //    }
     //}
     private void HandleJumpingInput()
+    //jump buffer
     {
         if (jump_Input)
         {
-            playerLocomotion.HandleJumping();
+            _lastJumpPressTime = Time.time;
             jump_Input = false;
+        }
+
+        if (Time.time - _lastJumpPressTime <= jumpBufferTime)
+        {
+            if (playerLocomotion.HandleJumping())
+            {
+                _lastJumpPressTime = -999f;
+            }
         }
     }
 }

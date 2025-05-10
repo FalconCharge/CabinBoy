@@ -21,11 +21,15 @@ public class PlayerLocomotion : MonoBehaviour
     public float RideSpringStrength = 10.0f;
     public float RideSpringDamper = 5.0f;
     public float rideHeight = 2.0f;
+    public float groundedTolerance = 0.1f;
     public float rayLen = 2.0f;
 
 
     [Header("Jump Settings")]
     public float jumpForce = 10.0f;
+    public float coyoteTime = 0.2f;
+    private float _lastGroundedTime = -999f;
+    public bool isGrounded = false;
 
     
     [Header("Movement Settings")]
@@ -84,7 +88,6 @@ public class PlayerLocomotion : MonoBehaviour
         //     _jumpPressed        = true;
         // }
     }
-
     private void Locomotion()
     {
         // Vector3 inputVel = _input.movementInput;
@@ -115,8 +118,6 @@ public class PlayerLocomotion : MonoBehaviour
 
         _rb.AddForce(Vector3.Scale(neededAccel * _rb.mass, ForceScale));
     }
-
-
     private void UpdateUprightForce()
     {
         Quaternion curr = transform.rotation;
@@ -134,66 +135,69 @@ public class PlayerLocomotion : MonoBehaviour
     private void HoverRay()
     {
 
-        RaycastHit hit;
+        isGrounded = false;
 
         if(showRay)
             Debug.DrawRay(transform.position, downDir * rayLen, debugRayColor);
 
-        if (Physics.Raycast(transform.position, downDir, out hit, rayLen, groundMask))
+        if (Physics.Raycast(transform.position, downDir, out var hit, rayLen, groundMask))
         {
-            Vector3 vel = _rb.linearVelocity;
-            Vector3 rayDir = transform.TransformDirection(downDir);
+            float dist = hit.distance;
 
-            Vector3 otherVel = Vector3.zero;
-            Rigidbody hitBody = hit.rigidbody;
-            if(hitBody != null)
+            if(dist <= rideHeight + groundedTolerance)
             {
-                otherVel = hitBody.linearVelocity;
+                isGrounded = true;
+                _lastGroundedTime = Time.time;
+                
+                Vector3 vel = _rb.linearVelocity;
+                Vector3 rayDir = transform.TransformDirection(downDir);
+
+                Vector3 otherVel = Vector3.zero;
+                Rigidbody hitBody = hit.rigidbody;
+                if(hitBody != null)
+                {
+                    otherVel = hitBody.linearVelocity;
+                }
+
+                float rayDirVel = Vector3.Dot(rayDir, vel);
+                float otherVelVel = Vector3.Dot(rayDir, otherVel);
+
+                float relVel = rayDirVel - otherVelVel;
+                float x = hit.distance - rideHeight;
+                float springForce = (x * RideSpringStrength) - (relVel * RideSpringDamper);
+
+                _rb.AddForce(rayDir * springForce);
+
+                if(hitBody != null)
+                    hitBody.AddForceAtPosition(rayDir * -springForce, hit.point);
+
             }
-
-            float rayDirVel = Vector3.Dot(rayDir, vel);
-            float otherVelVel = Vector3.Dot(rayDir, otherVel);
-
-            float relVel = rayDirVel - otherVelVel;
-            float x = hit.distance - rideHeight;
-            float springForce = (x * RideSpringStrength) - (relVel * RideSpringDamper);
-
-            _rb.AddForce(rayDir * springForce);
-
-            if(hitBody != null)
+            else
             {
-                hitBody.AddForceAtPosition(rayDir * -springForce, hit.point);
+                _rb.AddForce(downDir * RideSpringDamper, ForceMode.Acceleration);
             }
         }
+        else
+        {
+            _rb.AddForce(downDir * RideSpringDamper, ForceMode.Acceleration);
+        }
     }
-    public void HandleJumping()
+    public bool HandleJumping()
     {
-        _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); //AnalogJumpUpForce.Evaluate(1f)
-
-        // bool canBuffer = _jumpPressed && (Time.time - _lastJumpPressTime <= jumpBufferTime);
-        // bool canCoyote = Time.time - _lastGroundedTime <= coyoteTime;
-        // if (canBuffer && canCoyote && isGrounded)
-        // {
-            // _rb.linearVelocity = new Vector3(
-            //     _rb.linearVelocity.x,
-            //     JumpUpVel * JumpUpVelFactorFromExistingY.Evaluate(_rb.linearVelocity.y),
-            //     _rb.linearVelocity.z
-            // );
-            // _rb.AddForce(Vector3.up * AnalogJumpUpForce.Evaluate(1f), ForceMode.Impulse);
-        //     _jumpPressed = false;
-        //     _lastGroundedTime = -999f;
-        // }
+        if(isGrounded && Time.time - _lastGroundedTime <= coyoteTime)
+        {
+            _rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse); //AnalogJumpUpForce.Evaluate(1f)
+            isGrounded = false;
+            _lastGroundedTime = -999f;
+            return true;
+        }
+        return false;
     }
 
     private static Quaternion ShortestRotation(Quaternion from, Quaternion to)
     {
-        // If the dot product is negative, the quaternions
-        // have opposite handedness and the long way around
-        // will be chosen.  Flip one to ensure the short way.
         if (Quaternion.Dot(from, to) < 0f)
             to = new Quaternion(-to.x, -to.y, -to.z, -to.w);
-
-        // Delta = target * inverse(current)
         return to * Quaternion.Inverse(from);
     }
 }
