@@ -1,4 +1,5 @@
 using Unity.Mathematics;
+using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class PlayerLocomotion : MonoBehaviour
@@ -68,6 +69,7 @@ public class PlayerLocomotion : MonoBehaviour
         ReadInput();
         HoverRay();
         Locomotion();
+        TryProcessJump();
         UpdateUprightForce();
 
     }
@@ -180,8 +182,30 @@ public class PlayerLocomotion : MonoBehaviour
         else
         {
             _rb.AddForce(downDir * RideSpringDamper, ForceMode.Acceleration);
+            isGrounded = false;
         }
     }
+    
+    private void TryProcessJump()
+    {
+        bool canCoyote = Time.time - _lastGroundedTime <= coyoteTime;
+        
+        bool didBuffer = Time.time - _input.lastJumpPressTime <= _input.jumpBufferTime;
+
+        if (canCoyote && didBuffer)
+        {
+            Debug.Log("Jump");
+            // perform the jump
+            Vector3 shit = _rb.linearVelocity;
+            shit.x = 0; shit.z = 0; shit.y *= -1;
+            _rb.AddForce(shit + Vector3.up * jumpForce, ForceMode.Impulse);
+
+            // consume both windows
+            _lastGroundedTime       = -999f;
+            _input.lastJumpPressTime = -999f;
+        }
+    }
+
     public bool HandleJumping()
     {
         if(isGrounded && Time.time - _lastGroundedTime <= coyoteTime)
