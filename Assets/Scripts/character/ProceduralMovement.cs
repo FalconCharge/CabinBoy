@@ -1,30 +1,38 @@
 using UnityEngine;
 
-[RequireComponent(typeof(Animator))]
 public class ProceduralMovement : MonoBehaviour
 {
+
+    
+    [Header("Grab Box Settings")]
+    [Tooltip("Local-space center of the grab box")]
+    [SerializeField] private Vector3     grabBoxCenter = new Vector3(0, 1f, 1f);
+    [Tooltip("Size of the grab box (width, height, depth)")]
+    [SerializeField] private Vector3     grabBoxSize   = new Vector3(1f, 1f, 2f);
+    [Tooltip("LayerMask of objects you can grab")]
+    [SerializeField] private LayerMask   grabbableLayer;
+    [Tooltip("World-space transforms of your hand bones")]
+    [SerializeField] private Transform   leftHandTransform;
+    [SerializeField] private Transform   rightHandTransform;
+    [Tooltip("Speed at which the hand moves to the grab point")]
+    [SerializeField] private float       pullSpeed     = 5f;
+#region  other
     [Header("References")]
     [SerializeField] private Animator animator;
-    [SerializeField] private InputManager inputManager;
-    [SerializeField] private PlayerLocomotion locomotion;
-    [Tooltip("Bone transform used to tilt torso when grabbing")] 
+    private InputManager inputManager;
+    private PlayerLocomotion locomotion;
     [SerializeField] private Transform torsoBone;
 
     [Header("Torso Tilt Settings")]
-    [Tooltip("Max degrees torso tilts left/right when grabbing")] 
     [SerializeField] private float maxTorsoTilt = 20f;
-    [Tooltip("Speed at which torso tilts toward target angle")] 
     [SerializeField] private float torsoTiltSpeed = 5f;
 
     [Header("Arm Grab Settings")]
-    [Tooltip("How fast the arm layers blend on grab/ungrab")] 
     [SerializeField] private float armLayerBlendSpeed = 5f;
     private int leftArmLayer, rightArmLayer;
 
     [Header("Arm Height Settings")]
-    [Tooltip("Speed at which arm height moves based on vertical look input")] 
     [SerializeField] private float armHeightSpeed = 1f;
-    [Tooltip("Minimum and maximum arm height in animator (0-1)")]
     [SerializeField] private Vector2 armHeightLimits = new Vector2(0f, 1f);
     private float armHeight;
 
@@ -59,33 +67,24 @@ public class ProceduralMovement : MonoBehaviour
         // Initialize arm height
         armHeight = (armHeightLimits.x + armHeightLimits.y) * 0.5f;
     }
-
     private void LateUpdate()
     {
         // Sync ragdoll joints after animation updates
         foreach (var bone in syncBones)
             bone.UpdateJointFromAnimation();
     }
-
-    /// <summary>
-    /// Call this once per frame to push parameters & procedural tilts.
-    /// </summary>
+    #endregion
     public void HandleAnims()
     {
-        // 1) Movement speed (magnitude of horizontal velocity)
+        ProcessGrabDetection();
+        
         float speedNorm = new Vector3(rb.linearVelocity.x, 0f, rb.linearVelocity.z).magnitude;
         animator.SetFloat(hashMoveSpeed, speedNorm);
-
-        // 2) Grounded flag from locomotion
         animator.SetBool(hashGrounded, locomotion.isGrounded);
-
-        // 3) Grabbing state for animation and layers
         bool leftGrab   = inputManager.left_Input;
         bool rightGrab  = inputManager.right_Input;
         bool isCarrying = leftGrab || rightGrab;
         animator.SetBool(hashIsCarrying, isCarrying);
-
-        // Blend animator layers for left/right grabs
         BlendArmLayer(leftArmLayer,  leftGrab);
         BlendArmLayer(rightArmLayer, rightGrab);
 
@@ -102,6 +101,85 @@ public class ProceduralMovement : MonoBehaviour
         UpdateTorsoTilt(tiltInput);
     }
 
+    private void ProcessGrabDetection()
+    {
+        // 1) Compute world-space box center & half-extents
+        Vector3 worldCenter = transform.TransformPoint(grabBoxCenter);
+        Vector3 halfExtents = grabBoxSize * 0.5f;
+        Quaternion worldRot = transform.rotation;
+
+        // 2) OverlapBox to find any grabbable colliders
+        Collider[] hits = Physics.OverlapBox(worldCenter, halfExtents, worldRot, grabbableLayer);
+        foreach (var col in hits)
+        {
+            Rigidbody body = col.attachedRigidbody;
+            if (body == null) continue;
+
+            // 3) Find the closest point on the collider volume
+            Vector3 grabPoint = col.ClosestPoint(worldCenter);
+
+            // 4) Draw debug lines from each hand
+            Debug.DrawLine(leftHandTransform.position,  grabPoint, Color.green);
+            Debug.DrawLine(rightHandTransform.position, grabPoint, Color.green);
+
+            // 5) If left grab held, pull left hand; same for right
+            if (inputManager.left_Input)
+            {
+                leftHandTransform.position = Vector3.MoveTowards(
+                    leftHandTransform.position,
+                    grabPoint,
+                    pullSpeed * Time.deltaTime
+                );
+            }
+            if (inputManager.right_Input)
+            {
+                rightHandTransform.position = Vector3.MoveTowards(
+                    rightHandTransform.position,
+                    grabPoint,
+                    pullSpeed * Time.deltaTime
+                );
+            }
+
+            // only process the first valid hit
+            break;
+        }
+         // 6) (Optional) visualize the grab-box in the editor
+        //    this only runs in editor or development builds:
+        #if UNITY_EDITOR
+        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z),
+                       worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y, -halfExtents.z), Color.yellow);
+        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y, -halfExtents.z),
+                       worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y,  halfExtents.z), Color.yellow);
+        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y,  halfExtents.z),
+                       worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y,  halfExtents.z), Color.yellow);
+        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y,  halfExtents.z),
+                       worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z), Color.yellow);
+
+        // Repeat for top face
+        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z),
+                       worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y, -halfExtents.z), Color.yellow);
+        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y, -halfExtents.z),
+                       worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y,  halfExtents.z), Color.yellow);
+        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y,  halfExtents.z),
+                       worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y,  halfExtents.z), Color.yellow);
+        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y,  halfExtents.z),
+                       worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z), Color.yellow);
+
+        // Connect vertical edges
+        for (int i = 0; i < 4; i++)
+        {
+            Vector3 cornerA = new Vector3(
+                ((i & 1) == 0 ? -halfExtents.x : halfExtents.x),
+                -halfExtents.y,
+                ((i & 2) == 0 ? -halfExtents.z : halfExtents.z)
+            );
+            Vector3 cornerB = new Vector3(cornerA.x, halfExtents.y, cornerA.z);
+            Debug.DrawLine(worldCenter + worldRot * cornerA,
+                           worldCenter + worldRot * cornerB, Color.yellow);
+        }
+        #endif
+    }
+
     private void BlendArmLayer(int layerIndex, bool active)
     {
         float target = active ? 1f : 0f;
@@ -111,10 +189,6 @@ public class ProceduralMovement : MonoBehaviour
             Mathf.MoveTowards(current, target, armLayerBlendSpeed * Time.deltaTime)
         );
     }
-
-    /// <summary>
-    /// Smoothly tilts the torso bone around local Z for a grabbing pose.
-    /// </summary>
     private void UpdateTorsoTilt(float inputX)
     {
         if (torsoBone == null) return;

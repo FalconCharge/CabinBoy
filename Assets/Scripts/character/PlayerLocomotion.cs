@@ -12,6 +12,9 @@ public class PlayerLocomotion : MonoBehaviour
     private Rigidbody _rb;
     public Transform camObj;
 
+
+
+
     [Header("Orientation Settings")]
     public float grabTurnFactor = 0.5f;
     public float uprightSpringStrength = 150f;
@@ -48,7 +51,11 @@ public class PlayerLocomotion : MonoBehaviour
 
     public Vector3 downDir = Vector3.down;
     public LayerMask groundMask;
+    private float baseRideHeight;
 
+    [Header("Bob up & Down")]
+    public float bobAmplitude = 0.15f;
+    public float bobFrequency = 6f;
     
     [Header("Debug Settings")]
     public bool showRay = false;
@@ -60,7 +67,9 @@ public class PlayerLocomotion : MonoBehaviour
         _player = GetComponent<PlayerManager>();
         _rb = GetComponent<Rigidbody>();
         _rb.angularDamping = uprightSpringDamper;
-        _uprightTargetRot = transform.rotation;
+        _uprightTargetRot = transform.rotation;    
+        baseRideHeight = rideHeight;
+
         // m_GoalVel = Vector3.zero;
     }
 
@@ -68,10 +77,22 @@ public class PlayerLocomotion : MonoBehaviour
     public void HandleAllMovement()
     {
         ReadInput();
+        BobUpNDown();
         HoverRay();
         Locomotion();
         TryProcessJump();
         UpdateUprightForce();
+
+    }
+    private void BobUpNDown()
+    {
+        float horizSpeed = new Vector2(_rb.linearVelocity.x, _rb.linearVelocity.z).magnitude;
+        float speedNorm  = Mathf.Clamp01(horizSpeed / MaxSpeed);
+
+
+        float bob = Mathf.Sin(Time.time * bobFrequency) * bobAmplitude * speedNorm;
+
+        rideHeight = baseRideHeight + bob;
 
     }
     private void ReadInput()
@@ -148,7 +169,6 @@ public class PlayerLocomotion : MonoBehaviour
     }
     private void HoverRay()
     {
-
         isGrounded = false;
 
         if(showRay)
