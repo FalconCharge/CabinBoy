@@ -8,29 +8,37 @@ public class CargoManager : MonoBehaviour
     [Header("Setup")]
     [SerializeField] private float spaceBTWCargo = 2f;
     [SerializeField] private Vector2Int amountOfCrates = new Vector2Int(5, 5);
+
+    [SerializeField] TextMeshProUGUI cargoScoreText;
     private GameObject[,] crates;
 
-    [Header("New Cargo method")]
-    [SerializeField] private GameObject heavyCargo;
-    [SerializeField] private int startAmountOfHeavyCargo;
-    [SerializeField] private GameObject medCargo;
-    [SerializeField] private int StartAmountOfMedCargo;
-    [SerializeField] private GameObject lightCargo;
-    [SerializeField] private int StartAmountOfLightCargo;
+    [Header("Cargo Win/Loss Details")]
+    [SerializeField] GameObject heavyCargo;
+    [SerializeField] int startAmountOfHeavyCargo;
+    [SerializeField] int needAmountOfHeavyCargo;
+    [SerializeField] GameObject medCargo;
+    [SerializeField] int startAmountOfMedCargo;
+    [SerializeField] int needAmountOfMedCargo;
+    [SerializeField] GameObject lightCargo;
+    [SerializeField] private int startAmountOfLightCargo;
+    [SerializeField] int needAmountOfLightCargo;
 
     [Header("Displaying private vars")]
-    [SerializeField] int currentAmountOfLightCargo  = 0;
-    [SerializeField] int currentAmountOfHeavyCargo = 0;
-    [SerializeField] int currentAmountOfMedCargo = 0;
+    [SerializeField] int lightCargoAmount  = 0;
+    [SerializeField] int medCargoAmount = 0;
+    [SerializeField] int heavyCargoAmount = 0;
+
+    // Show player they are about to lose   
+    [SerializeField] private int warningBuffer = 1;
 
 
     void Start(){
         
         //Fill in the crates array with the amounts of crates and access will goto light crates
 
-        currentAmountOfHeavyCargo = 0;
-        currentAmountOfMedCargo = 0;
-        currentAmountOfLightCargo = 0;
+        medCargoAmount = 0;
+        heavyCargoAmount = 0;
+        lightCargoAmount = 0;
 
         crates = new GameObject[amountOfCrates.x, amountOfCrates.y];
 
@@ -42,17 +50,19 @@ public class CargoManager : MonoBehaviour
             }
         }
 
+        UpdateCargoText();
+
     }
 
     private GameObject GetRandomCrate()
     {
         // Gather crate‐types that are still available
         List<int> availableTypes = new List<int>();
-        if (currentAmountOfHeavyCargo < startAmountOfHeavyCargo)
+        if (heavyCargoAmount < startAmountOfHeavyCargo)
             availableTypes.Add(0);
-        if (currentAmountOfMedCargo   < StartAmountOfMedCargo)
+        if (medCargoAmount   < startAmountOfMedCargo)
             availableTypes.Add(1);
-        if (currentAmountOfLightCargo < StartAmountOfLightCargo)
+        if (lightCargoAmount < startAmountOfLightCargo)
             availableTypes.Add(2);
 
         int choice;
@@ -72,14 +82,14 @@ public class CargoManager : MonoBehaviour
         switch (choice)
         {
             case 0:
-                currentAmountOfHeavyCargo++;
+                heavyCargoAmount++;
                 return heavyCargo;
             case 1:
-                currentAmountOfMedCargo++;
+                medCargoAmount++;
                 return medCargo;
             case 2:
             default:
-                currentAmountOfLightCargo++;
+                lightCargoAmount++;
                 return lightCargo;
         }
     }
@@ -113,47 +123,79 @@ public class CargoManager : MonoBehaviour
 
 
     public bool HasCargo(){
-        if(currentAmountOfHeavyCargo > 0) return true;
-        if(currentAmountOfLightCargo > 0) return true;
-        if(currentAmountOfMedCargo > 0) return true;
+        if(medCargoAmount > 0) return true;
+        if(lightCargoAmount > 0) return true;
+        if(heavyCargoAmount > 0) return true;
 
         return false;
     }
     public void LostCargo(GameObject cargoType){
         if(cargoType.CompareTag("LightCargo")){
-            currentAmountOfLightCargo -= 1;
+            lightCargoAmount -= 1;
         }else if(cargoType.CompareTag("MedCargo")){
-            currentAmountOfMedCargo -= 1;
+            medCargoAmount -= 1;
         }else if(cargoType.CompareTag("HeavyCargo")){
-            currentAmountOfHeavyCargo -= 1;
+            heavyCargoAmount -= 1;
         }else if(cargoType.CompareTag("Player")){
             LostPlayer();
         }else{
             Debug.LogWarning("Lost cargo without the tag LightCargo | MedCargo | HeavyCargo | Player");
         }
         CheckCargoLoss();
+        UpdateCargoText();
 
     }
 
-    private void CheckCargoLoss(){
-    
-        if(currentAmountOfHeavyCargo <= 0 && currentAmountOfLightCargo <= 0 && currentAmountOfMedCargo <= 0){
-            // Call the loss screen since we have no more cargo on the ship
+
+    private void CheckCargoLoss()
+    {
+        // If any one type dips below the required “need” amount → LOSS
+        if (medCargoAmount < needAmountOfMedCargo ||
+            heavyCargoAmount   < needAmountOfHeavyCargo   ||
+            lightCargoAmount < needAmountOfLightCargo)
+        {
             FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
         }
     }
 
+    private void CheckCargoWin()
+    {
+        // If all three meet or exceed their needs → WIN
+        if (medCargoAmount >= needAmountOfHeavyCargo &&
+            heavyCargoAmount   >= needAmountOfMedCargo   &&
+            lightCargoAmount >= needAmountOfLightCargo)
+        {
+            FindFirstObjectByType<GameOverUI>().ShowGameOverUI(true);
+        }
+    }
 
 
     //Getter for the amount of current Crates incase of future mechanics
-    public int AmountOfLightCargo(){
-        return currentAmountOfLightCargo;
-    }
-    public int AmountOfMedCargo(){
-        return currentAmountOfLightCargo;
-    }
-    public int AmountOfHeavyCargo(){
-        return currentAmountOfLightCargo;
-    }
+    public int AmountOfHeavyCargo() => medCargoAmount;
+    public int AmountOfMedCargo()   => heavyCargoAmount;
+    public int AmountOfLightCargo() => lightCargoAmount;
     
+
+    private void UpdateCargoText()
+    {
+        // Build each segment with optional coloring
+        string H = FormatSegment(heavyCargoAmount, needAmountOfHeavyCargo);
+        string M = FormatSegment(medCargoAmount,   needAmountOfMedCargo);
+        string L = FormatSegment(lightCargoAmount, needAmountOfLightCargo);
+
+        cargoScoreText.text = $"H: {H}   M: {M}   L: {L}";
+    }
+
+    // Returns "5/2" or "<color=red>1/2</color>" if at or below need,
+    // or "<color=yellow>2/2</color>" when within warningBuffer
+    private string FormatSegment(int current, int need)
+    {
+        string raw = $"{current}/{need}";
+
+        if (current < need)
+            return $"<color=red>{raw}</color>";
+        if (current <= need + warningBuffer)
+            return $"<color=yellow>{raw}</color>";
+        return raw;
+    }
 }
