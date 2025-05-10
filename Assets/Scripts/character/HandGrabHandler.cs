@@ -80,6 +80,7 @@ public class HandGrabHandler : MonoBehaviour
     bool TryCarryObject(Collision col)
     {
         //if has authority
+        
 
         //if player is not active ragdoll
 
@@ -98,6 +99,12 @@ public class HandGrabHandler : MonoBehaviour
         if(cargo != null){
             cargo.ApplyPickupColor();
             grabbedCargo = cargo;
+
+            // BUG: Audio src is playing multiple times
+            // Issue should be it's grabbing again once already grabbed
+            //Play grab sound effect 
+            AudioManager.Instance.PlayGrab();
+
         }
 
         fixedJoint = transform.gameObject.AddComponent<FixedJoint>();

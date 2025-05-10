@@ -1,0 +1,15 @@
+fileFormatVersion: 2
+guid: 8335abb8d61a05a47acf5b9f589dd792
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - musicSource: {instanceID: 0}
+  - sfxSource: {instanceID: 0}
+  - mainTheme: {fileID: 8300000, guid: 00c2982dccd8ba94a9219582d3617a89, type: 3}
+  - grab: {fileID: 8300000, guid: e97c5dcce31bbf9449541a37bfa23e8b, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
