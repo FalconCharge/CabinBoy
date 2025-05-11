@@ -76,6 +76,7 @@ public class HandGrabHandler : MonoBehaviour
         if (collision.collider.TryGetComponent<Cargo>(out var cargo))
         {
             cargo.ApplyPickUpDetail();
+            AudioManager.Instance.PlayGrab();
         }
 
         // store & bump drag
