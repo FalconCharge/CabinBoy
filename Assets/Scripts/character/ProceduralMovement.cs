@@ -19,6 +19,10 @@ public class ProceduralMovement : MonoBehaviour
     [SerializeField] private Rigidbody leftHandRb;
     [SerializeField] private Rigidbody rightHandRb;
 
+    private Vector3 leftClosestPoint, rightClosestPoint;
+    public Rigidbody leftClosestObject, rightClosestObject;
+    private const float grabAttachThreshold = 0.1f;
+
 
     [SerializeField] private float       pullSpeed     = 5f;
     
@@ -61,10 +65,8 @@ public class ProceduralMovement : MonoBehaviour
 
     private void Awake()
     {
-        // Cache sync-bone components
         syncBones = GetComponentsInChildren<SyncPhysicsObject>();
 
-        // Auto-assign references if missing
         if (animator     == null) animator     = GetComponent<Animator>();
         if (inputManager == null) inputManager = GetComponent<InputManager>();
         if (locomotion   == null) locomotion   = GetComponent<PlayerLocomotion>();
@@ -74,16 +76,13 @@ public class ProceduralMovement : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
 
-        // Prepare arm layers for grabbing
         leftArmLayer  = animator.GetLayerIndex("LeftArm");
         rightArmLayer = animator.GetLayerIndex("RightArm");
 
-        // Initialize arm height
         armHeight = (armHeightLimits.x + armHeightLimits.y) * 0.5f;
     }
     private void LateUpdate()
     {
-        // Sync ragdoll joints after animation updates
         foreach (var bone in syncBones)
             bone.UpdateJointFromAnimation();
     }
@@ -120,47 +119,59 @@ public class ProceduralMovement : MonoBehaviour
 
     private void ProcessGrabDetection()
     {
-        closestObject = null;
 
-        // 1) Compute box in world-space
+
+        // compute the world‐space box
         Vector3 worldCenter = transform.TransformPoint(grabBoxCenter);
         Vector3 halfExtents = grabBoxSize * 0.5f;
         Quaternion worldRot = transform.rotation;
 
-        // 2) Find any candidate
+        // find all grabbable colliders
         Collider[] hits = Physics.OverlapBox(worldCenter, halfExtents, worldRot, grabbableLayer);
-        float bestDist = float.MaxValue;
-        Rigidbody bestBody = null;
-        Vector3 bestPoint = Vector3.zero;
-        Transform grabbingHand = inputManager.left_Input ? leftHandTransform
-                            : inputManager.right_Input ? rightHandTransform
-                            : null;
 
-        if (grabbingHand != null)
+        // reset
+        leftClosestObject  = null;
+        rightClosestObject = null;
+        leftClosestPoint   = Vector3.zero;
+        rightClosestPoint  = Vector3.zero;
+
+        // find closest for LEFT hand
+        float bestDist = float.MaxValue;
+        foreach (var col in hits)
         {
-            foreach (var col in hits)
+            var body = col.attachedRigidbody;
+            if (body == null) continue;
+            Vector3 pt = col.ClosestPoint(worldCenter);
+            float dist = Vector3.Distance(leftHandTransform.position, pt);
+            if (dist < bestDist)
             {
-                var body = col.attachedRigidbody;
-                if (body == null) continue;
-                Vector3 pt = col.ClosestPoint(worldCenter);
-                float dist = Vector3.Distance(grabbingHand.position, pt);
-                if (dist < bestDist)
-                {
-                    bestDist  = dist;
-                    bestBody  = body;
-                    bestPoint = pt;
-                }
+                bestDist           = dist;
+                leftClosestObject  = body;
+                leftClosestPoint   = pt;
             }
         }
 
-        closestObject = bestBody;
-        closestPoint  = bestPoint;
-        
-        if (closestObject != null)
+        // find closest for RIGHT hand
+        bestDist = float.MaxValue;
+        foreach (var col in hits)
         {
-            Debug.DrawLine(leftHandTransform.position,  bestPoint, Color.green);
-            Debug.DrawLine(rightHandTransform.position, bestPoint, Color.green);
+            var body = col.attachedRigidbody;
+            if (body == null) continue;
+            Vector3 pt = col.ClosestPoint(worldCenter);
+            float dist = Vector3.Distance(rightHandTransform.position, pt);
+            if (dist < bestDist)
+            {
+                bestDist            = dist;
+                rightClosestObject  = body;
+                rightClosestPoint   = pt;
+            }
         }
+
+        // debug lines
+        if (leftClosestObject != null)
+            Debug.DrawLine(leftHandTransform.position, leftClosestPoint, Color.green);
+        if (rightClosestObject != null)
+            Debug.DrawLine(rightHandTransform.position, rightClosestPoint, Color.green);
 
         #if UNITY_EDITOR
         Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z),
@@ -195,90 +206,22 @@ public class ProceduralMovement : MonoBehaviour
                            worldCenter + worldRot * cornerB, Color.yellow);
         }
         #endif
+
     }
 
     private void HandleLimbPulling()
     {
-        if (closestObject == null) return;
-
-        // Move the left‐hand RigidBody toward the grab point
-        if (inputManager.left_Input)
+        if (inputManager.left_Input && leftClosestObject != null)
         {
-            Vector3 nextPos = Vector3.MoveTowards(
-                leftHandRb.position,
-                closestPoint,
-                pullSpeed * Time.fixedDeltaTime
-            );
-            leftHandRb.MovePosition(nextPos);
+            Vector3 dir = (closestPoint - leftHandRb.position).normalized;
+            leftHandRb.AddForce(dir * pullSpeed, ForceMode.VelocityChange);
+        }
+        if (inputManager.right_Input && rightClosestObject != null)
+        {
+            Vector3 dir = (closestPoint - rightHandRb.position).normalized;
+            rightHandRb.AddForce(dir * pullSpeed, ForceMode.VelocityChange);
         }
 
-        // Move the right‐hand RigidBody toward the grab point
-        if (inputManager.right_Input)
-        {
-            Vector3 nextPos = Vector3.MoveTowards(
-                rightHandRb.position,
-                closestPoint,
-                pullSpeed * Time.fixedDeltaTime
-            );
-            rightHandRb.MovePosition(nextPos);
-        }
-
-        /*
-        if (closestObject != null)
-        {
-            if (inputManager.left_Input)
-            {
-                leftHandTransform.position = Vector3.MoveTowards(
-                    leftHandTransform.position,
-                    closestPoint,
-                    pullSpeed * Time.deltaTime
-                );
-            }
-
-            if (inputManager.right_Input)
-            {
-                rightHandTransform.position = Vector3.MoveTowards(
-                    rightHandTransform.position,
-                    closestPoint,
-                    pullSpeed * Time.deltaTime
-                );
-            }
-        }
-        */
-        /*
-        bool anyPull = false;
-        float origAD = rb.angularDamping;
-
-        // Left arm pull
-        if (inputManager.left_Input && closestObject != null)
-        {
-            Vector3 dir  = (closestPoint - leftHandTransform.position).normalized;
-            float dist   = Vector3.Distance(leftHandTransform.position, closestPoint);
-            float t      = Mathf.Clamp01(dist / maxPullDistance);
-            rb.AddForce(dir * limbPullForce * (1 - t));
-            anyPull = true;
-        }
-
-        // Right arm pull
-        if (inputManager.right_Input && closestObject != null)
-        {
-            Vector3 dir  = (closestPoint - rightHandTransform.position).normalized;
-            float dist   = Vector3.Distance(rightHandTransform.position, closestPoint);
-            float t      = Mathf.Clamp01(dist / maxPullDistance);
-            rb.AddForce(dir * limbPullForce * (1 - t));
-            anyPull = true;
-        }
-
-        // Stabilize when pulling
-        if (anyPull)
-        {
-            rb.angularDamping = angularDragBoost;
-            rb.linearVelocity   *= velocityDamper;
-        }
-        else
-        {
-            rb.angularDamping = origAD;
-        }*/
     }
 
     private void BlendArmLayer(int layerIndex, bool active)

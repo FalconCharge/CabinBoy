@@ -19,6 +19,9 @@ public class Cargo : MonoBehaviour
     private Color origColor;
     private float origDrag; 
 
+    float baseLinearDrag;
+    float baseAngularDrag;
+
     private Rigidbody m_rb;
 
     public int isGrabbed = 0;
@@ -33,6 +36,10 @@ public class Cargo : MonoBehaviour
     void Awake()
     {
         m_rb = GetComponent<Rigidbody>();
+
+        baseLinearDrag = m_rb.linearDamping;
+        baseAngularDrag = m_rb.angularDamping;
+
         m_buoyancyObject = GetComponent<BuoyancyObject>();
         m_rb.mass = this.mass;
         origMass = this.mass;   
@@ -74,24 +81,27 @@ public class Cargo : MonoBehaviour
         
     }
 
-    public void ApplyPickUpDetail(){
+    public void ApplyPickUpDetail(float linearDrag, float angularDrag){
         isGrabbed += 1;
 
-        GetComponent<Rigidbody>().mass = 1;
+        m_rb.mass = 1;
 
         Color pickupColor = origColor + tint;
 
         this.GetComponent<Renderer>().material.color = pickupColor;
 
+        m_rb.linearDamping = linearDrag;
+        m_rb.angularDamping = angularDrag;
         //Adjust the rigibody to make changes to the drag same as seen in color and mass
 
     }
     public void ResetColor(){
         isGrabbed -= 1;
         if(isGrabbed == 0){
-            GetComponent<Rigidbody>().mass = origMass;
+            m_rb.mass = origMass;
             this.GetComponent<Renderer>().material.color = origColor;
-
+            m_rb.linearDamping = baseLinearDrag;
+            m_rb.angularDamping = baseAngularDrag;
             // Adjust the drag back to it's normal values
         }
 

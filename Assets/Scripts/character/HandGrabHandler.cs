@@ -59,6 +59,7 @@ public class HandGrabHandler : MonoBehaviour
         }
 
         heldRb.GetComponent<Cargo>().ResetColor();
+        
 
         // destroy joint
         Destroy(cfgJoint);
@@ -75,15 +76,19 @@ public class HandGrabHandler : MonoBehaviour
 
         if (collision.collider.TryGetComponent<Cargo>(out var cargo))
         {
-            cargo.ApplyPickUpDetail();
-            AudioManager.Instance.PlayGrab();
+            cargo.ApplyPickUpDetail(grabbedDrag ,grabbedAngularDrag);
+            if(AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlayGrab();
+            }
         }
+
 
         // store & bump drag
         heldRb          = otherRb;
         origDrag        = otherRb.linearDamping;
         origAngularDrag = otherRb.angularDamping;
-        otherRb.linearDamping        = grabbedDrag;
+        otherRb.linearDamping  = grabbedDrag;
         otherRb.angularDamping = grabbedAngularDrag;
 
         // create joint
