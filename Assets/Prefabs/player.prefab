@@ -139,6 +139,8 @@ GameObject:
   - component: {fileID: 8200891627649929609}
   - component: {fileID: 4112380772288260411}
   - component: {fileID: 2557327573422620383}
+  - component: {fileID: 3158079616751698188}
+  - component: {fileID: 2499507487349289723}
   m_Layer: 6
   m_Name: player
   m_TagString: Player
@@ -157,7 +159,7 @@ Transform:
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 2, z: 0}
   m_LocalScale: {x: 2, y: 2, z: 2}
-  m_ConstrainProportionsScale: 1
+  m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8137617594947854229}
   - {fileID: 4106505831423042742}
@@ -361,7 +363,7 @@ MonoBehaviour:
   grabBoxSize: {x: 8, y: 3.5, z: 5.5}
   grabbableLayer:
     serializedVersion: 2
-    m_Bits: 183
+    m_Bits: 55
   leftHand: {fileID: 2624240057401614957}
   rightHand: {fileID: 2465337394819910699}
   leftHandTransform: {fileID: 5807594628965171638}
@@ -439,6 +441,45 @@ MonoBehaviour:
     joint: {fileID: 0}
     positionSpring: 600
     positionDamper: 20
+--- !u!114 &3158079616751698188
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640946222780028348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  waterCurrentForce: 250
+  waterCurrentDirection: {x: 0, y: 0, z: 1}
+  valueOfCargo: 5
+  killDistance: 40
+  isGrabbed: 1
+  adjusted: 0
+--- !u!114 &2499507487349289723
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 640946222780028348}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bb2a83f32a9f00b45a3286b69dd06a9a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  floaters:
+  - {fileID: 4573625933123052722}
+  underWaterDrag: 3
+  underWaterAngularDrag: 1
+  airDrag: 0
+  airAngularDrag: 0
+  waterHeightOffset: 1
+  floatingPower: 15
 --- !u!1 &682360383406077625
 GameObject:
   m_ObjectHideFlags: 0
@@ -1126,9 +1167,9 @@ MonoBehaviour:
   rotationalSpring: 1000
   rotationalDamper: 50
   limitAngle: 15
-  connectedMassScale: 0.01
-  grabbedDrag: 5
-  grabbedAngularDrag: 5
+  connectedMassScale: 1e-10
+  grabbedDrag: 4
+  grabbedAngularDrag: 2
   currentlyGrabbing: 0
 --- !u!1 &2551001818335811427
 GameObject:
@@ -1364,9 +1405,9 @@ MonoBehaviour:
   rotationalSpring: 1000
   rotationalDamper: 50
   limitAngle: 15
-  connectedMassScale: 0.01
-  grabbedDrag: 5
-  grabbedAngularDrag: 5
+  connectedMassScale: 1e-10
+  grabbedDrag: 4
+  grabbedAngularDrag: 2
   currentlyGrabbing: 0
 --- !u!1 &2787194427827167573
 GameObject:

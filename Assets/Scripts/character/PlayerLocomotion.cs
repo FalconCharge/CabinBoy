@@ -1,5 +1,3 @@
-using Unity.Mathematics;
-using UnityEditor.Callbacks;
 using UnityEngine;
 
 public class PlayerLocomotion : MonoBehaviour

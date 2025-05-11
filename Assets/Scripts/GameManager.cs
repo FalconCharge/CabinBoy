@@ -64,6 +64,11 @@ public class GameManager : MonoBehaviour
         cargoText.alpha = 0f;
 
         gameTimer = GetComponent<GameTimer>();
+
+
+        // Temp place to put no mouse
+        // Cursor.visible = false;
+        // Cursor.lockState = CursorLockMode.Locked;
     }
 
 
@@ -188,6 +193,7 @@ public class GameManager : MonoBehaviour
             }else{
                 FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
             }
+            Debug.Log("GameOver");
         }
     }
 
