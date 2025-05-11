@@ -69,8 +69,7 @@ public class HandGrabHandler : MonoBehaviour
         // Record cargo
         if (collision.collider.TryGetComponent<Cargo>(out var cargo))
         {
-            if(!cargo.colored)
-                cargo.ApplyPickupColor();
+            cargo.ApplyPickUpDetail();
                 
             Debug.Log("colorapply");
             grabbedCargo = cargo;

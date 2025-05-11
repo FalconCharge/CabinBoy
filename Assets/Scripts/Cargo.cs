@@ -1,5 +1,6 @@
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Analytics;
 using UnityEngine.InputSystem.Interactions;
 
 public class Cargo : MonoBehaviour
@@ -19,7 +20,7 @@ public class Cargo : MonoBehaviour
 
     private Rigidbody m_rb;
     
-    public bool colored = false;
+    public bool adjusted = false;
     private BuoyancyObject m_buoyancyObject;
 
     private CargoManager cargoManager;
@@ -67,22 +68,26 @@ public class Cargo : MonoBehaviour
         }
     }
 
-    public void ApplyPickupColor(){
-        //Set mass to 1
+    public void ApplyPickUpDetail(){
+        if(adjusted) return;
+
         GetComponent<Rigidbody>().mass = 1;
 
-        origColor = this.GetComponent<Renderer>().material.color;
+        Color pickupColor = origColor + tint;
 
-        Color pickupColor = this.GetComponent<Renderer>().material.color;
-
-        pickupColor += tint;
         this.GetComponent<Renderer>().material.color = pickupColor;
-        colored = true;
+        
+        adjusted = true;
     }
     public void ResetColor(){
-        colored = false;
-        GetComponent<Rigidbody>().mass = origMass;
-        this.GetComponent<Renderer>().material.color = origColor;
+        if(adjusted){
+            GetComponent<Rigidbody>().mass = origMass;
+            this.GetComponent<Renderer>().material.color = origColor;
+
+            adjusted = false;
+        }
+
+
     }
 
 }
