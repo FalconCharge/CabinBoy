@@ -22,11 +22,14 @@ public class Cargo : MonoBehaviour
 
     private CargoManager cargoManager;
 
+    private float origMass;
+
     void Awake()
     {
         m_rb = GetComponent<Rigidbody>();
         m_buoyancyObject = GetComponent<BuoyancyObject>();
         m_rb.mass = this.mass;
+        origMass = this.mass;
         cargoManager = FindAnyObjectByType<CargoManager>();
 
         // don't work on player
@@ -63,6 +66,9 @@ public class Cargo : MonoBehaviour
     }
 
     public void ApplyPickupColor(){
+        //Set mass to 1
+        GetComponent<Rigidbody>().mass = 1;
+
         origColor = this.GetComponent<Renderer>().material.color;
 
         Color pickupColor = this.GetComponent<Renderer>().material.color;
@@ -71,6 +77,7 @@ public class Cargo : MonoBehaviour
         this.GetComponent<Renderer>().material.color = pickupColor;
     }
     public void ResetColor(){
+        GetComponent<Rigidbody>().mass = origMass;
         this.GetComponent<Renderer>().material.color = origColor;
     }
 
