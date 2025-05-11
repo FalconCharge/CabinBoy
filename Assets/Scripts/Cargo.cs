@@ -17,6 +17,7 @@ public class Cargo : MonoBehaviour
 
     private Color tint = new Color(0.15f, 0.15f, 0.15f);
     private Color origColor;
+    private float origDrag; 
 
     private Rigidbody m_rb;
     
@@ -32,7 +33,8 @@ public class Cargo : MonoBehaviour
         m_rb = GetComponent<Rigidbody>();
         m_buoyancyObject = GetComponent<BuoyancyObject>();
         m_rb.mass = this.mass;
-        origMass = this.mass;
+        origMass = this.mass;   
+        origDrag = m_rb.angularDamping; //ORig drag
         cargoManager = FindAnyObjectByType<CargoManager>();
 
         // don't work on player
@@ -76,6 +78,8 @@ public class Cargo : MonoBehaviour
         Color pickupColor = origColor + tint;
 
         this.GetComponent<Renderer>().material.color = pickupColor;
+
+        // Apply the drag changes
         
         adjusted = true;
     }
@@ -83,6 +87,8 @@ public class Cargo : MonoBehaviour
         if(adjusted){
             GetComponent<Rigidbody>().mass = origMass;
             this.GetComponent<Renderer>().material.color = origColor;
+
+            // Remove the drag changes
 
             adjusted = false;
         }

@@ -25,7 +25,8 @@ public class PlayerLocomotion : MonoBehaviour
     [Header("Hover Settings")]
     public float RideSpringStrength = 10.0f;
     public float RideSpringDamper = 5.0f;
-    public float rideHeight = 2.0f;
+    public float baseRideHeight = 2.0f;
+    public float rideHeight;
     public float groundedTolerance = 0.1f;
     public float rayLen = 2.0f;
 
@@ -51,7 +52,6 @@ public class PlayerLocomotion : MonoBehaviour
 
     public Vector3 downDir = Vector3.down;
     public LayerMask groundMask;
-    private float baseRideHeight;
 
     [Header("Bob up & Down")]
     public float bobAmplitude = 0.15f;
@@ -68,7 +68,7 @@ public class PlayerLocomotion : MonoBehaviour
         _rb = GetComponent<Rigidbody>();
         _rb.angularDamping = uprightSpringDamper;
         _uprightTargetRot = transform.rotation;    
-        baseRideHeight = rideHeight;
+        rideHeight = baseRideHeight;
 
         // m_GoalVel = Vector3.zero;
     }
