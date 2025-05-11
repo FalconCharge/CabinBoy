@@ -49,7 +49,7 @@ public class HandGrabHandler : MonoBehaviour
 
             // Apply small throw impulse
             Rigidbody otherRb = cfgJoint.connectedBody;
-            otherRb.AddForce((player.transform.forward + Vector3.up * 0.25f) * 0.1f, ForceMode.Impulse);
+            // otherRb.AddForce((player.transform.forward + Vector3.up * 0.25f) * 0.1f, ForceMode.Impulse);
 
             Destroy(cfgJoint);
             cfgJoint = null;
