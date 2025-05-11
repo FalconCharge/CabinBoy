@@ -1476,11 +1476,6 @@ CapsuleCollider:
   m_Height: 0.101632185
   m_Direction: 1
   m_Center: {x: -0.0043299533, y: 0.050816093, z: -0.003336484}
---- !u!1 &330446931 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2624240057401614957, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
-  m_PrefabInstance: {fileID: 6669663731868869419}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -1569,7 +1564,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3007058, y: 0.00000003177786, z: -0.00000001001952, w: 0.953717}
-  m_LocalPosition: {x: 0, y: 12.886479, z: -15.547505}
+  m_LocalPosition: {x: -1, y: 12.886479, z: -15.547505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -4887,7 +4882,7 @@ Transform:
   m_GameObject: {fileID: 1197058843}
   serializedVersion: 2
   m_LocalRotation: {x: 0.3007058, y: 0.00000003177786, z: -0.000000010019519, w: 0.953717}
-  m_LocalPosition: {x: 0, y: 12.886479, z: -15.547505}
+  m_LocalPosition: {x: -1, y: 12.886479, z: -15.547505}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5191,11 +5186,6 @@ Transform:
   - {fileID: 1591478523}
   m_Father: {fileID: 1446530635}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &1307508055 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2465337394819910699, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
-  m_PrefabInstance: {fileID: 6669663731868869419}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1309655820
 GameObject:
   m_ObjectHideFlags: 0
@@ -7478,21 +7468,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
-    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
-      propertyPath: leftHand
-      value: 
-      objectReference: {fileID: 330446931}
-    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
-      propertyPath: pullSpeed
-      value: 350
-      objectReference: {fileID: 0}
-    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
-      propertyPath: rightHand
-      value: 
-      objectReference: {fileID: 1307508055}
     - target: {fileID: 4573625933123052722, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 4573625933123052722, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: m_LocalPosition.y

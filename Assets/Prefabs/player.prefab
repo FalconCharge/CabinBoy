@@ -362,11 +362,15 @@ MonoBehaviour:
   grabbableLayer:
     serializedVersion: 2
     m_Bits: 183
+  leftHand: {fileID: 2624240057401614957}
+  rightHand: {fileID: 2465337394819910699}
   leftHandTransform: {fileID: 5807594628965171638}
   rightHandTransform: {fileID: 1599436959053540317}
   leftHandRb: {fileID: 8618443564534488342}
   rightHandRb: {fileID: 4485463673120442762}
-  pullSpeed: 90
+  leftClosestObject: {fileID: 0}
+  rightClosestObject: {fileID: 0}
+  pullSpeed: 350
   limbPullForce: 35
   maxPullDistance: 3
   velocityDamper: 0.85
@@ -1125,6 +1129,7 @@ MonoBehaviour:
   connectedMassScale: 0.01
   grabbedDrag: 5
   grabbedAngularDrag: 5
+  currentlyGrabbing: 0
 --- !u!1 &2551001818335811427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1362,6 +1367,7 @@ MonoBehaviour:
   connectedMassScale: 0.01
   grabbedDrag: 5
   grabbedAngularDrag: 5
+  currentlyGrabbing: 0
 --- !u!1 &2787194427827167573
 GameObject:
   m_ObjectHideFlags: 0
