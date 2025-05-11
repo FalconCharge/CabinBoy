@@ -75,8 +75,7 @@ public class Cargo : MonoBehaviour
     }
 
     public void ApplyPickUpDetail(){
-        // if(adjusted) return;
-        // isGrabbed += 1;
+        isGrabbed += 1;
 
         GetComponent<Rigidbody>().mass = 1;
 
@@ -85,20 +84,18 @@ public class Cargo : MonoBehaviour
         this.GetComponent<Renderer>().material.color = pickupColor;
 
         // Apply the drag changes
-        
-        adjusted = true;
+        Debug.Log("Hands: " + isGrabbed);         
     }
     public void ResetColor(){
-        // if(adjusted){
+        isGrabbed -= 1;
+        if(isGrabbed == 0){
             GetComponent<Rigidbody>().mass = origMass;
             this.GetComponent<Renderer>().material.color = origColor;
+        }
 
-            // Remove the drag changes
+        Debug.Log("Hands: " + isGrabbed);         
 
-            adjusted = false;
-        // }
-
-
+    
     }
 
 }
