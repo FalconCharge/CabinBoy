@@ -17,6 +17,7 @@ public class HandGrabHandler : MonoBehaviour
     private ConfigurableJoint cfgJoint;
     private Rigidbody rb;
     private Cargo grabbedCargo;
+    
 
     private void Awake()
     {
@@ -68,8 +69,13 @@ public class HandGrabHandler : MonoBehaviour
         // Record cargo
         if (collision.collider.TryGetComponent<Cargo>(out var cargo))
         {
-            cargo.ApplyPickupColor();
+            if(!cargo.colored)
+                cargo.ApplyPickupColor();
+                
+            Debug.Log("colorapply");
             grabbedCargo = cargo;
+            
+            // AudioManager.Instance.PlayGrab();
         }
 
         // Create ConfigurableJoint

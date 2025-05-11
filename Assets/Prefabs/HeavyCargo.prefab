@@ -14,7 +14,6 @@ GameObject:
   - component: {fileID: 2591167964865617701}
   - component: {fileID: 75663303063776659}
   - component: {fileID: 6991600369092187718}
-  - component: {fileID: 7746636787606939467}
   - component: {fileID: 1653785259157812071}
   - component: {fileID: 319294615623860650}
   - component: {fileID: 8773687984010043362}
@@ -157,28 +156,7 @@ MonoBehaviour:
   waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 20
   killDistance: 40
---- !u!64 &7746636787606939467
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6135168412169155745}
-  m_Material: {fileID: 13400000, guid: 2b9c0aedc2a68b842a73a270468e9baf, type: 2}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_IsTrigger: 0
-  m_ProvidesContacts: 0
-  m_Enabled: 0
-  serializedVersion: 5
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: 964127668553843577, guid: a3d828b950ca0d842b024ca962e98ad1, type: 3}
+  colored: 0
 --- !u!136 &1653785259157812071
 CapsuleCollider:
   m_ObjectHideFlags: 0
