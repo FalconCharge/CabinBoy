@@ -12,6 +12,10 @@ public class ProceduralMovement : MonoBehaviour
     [Tooltip("LayerMask of objects you can grab")]
     [SerializeField] private LayerMask   grabbableLayer;
     [Tooltip("World-space transforms of your hand bones")]
+
+    [SerializeField] private GameObject leftHand;
+    [SerializeField] private GameObject rightHand;
+
     [SerializeField] private Transform   leftHandTransform;
     [SerializeField] private Transform   rightHandTransform;
     [Tooltip("Speed at which the hand moves to the grab point")]
@@ -134,42 +138,49 @@ public class ProceduralMovement : MonoBehaviour
         rightClosestObject = null;
         leftClosestPoint   = Vector3.zero;
         rightClosestPoint  = Vector3.zero;
-
-        // find closest for LEFT hand
-        float bestDist = float.MaxValue;
-        foreach (var col in hits)
+        
+        if(!leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
         {
-            var body = col.attachedRigidbody;
-            if (body == null) continue;
-            Vector3 pt = col.ClosestPoint(worldCenter);
-            float dist = Vector3.Distance(leftHandTransform.position, pt);
-            if (dist < bestDist)
+            // find closest for LEFT hand
+            float bestDist = float.MaxValue;
+            foreach (var col in hits)
             {
-                bestDist           = dist;
-                leftClosestObject  = body;
-                leftClosestPoint   = pt;
+                var body = col.attachedRigidbody;
+                if (body == null) continue;
+                Vector3 pt = col.ClosestPoint(worldCenter);
+                float dist = Vector3.Distance(leftHandTransform.position, pt);
+                if (dist < bestDist)
+                {
+                    bestDist           = dist;
+                    leftClosestObject  = body;
+                    leftClosestPoint   = pt;
+                }
             }
+            if (leftClosestObject != null)
+                Debug.DrawLine(leftHandTransform.position, leftClosestPoint, Color.green);
+
         }
 
-        // find closest for RIGHT hand
-        bestDist = float.MaxValue;
-        foreach (var col in hits)
+        if(!rightHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
         {
-            var body = col.attachedRigidbody;
-            if (body == null) continue;
-            Vector3 pt = col.ClosestPoint(worldCenter);
-            float dist = Vector3.Distance(rightHandTransform.position, pt);
-            if (dist < bestDist)
+            // find closest for RIGHT hand
+            float bestDist = float.MaxValue;
+            foreach (var col in hits)
             {
-                bestDist            = dist;
-                rightClosestObject  = body;
-                rightClosestPoint   = pt;
+                var body = col.attachedRigidbody;
+                if (body == null) continue;
+                Vector3 pt = col.ClosestPoint(worldCenter);
+                float dist = Vector3.Distance(rightHandTransform.position, pt);
+                if (dist < bestDist)
+                {
+                    bestDist            = dist;
+                    rightClosestObject  = body;
+                    rightClosestPoint   = pt;
+                }
             }
         }
 
         // debug lines
-        if (leftClosestObject != null)
-            Debug.DrawLine(leftHandTransform.position, leftClosestPoint, Color.green);
         if (rightClosestObject != null)
             Debug.DrawLine(rightHandTransform.position, rightClosestPoint, Color.green);
 
@@ -211,15 +222,15 @@ public class ProceduralMovement : MonoBehaviour
 
     private void HandleLimbPulling()
     {
-        if (inputManager.left_Input && leftClosestObject != null)
+        if (inputManager.left_Input && leftClosestObject != null && !leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
         {
-            Vector3 dir = (closestPoint - leftHandRb.position).normalized;
-            leftHandRb.AddForce(dir * pullSpeed, ForceMode.VelocityChange);
+            Vector3 dir = (leftClosestPoint - leftHandRb.position).normalized;
+            leftHandRb.AddForce(dir * pullSpeed, ForceMode.Force);
         }
-        if (inputManager.right_Input && rightClosestObject != null)
+        if (inputManager.right_Input && rightClosestObject != null && !rightHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
         {
-            Vector3 dir = (closestPoint - rightHandRb.position).normalized;
-            rightHandRb.AddForce(dir * pullSpeed, ForceMode.VelocityChange);
+            Vector3 dir = (rightClosestPoint - rightHandRb.position).normalized;
+            rightHandRb.AddForce(dir * pullSpeed, ForceMode.Force);
         }
 
     }

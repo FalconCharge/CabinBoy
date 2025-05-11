@@ -1140,6 +1140,7 @@ GameObject:
   - component: {fileID: 261699519}
   - component: {fileID: 261699518}
   - component: {fileID: 261699517}
+  - component: {fileID: 261699521}
   m_Layer: 0
   m_Name: Cube (1)
   m_TagString: Untagged
@@ -1263,6 +1264,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 261699515}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &261699521
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 261699515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  waterCurrentForce: 100
+  waterCurrentDirection: {x: 0, y: 0, z: 0}
+  valueOfCargo: 5
+  killDistance: 40
+  isGrabbed: 0
+  adjusted: 0
 --- !u!1 &262687667
 GameObject:
   m_ObjectHideFlags: 0
@@ -1456,6 +1476,11 @@ CapsuleCollider:
   m_Height: 0.101632185
   m_Direction: 1
   m_Center: {x: -0.0043299533, y: 0.050816093, z: -0.003336484}
+--- !u!1 &330446931 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2624240057401614957, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+  m_PrefabInstance: {fileID: 6669663731868869419}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -2265,6 +2290,7 @@ GameObject:
   - component: {fileID: 583724872}
   - component: {fileID: 583724871}
   - component: {fileID: 583724870}
+  - component: {fileID: 583724874}
   m_Layer: 0
   m_Name: Cube (2)
   m_TagString: Untagged
@@ -2388,6 +2414,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 583724868}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &583724874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 583724868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  waterCurrentForce: 100
+  waterCurrentDirection: {x: 0, y: 0, z: 0}
+  valueOfCargo: 5
+  killDistance: 40
+  isGrabbed: 0
+  adjusted: 0
 --- !u!1 &600511424 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8817898888258712963, guid: 6588d24a3e77cd34493955dc2e6e4003, type: 3}
@@ -2878,6 +2923,7 @@ GameObject:
   - component: {fileID: 717242742}
   - component: {fileID: 717242741}
   - component: {fileID: 717242740}
+  - component: {fileID: 717242744}
   m_Layer: 0
   m_Name: Cube (3)
   m_TagString: Untagged
@@ -3001,6 +3047,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 717242738}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &717242744
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 717242738}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  waterCurrentForce: 100
+  waterCurrentDirection: {x: 0, y: 0, z: 0}
+  valueOfCargo: 5
+  killDistance: 40
+  isGrabbed: 0
+  adjusted: 0
 --- !u!1 &751354674
 GameObject:
   m_ObjectHideFlags: 0
@@ -3932,6 +3997,7 @@ GameObject:
   - component: {fileID: 930860944}
   - component: {fileID: 930860943}
   - component: {fileID: 930860942}
+  - component: {fileID: 930860946}
   m_Layer: 0
   m_Name: Cube
   m_TagString: Untagged
@@ -4055,6 +4121,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 930860940}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &930860946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930860940}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mass: 1
+  waterCurrentForce: 100
+  waterCurrentDirection: {x: 0, y: 0, z: 0}
+  valueOfCargo: 5
+  killDistance: 40
+  isGrabbed: 0
+  adjusted: 0
 --- !u!1 &957064163
 GameObject:
   m_ObjectHideFlags: 0
@@ -5106,6 +5191,11 @@ Transform:
   - {fileID: 1591478523}
   m_Father: {fileID: 1446530635}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1307508055 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2465337394819910699, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+  m_PrefabInstance: {fileID: 6669663731868869419}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1309655820
 GameObject:
   m_ObjectHideFlags: 0
@@ -7388,6 +7478,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: player
       objectReference: {fileID: 0}
+    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+      propertyPath: leftHand
+      value: 
+      objectReference: {fileID: 330446931}
+    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+      propertyPath: pullSpeed
+      value: 350
+      objectReference: {fileID: 0}
+    - target: {fileID: 4112380772288260411, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
+      propertyPath: rightHand
+      value: 
+      objectReference: {fileID: 1307508055}
     - target: {fileID: 4573625933123052722, guid: d0419675fa8e26049b4928d5b86b84f8, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

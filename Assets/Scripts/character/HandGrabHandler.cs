@@ -25,6 +25,7 @@ public class HandGrabHandler : MonoBehaviour
     private Rigidbody         heldRb;
     private Cargo             grabbedCargo;
     private float             origDrag, origAngularDrag;
+    public bool currentlyGrabbing = false;
 
     void Awake()
     {
@@ -59,7 +60,7 @@ public class HandGrabHandler : MonoBehaviour
         }
 
         heldRb.GetComponent<Cargo>().ResetColor();
-        
+        currentlyGrabbing = false;
 
         // destroy joint
         Destroy(cfgJoint);
@@ -77,6 +78,7 @@ public class HandGrabHandler : MonoBehaviour
         if (collision.collider.TryGetComponent<Cargo>(out var cargo))
         {
             cargo.ApplyPickUpDetail(grabbedDrag ,grabbedAngularDrag);
+            currentlyGrabbing = true;
             if(AudioManager.Instance != null)
             {
                 AudioManager.Instance.PlayGrab();
