@@ -83,17 +83,18 @@ public class Cargo : MonoBehaviour
 
         this.GetComponent<Renderer>().material.color = pickupColor;
 
-        // Apply the drag changes
-        Debug.Log("Hands: " + isGrabbed);         
+        //Adjust the rigibody to make changes to the drag same as seen in color and mass
+
     }
     public void ResetColor(){
         isGrabbed -= 1;
         if(isGrabbed == 0){
             GetComponent<Rigidbody>().mass = origMass;
             this.GetComponent<Renderer>().material.color = origColor;
+
+            // Adjust the drag back to it's normal values
         }
 
-        Debug.Log("Hands: " + isGrabbed);         
 
     
     }
