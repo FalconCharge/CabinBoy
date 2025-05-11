@@ -18,6 +18,8 @@ public class Cargo : MonoBehaviour
     private Color origColor;
 
     private Rigidbody m_rb;
+    
+    public bool colored = false;
     private BuoyancyObject m_buoyancyObject;
 
     private CargoManager cargoManager;
@@ -75,8 +77,10 @@ public class Cargo : MonoBehaviour
 
         pickupColor += tint;
         this.GetComponent<Renderer>().material.color = pickupColor;
+        colored = true;
     }
     public void ResetColor(){
+        colored = false;
         GetComponent<Rigidbody>().mass = origMass;
         this.GetComponent<Renderer>().material.color = origColor;
     }
