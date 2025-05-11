@@ -275,6 +275,7 @@ MonoBehaviour:
   uprightSpringDamper: 20
   RideSpringStrength: 50
   RideSpringDamper: 5
+  baseRideHeight: 1.5
   rideHeight: 1.5
   groundedTolerance: 0.3
   rayLen: 1.5
@@ -1122,6 +1123,8 @@ MonoBehaviour:
   rotationalDamper: 50
   limitAngle: 15
   connectedMassScale: 0.01
+  grabbedDrag: 5
+  grabbedAngularDrag: 5
 --- !u!1 &2551001818335811427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1357,6 +1360,8 @@ MonoBehaviour:
   rotationalDamper: 50
   limitAngle: 15
   connectedMassScale: 0.01
+  grabbedDrag: 5
+  grabbedAngularDrag: 5
 --- !u!1 &2787194427827167573
 GameObject:
   m_ObjectHideFlags: 0

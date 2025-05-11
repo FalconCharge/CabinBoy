@@ -20,6 +20,8 @@ public class Cargo : MonoBehaviour
     private float origDrag; 
 
     private Rigidbody m_rb;
+
+    public int isGrabbed = 0;
     
     public bool adjusted = false;
     private BuoyancyObject m_buoyancyObject;
@@ -68,10 +70,13 @@ public class Cargo : MonoBehaviour
             // Destroy gameObject because it's no longer used
             Destroy(this.gameObject);
         }
+
+        
     }
 
     public void ApplyPickUpDetail(){
-        if(adjusted) return;
+        // if(adjusted) return;
+        // isGrabbed += 1;
 
         GetComponent<Rigidbody>().mass = 1;
 
@@ -84,14 +89,14 @@ public class Cargo : MonoBehaviour
         adjusted = true;
     }
     public void ResetColor(){
-        if(adjusted){
+        // if(adjusted){
             GetComponent<Rigidbody>().mass = origMass;
             this.GetComponent<Renderer>().material.color = origColor;
 
             // Remove the drag changes
 
             adjusted = false;
-        }
+        // }
 
 
     }

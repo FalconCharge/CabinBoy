@@ -129,24 +129,39 @@ public class ProceduralMovement : MonoBehaviour
 
         // 2) Find any candidate
         Collider[] hits = Physics.OverlapBox(worldCenter, halfExtents, worldRot, grabbableLayer);
-        foreach (var col in hits)
+        float bestDist = float.MaxValue;
+        Rigidbody bestBody = null;
+        Vector3 bestPoint = Vector3.zero;
+        Transform grabbingHand = inputManager.left_Input ? leftHandTransform
+                            : inputManager.right_Input ? rightHandTransform
+                            : null;
+
+        if (grabbingHand != null)
         {
-            var body = col.attachedRigidbody;
-            if (body == null) continue;
-
-            // 3) Closest point on that collider
-            Vector3 pt = col.ClosestPoint(worldCenter);
-            closestObject = body;
-            closestPoint  = pt;
-
-            // 4) Debug lines
-            Debug.DrawLine(leftHandTransform.position,  pt, Color.green);
-            Debug.DrawLine(rightHandTransform.position, pt, Color.green);
-
-            break;
+            foreach (var col in hits)
+            {
+                var body = col.attachedRigidbody;
+                if (body == null) continue;
+                Vector3 pt = col.ClosestPoint(worldCenter);
+                float dist = Vector3.Distance(grabbingHand.position, pt);
+                if (dist < bestDist)
+                {
+                    bestDist  = dist;
+                    bestBody  = body;
+                    bestPoint = pt;
+                }
+            }
         }
-         // 6) (Optional) visualize the grab-box in the editor
-        //    this only runs in editor or development builds:
+
+        closestObject = bestBody;
+        closestPoint  = bestPoint;
+        
+        if (closestObject != null)
+        {
+            Debug.DrawLine(leftHandTransform.position,  bestPoint, Color.green);
+            Debug.DrawLine(rightHandTransform.position, bestPoint, Color.green);
+        }
+
         #if UNITY_EDITOR
         Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z),
                        worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y, -halfExtents.z), Color.yellow);
