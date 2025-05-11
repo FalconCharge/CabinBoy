@@ -149,11 +149,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 2
+  mass: 5
   waterCurrentForce: 10
   waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 10
   killDistance: 40
+  colored: 0
 --- !u!64 &6776515575876858256
 MeshCollider:
   m_ObjectHideFlags: 0
