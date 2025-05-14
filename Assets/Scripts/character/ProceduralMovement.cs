@@ -16,12 +16,12 @@ public class ProceduralMovement : MonoBehaviour
     [SerializeField] private GameObject leftHand;
     [SerializeField] private GameObject rightHand;
 
-    [SerializeField] private Transform   leftHandTransform;
-    [SerializeField] private Transform   rightHandTransform;
+    private Transform   leftHandTransform;
+    private Transform   rightHandTransform; 
     [Tooltip("Speed at which the hand moves to the grab point")]
 
-    [SerializeField] private Rigidbody leftHandRb;
-    [SerializeField] private Rigidbody rightHandRb;
+    private Rigidbody leftHandRb;
+    private Rigidbody rightHandRb;
 
     private Vector3 leftClosestPoint, rightClosestPoint;
     public Rigidbody leftClosestObject, rightClosestObject;
@@ -82,6 +82,11 @@ public class ProceduralMovement : MonoBehaviour
 
         leftArmLayer  = animator.GetLayerIndex("LeftArm");
         rightArmLayer = animator.GetLayerIndex("RightArm");
+
+        rightHandTransform = rightHand.transform;
+        leftHandTransform  = leftHand.transform;
+        leftHandRb  = leftHand.GetComponent<Rigidbody>();
+        rightHandRb = rightHand.GetComponent<Rigidbody>();
 
         armHeight = (armHeightLimits.x + armHeightLimits.y) * 0.5f;
     }

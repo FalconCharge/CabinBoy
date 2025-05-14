@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class SyncPhysicsObject : MonoBehaviour
 {
-    Rigidbody _rb;
+    private Rigidbody _rb;
     ConfigurableJoint joint;
 
     [SerializeField]
