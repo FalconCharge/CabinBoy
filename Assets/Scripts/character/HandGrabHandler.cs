@@ -57,9 +57,14 @@ public class HandGrabHandler : MonoBehaviour
         {
             heldRb.linearDamping        = origDrag;
             heldRb.angularDamping = origAngularDrag;
+
+            var cargo = heldRb.GetComponent<Cargo>();
+            if (cargo != null)
+            {
+                cargo.ResetColor();
+            }
         }
 
-        heldRb.GetComponent<Cargo>().ResetColor();
         currentlyGrabbing = false;
 
         // destroy joint
