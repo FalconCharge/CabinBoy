@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour
@@ -94,7 +93,7 @@ public class AudioManager : MonoBehaviour
     private void PlaySfxClip(AudioClip clip)
     {
         if (clip == null) return;
-        
+
         sfxSource.PlayOneShot(clip, sfxVolume);
     }
     public void PlaySfxClip(AudioClip clip, float volumeScale = 1f)
@@ -125,7 +124,7 @@ public class AudioManager : MonoBehaviour
             StopCoroutine(windFadeCoroutine);
 
         float duration = (fadeDuration > 0f) ? fadeDuration : windFadeDuration;
-        float targetVolume = Mathf.Clamp01(Mathf.Abs(strength)) * windMaxVolume;
+        float targetVolume = Mathf.Clamp01(Mathf.Abs(strength)) * windMaxVolume * sfxVolume;
 
         windFadeCoroutine = StartCoroutine(FadeWind(windSource, windSource.volume, targetVolume, duration));
     }

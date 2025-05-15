@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 5884348573905387825}
   m_Layer: 0
   m_Name: crate
-  m_TagString: Untagged
+  m_TagString: LightCargo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -111,7 +111,7 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 2}
+  m_Size: {x: 3, y: 3, z: 3}
   m_Center: {x: 0, y: 0, z: 0}
 --- !u!54 &5655314958279023648
 Rigidbody:
@@ -152,12 +152,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2a83f32a9f00b45a3286b69dd06a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floaters: []
+  floaters:
+  - {fileID: 4461546141613467324}
   underWaterDrag: 3
   underWaterAngularDrag: 1
   airDrag: 0
   airAngularDrag: 0
-  waterHeightOffset: 1
+  waterHeightOffset: 0
   floatingPower: 15
 --- !u!114 &3025476019597927146
 MonoBehaviour:
@@ -171,9 +172,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 1
-  waterCurrentForce: 100
-  waterCurrentDirection: {x: 0, y: 0, z: 0}
+  mass: 2
+  waterCurrentForce: 10
+  waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 5
   killDistance: 40
   isGrabbed: 0
@@ -190,6 +191,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 223f22e0901e03a458939e458b4f1794, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundStrength: 1
-  minImpulse: 1
-  maxImpulse: 10
+  soundStrength: 0.6
+  minImpulse: 5
+  maxImpulse: 20

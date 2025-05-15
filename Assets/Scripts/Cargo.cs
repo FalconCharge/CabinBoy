@@ -15,7 +15,7 @@ public class Cargo : MonoBehaviour
 
     [SerializeField] private float killDistance = 40f;
 
-    private Color tint = new Color(0.15f, 0.15f, 0.15f);
+    private Color tint = new Color(0.25f, 0.25f, 0.25f);
     private Color origColor;
     private float origDrag; 
 

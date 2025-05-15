@@ -151,12 +151,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2a83f32a9f00b45a3286b69dd06a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floaters: []
+  floaters:
+  - {fileID: 1914956325507426346}
   underWaterDrag: 3
   underWaterAngularDrag: 1
   airDrag: 0
   airAngularDrag: 0
-  waterHeightOffset: 1
+  waterHeightOffset: 0
   floatingPower: 15
 --- !u!114 &6338459737766368243
 MonoBehaviour:
@@ -171,8 +172,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 1
-  waterCurrentForce: 100
-  waterCurrentDirection: {x: 0, y: 0, z: 0}
+  waterCurrentForce: 10
+  waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 5
   killDistance: 40
   isGrabbed: 0
@@ -190,5 +191,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundStrength: 1
-  minImpulse: 1
+  minImpulse: 5
   maxImpulse: 10

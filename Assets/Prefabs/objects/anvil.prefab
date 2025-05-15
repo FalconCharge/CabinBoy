@@ -18,7 +18,7 @@ GameObject:
   - component: {fileID: 1949635021367682997}
   m_Layer: 0
   m_Name: anvil
-  m_TagString: Untagged
+  m_TagString: HeavyCargo
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,13 +151,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb2a83f32a9f00b45a3286b69dd06a9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floaters: []
+  floaters:
+  - {fileID: 3916832661872565724}
   underWaterDrag: 3
   underWaterAngularDrag: 1
   airDrag: 0
   airAngularDrag: 0
-  waterHeightOffset: 1
-  floatingPower: 15
+  waterHeightOffset: 0
+  floatingPower: 100
 --- !u!114 &1605753448283877739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,9 +171,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c3aee786bcc6194ba2fe88b7a470ee3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mass: 1
-  waterCurrentForce: 100
-  waterCurrentDirection: {x: 0, y: 0, z: 0}
+  mass: 5
+  waterCurrentForce: 5
+  waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 5
   killDistance: 40
   isGrabbed: 0
@@ -190,5 +191,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   soundStrength: 1
-  minImpulse: 1
-  maxImpulse: 10
+  minImpulse: 10
+  maxImpulse: 20

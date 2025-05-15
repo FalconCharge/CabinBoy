@@ -307,14 +307,14 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   musicSource: {fileID: 5558017858145703321}
   sfxSource: {fileID: 1928698139231460264}
-  windSource: {fileID: 0}
+  windSource: {fileID: 7660386706259445898}
   mainTheme: {fileID: 8300000, guid: 00c2982dccd8ba94a9219582d3617a89, type: 3}
   grabSound: {fileID: 8300000, guid: 72eac0e0ec69ac241ab6fc32d7536f3b, type: 3}
   cargoHitSounds:
   - {fileID: 8300000, guid: 68347086241b4a84a8780191045c4578, type: 3}
   - {fileID: 8300000, guid: e51eee8728c47644bb1c2e0f3faa5089, type: 3}
   - {fileID: 8300000, guid: 37a44220fef5d1741ac763d961c896be, type: 3}
-  windSound: {fileID: 0}
+  windSound: {fileID: 8300000, guid: 36521c210d687ff47b1617800e78d71d, type: 3}
   windFadeDuration: 2
   windMaxVolume: 0.6
 --- !u!1 &9073756708981641461
