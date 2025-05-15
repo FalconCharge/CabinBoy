@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 6991600369092187718}
   - component: {fileID: 1653785259157812071}
   - component: {fileID: 5008373516648205910}
+  - component: {fileID: -355341650059602558}
   m_Layer: 0
   m_Name: HeavyCargo
   m_TagString: HeavyCargo
@@ -201,3 +202,18 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 5.0495396, y: 7.598478, z: 2.0960042}
   m_Center: {x: 0.029064178, y: 4.2811804, z: 0.07747464}
+--- !u!114 &-355341650059602558
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6135168412169155745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223f22e0901e03a458939e458b4f1794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundStrength: 1
+  minImpulse: 10
+  maxImpulse: 20

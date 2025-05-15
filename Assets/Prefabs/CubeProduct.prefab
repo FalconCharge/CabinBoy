@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2591167964865617701}
   - component: {fileID: 75663303063776659}
   - component: {fileID: 6991600369092187718}
+  - component: {fileID: 735779470589450206}
   m_Layer: 0
   m_Name: CubeProduct
   m_TagString: LightCargo
@@ -177,3 +178,18 @@ MonoBehaviour:
   killDistance: 40
   isGrabbed: 0
   adjusted: 0
+--- !u!114 &735779470589450206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6135168412169155745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223f22e0901e03a458939e458b4f1794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundStrength: 0.6
+  minImpulse: 5
+  maxImpulse: 15

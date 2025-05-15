@@ -65,10 +65,7 @@ public class GameManager : MonoBehaviour
 
         gameTimer = GetComponent<GameTimer>();
 
-
-        // Temp place to put no mouse
-        // Cursor.visible = false;
-        // Cursor.lockState = CursorLockMode.Locked;
+        AudioManager.Instance.PlayMainTheme();
     }
 
 

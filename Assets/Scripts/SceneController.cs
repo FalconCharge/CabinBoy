@@ -7,12 +7,21 @@ public class SceneController : MonoBehaviour
     {
         // Load the Game scene
         SceneManager.LoadScene("Game"); 
+        Debug.Log("Starting up game scene");
+
+
+        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
 
     public void OpenMainMenu()
     {
         // Load the Main Menu scene
         SceneManager.LoadScene("MainMenu");
+        Debug.Log("Starting up MainMenu Scene");
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void PauseGame()
@@ -27,6 +36,16 @@ public class SceneController : MonoBehaviour
         // Unfreeze the game
         Time.timeScale = 1f;
         // Hide the pause UI
+    }
+
+    public void LoadOptions()
+    {
+        SceneManager.LoadScene("Options");
+        Debug.Log("Starting up Options Scene");
+
+        Cursor.visible = true;
+        Cursor.lockState = CursorLockMode.None;
+
     }
 
     public void Exit()

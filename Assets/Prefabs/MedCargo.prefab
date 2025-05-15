@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 75663303063776659}
   - component: {fileID: 6991600369092187718}
   - component: {fileID: 6776515575876858256}
+  - component: {fileID: 6236002905765017150}
   m_Layer: 0
   m_Name: MedCargo
   m_TagString: MedCargo
@@ -178,3 +179,18 @@ MeshCollider:
   m_Convex: 1
   m_CookingOptions: 30
   m_Mesh: {fileID: 4300082, guid: e286625af9da2b94a8090be8dea80dea, type: 3}
+--- !u!114 &6236002905765017150
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6135168412169155745}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 223f22e0901e03a458939e458b4f1794, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundStrength: 0.8
+  minImpulse: 8
+  maxImpulse: 15
