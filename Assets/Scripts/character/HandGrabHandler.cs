@@ -41,8 +41,16 @@ public class HandGrabHandler : MonoBehaviour
 
     void OnCollisionEnter(Collision collision)
     {
-        if (player.inputManager.left_Input || player.inputManager.right_Input)
-            TryGrab(collision);
+        if(leftArm)
+        {
+            if (player.inputManager.left_Input)
+                TryGrab(collision);
+        }
+        else
+        {
+            if (player.inputManager.right_Input)
+                TryGrab(collision);
+        }
     }
 
     private void TryLetGo()

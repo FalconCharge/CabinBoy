@@ -11,8 +11,6 @@ public class PlayerLocomotion : MonoBehaviour
     public Transform camObj;
 
 
-
-
     [Header("Orientation Settings")]
     public float grabTurnFactor = 0.5f;
     public float uprightSpringStrength = 150f;

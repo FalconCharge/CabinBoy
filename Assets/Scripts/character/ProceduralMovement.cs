@@ -227,6 +227,10 @@ public class ProceduralMovement : MonoBehaviour
 
     private void HandleLimbPulling()
     {
+        if( leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing || rightHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
+        {
+            return;
+        }
         if (inputManager.left_Input && leftClosestObject != null && !leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
         {
             Vector3 dir = (leftClosestPoint - leftHandRb.position).normalized;
