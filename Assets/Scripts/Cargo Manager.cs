@@ -13,6 +13,9 @@ public class CargoManager : MonoBehaviour
     private GameObject[,] crates;
 
     [Header("Cargo Win/Loss Details")]
+    [SerializeField] GameObject valueCargo;
+    [SerializeField] int startAmountOfvalueCargo;
+    [SerializeField] int needAmountOfvalueCargo;
     [SerializeField] GameObject heavyCargo;
     [SerializeField] int startAmountOfHeavyCargo;
     [SerializeField] int needAmountOfHeavyCargo;
@@ -27,6 +30,7 @@ public class CargoManager : MonoBehaviour
     [SerializeField] int lightCargoAmount  = 0;
     [SerializeField] int medCargoAmount = 0;
     [SerializeField] int heavyCargoAmount = 0;
+    [SerializeField] int valueCargoAmount = 0;
 
     // Show player they are about to lose   
     [SerializeField] private int warningBuffer = 1;
@@ -38,6 +42,7 @@ public class CargoManager : MonoBehaviour
 
         medCargoAmount = 0;
         heavyCargoAmount = 0;
+        valueCargoAmount = 0;
         lightCargoAmount = 0;
 
         crates = new GameObject[amountOfCrates.x, amountOfCrates.y];
@@ -64,6 +69,8 @@ public class CargoManager : MonoBehaviour
             availableTypes.Add(1);
         if (lightCargoAmount < startAmountOfLightCargo)
             availableTypes.Add(2);
+        if (valueCargoAmount < startAmountOfvalueCargo)
+            availableTypes.Add(3);
 
         int choice;
         if (availableTypes.Count > 0)
@@ -88,9 +95,11 @@ public class CargoManager : MonoBehaviour
                 medCargoAmount++;
                 return medCargo;
             case 2:
-            default:
                 lightCargoAmount++;
                 return lightCargo;
+            default:
+                valueCargoAmount++;
+                return valueCargo;
         }
     }
 
@@ -126,6 +135,7 @@ public class CargoManager : MonoBehaviour
         if(medCargoAmount > 0) return true;
         if(lightCargoAmount > 0) return true;
         if(heavyCargoAmount > 0) return true;
+        if(valueCargoAmount > 0) return true;
 
         return false;
     }
@@ -136,6 +146,8 @@ public class CargoManager : MonoBehaviour
             medCargoAmount -= 1;
         }else if(cargoType.CompareTag("HeavyCargo")){
             heavyCargoAmount -= 1;
+        }else if (cargoType.CompareTag("ValueCargo")) {
+            valueCargoAmount -= 1;
         }else if(cargoType.CompareTag("Player")){
             LostPlayer();
         }else{
@@ -152,7 +164,8 @@ public class CargoManager : MonoBehaviour
         // If any one type dips below the required “need” amount → LOSS
         if (medCargoAmount < needAmountOfMedCargo ||
             heavyCargoAmount   < needAmountOfHeavyCargo   ||
-            lightCargoAmount < needAmountOfLightCargo)
+            lightCargoAmount < needAmountOfLightCargo ||
+            valueCargoAmount < needAmountOfvalueCargo)
         {
             FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
         }
@@ -163,7 +176,8 @@ public class CargoManager : MonoBehaviour
         // If all three meet or exceed their needs → WIN
         if (medCargoAmount >= needAmountOfHeavyCargo &&
             heavyCargoAmount   >= needAmountOfMedCargo   &&
-            lightCargoAmount >= needAmountOfLightCargo)
+            lightCargoAmount >= needAmountOfLightCargo &&
+            valueCargoAmount >= needAmountOfvalueCargo)
         {
             FindFirstObjectByType<GameOverUI>().ShowGameOverUI(true);
         }
@@ -174,16 +188,18 @@ public class CargoManager : MonoBehaviour
     public int AmountOfHeavyCargo() => medCargoAmount;
     public int AmountOfMedCargo()   => heavyCargoAmount;
     public int AmountOfLightCargo() => lightCargoAmount;
+    public int AmountOfValueCargo() => valueCargoAmount;
     
 
     private void UpdateCargoText()
     {
         // Build each segment with optional coloring
         string H = FormatSegment(heavyCargoAmount, needAmountOfHeavyCargo);
-        string M = FormatSegment(medCargoAmount,   needAmountOfMedCargo);
+        string M = FormatSegment(medCargoAmount, needAmountOfMedCargo);
         string L = FormatSegment(lightCargoAmount, needAmountOfLightCargo);
+        string V = FormatSegment(valueCargoAmount, needAmountOfvalueCargo);
 
-        cargoScoreText.text = $"H: {H}   M: {M}   L: {L}";
+        cargoScoreText.text = $"H: {H}   V: {V}   M: {M}   L: {L}";
     }
 
     // Returns "5/2" or "<color=red>1/2</color>" if at or below need,
