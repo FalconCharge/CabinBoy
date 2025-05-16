@@ -3,10 +3,11 @@ using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
+    [SerializeField] SceneTransition sceneTransition;
     public void StartGame()
     {
-        // Load the Game scene
-        SceneManager.LoadScene("Game"); 
+        // Load game + Fade to it
+        sceneTransition.FadeToScene("Game");
         Debug.Log("Starting up game scene");
 
 
@@ -17,7 +18,7 @@ public class SceneController : MonoBehaviour
     public void OpenMainMenu()
     {
         // Load the Main Menu scene
-        SceneManager.LoadScene("MainMenu");
+        sceneTransition.FadeToScene("MainMenu");
         Debug.Log("Starting up MainMenu Scene");
 
         Cursor.visible = true;
@@ -40,7 +41,7 @@ public class SceneController : MonoBehaviour
 
     public void LoadOptions()
     {
-        SceneManager.LoadScene("Options");
+        sceneTransition.FadeToScene("Options");
         Debug.Log("Starting up Options Scene");
 
         Cursor.visible = true;
