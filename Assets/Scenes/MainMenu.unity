@@ -636,7 +636,7 @@ Transform:
   m_GameObject: {fileID: 355480703}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3, y: 0, z: 24.4}
+  m_LocalPosition: {x: 26.87846, y: -23.239662, z: -8.918638}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -668,7 +668,7 @@ Transform:
   - {fileID: 1771155572}
   - {fileID: 2098651235}
   - {fileID: 1092256492}
-  m_Father: {fileID: 0}
+  m_Father: {fileID: 1832863679}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &359719047
 PrefabInstance:
@@ -2490,7 +2490,7 @@ GameObject:
   - component: {fileID: 1271017392}
   - component: {fileID: 1271017391}
   - component: {fileID: 1271017390}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: Transition
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2527,7 +2527,7 @@ MonoBehaviour:
   m_BlockingObjects: 0
   m_BlockingMask:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 0
 --- !u!114 &1271017392
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3433,7 +3433,7 @@ GameObject:
   - component: {fileID: 1742226011}
   - component: {fileID: 1742226010}
   - component: {fileID: 1742226009}
-  m_Layer: 5
+  m_Layer: 0
   m_Name: fadeImage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -3454,7 +3454,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
   m_Color: {r: 0, g: 0, b: 0, a: 0}
-  m_RaycastTarget: 1
+  m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
   m_OnCullStateChanged:
@@ -3854,6 +3854,7 @@ Transform:
   - {fileID: 407378637}
   - {fileID: 24132960}
   - {fileID: 1761724276}
+  - {fileID: 355480704}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1855904129
@@ -4631,12 +4632,11 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 983834627}
+  - {fileID: 1271017394}
   - {fileID: 1587297578}
   - {fileID: 2006103952}
   - {fileID: 1708871093}
   - {fileID: 114440258}
   - {fileID: 1112597675}
-  - {fileID: 355480704}
   - {fileID: 1342121002}
-  - {fileID: 1271017394}
   - {fileID: 1832863679}
