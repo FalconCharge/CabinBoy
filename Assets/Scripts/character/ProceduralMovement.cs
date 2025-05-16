@@ -1,3 +1,4 @@
+using UnityEditor.Search;
 using UnityEngine;
 
 public class ProceduralMovement : MonoBehaviour
@@ -27,7 +28,7 @@ public class ProceduralMovement : MonoBehaviour
     public Rigidbody leftClosestObject, rightClosestObject;
     private const float grabAttachThreshold = 0.1f;
 
-
+    [SerializeField] private bool debugLines = false;
     [SerializeField] private float       pullSpeed     = 5f;
     
     private Rigidbody                        closestObject;
@@ -161,7 +162,7 @@ public class ProceduralMovement : MonoBehaviour
                     leftClosestPoint   = pt;
                 }
             }
-            if (leftClosestObject != null)
+            if (leftClosestObject != null && debugLines)
                 Debug.DrawLine(leftHandTransform.position, leftClosestPoint, Color.green);
 
         }
@@ -186,29 +187,32 @@ public class ProceduralMovement : MonoBehaviour
         }
 
         // debug lines
-        if (rightClosestObject != null)
+        if (rightClosestObject != null && debugLines)
             Debug.DrawLine(rightHandTransform.position, rightClosestPoint, Color.green);
 
-        #if UNITY_EDITOR
-        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z),
+#if UNITY_EDITOR
+        if (debugLines)
+        {
+            Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z),
                        worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y, -halfExtents.z), Color.yellow);
-        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y, -halfExtents.z),
-                       worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y,  halfExtents.z), Color.yellow);
-        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y,  halfExtents.z),
-                       worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y,  halfExtents.z), Color.yellow);
-        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y,  halfExtents.z),
-                       worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z), Color.yellow);
+            Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y, -halfExtents.z),
+                        worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y,  halfExtents.z), Color.yellow);
+            Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, -halfExtents.y,  halfExtents.z),
+                        worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y,  halfExtents.z), Color.yellow);
+            Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y,  halfExtents.z),
+                        worldCenter + worldRot * new Vector3(-halfExtents.x, -halfExtents.y, -halfExtents.z), Color.yellow);
 
-        // Repeat for top face
-        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z),
-                       worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y, -halfExtents.z), Color.yellow);
-        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y, -halfExtents.z),
-                       worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y,  halfExtents.z), Color.yellow);
-        Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y,  halfExtents.z),
-                       worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y,  halfExtents.z), Color.yellow);
-        Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y,  halfExtents.z),
-                       worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z), Color.yellow);
-
+            // Repeat for top face
+            Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z),
+                        worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y, -halfExtents.z), Color.yellow);
+            Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y, -halfExtents.z),
+                        worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y,  halfExtents.z), Color.yellow);
+            Debug.DrawLine(worldCenter + worldRot * new Vector3( halfExtents.x, halfExtents.y,  halfExtents.z),
+                        worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y,  halfExtents.z), Color.yellow);
+            Debug.DrawLine(worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y,  halfExtents.z),
+                        worldCenter + worldRot * new Vector3(-halfExtents.x, halfExtents.y, -halfExtents.z), Color.yellow);
+        }
+        
         // Connect vertical edges
         for (int i = 0; i < 4; i++)
         {
@@ -218,8 +222,11 @@ public class ProceduralMovement : MonoBehaviour
                 ((i & 2) == 0 ? -halfExtents.z : halfExtents.z)
             );
             Vector3 cornerB = new Vector3(cornerA.x, halfExtents.y, cornerA.z);
-            Debug.DrawLine(worldCenter + worldRot * cornerA,
-                           worldCenter + worldRot * cornerB, Color.yellow);
+            if (debugLines)
+            {
+                Debug.DrawLine(worldCenter + worldRot * cornerA,
+                            worldCenter + worldRot * cornerB, Color.yellow);
+            }
         }
         #endif
 
@@ -227,10 +234,13 @@ public class ProceduralMovement : MonoBehaviour
 
     private void HandleLimbPulling()
     {
-        if( leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing || rightHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
-        {
+        // if( leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing || rightHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
+        // {
+        //     return;
+        // }
+        if (leftClosestObject == rightClosestObject && ( leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing || rightHand.GetComponent<HandGrabHandler>().currentlyGrabbing))
             return;
-        }
+            
         if (inputManager.left_Input && leftClosestObject != null && !leftHand.GetComponent<HandGrabHandler>().currentlyGrabbing)
         {
             Vector3 dir = (leftClosestPoint - leftHandRb.position).normalized;

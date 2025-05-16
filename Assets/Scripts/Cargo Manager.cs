@@ -116,7 +116,7 @@ public class CargoManager : MonoBehaviour
                 // Calculate position based on spacing
                 Vector3 spawnPos = startPos + new Vector3(row * spaceBTWCargo, transform.position.y, col * spaceBTWCargo);
 
-                Instantiate(crates[row, col], spawnPos, Quaternion.identity);
+                Instantiate(crates[row, col], spawnPos, crates[row, col].transform.rotation);//Quaternion.identity);
             }
         }
     }
