@@ -1,9 +1,17 @@
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 public class SceneController : MonoBehaviour
 {
-    [SerializeField] SceneTransition sceneTransition;
+    private SceneTransition sceneTransition;
+
+    private void Awake()
+    {
+        sceneTransition = FindFirstObjectByType<SceneTransition>();
+        if (sceneTransition == null)
+        {
+            Debug.LogError("SceneTransition not found! Make sure it exists in the scene.");
+        }
+    }
     public void StartGame()
     {
         // Load game + Fade to it
