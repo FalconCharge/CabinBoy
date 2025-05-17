@@ -604,6 +604,7 @@ MonoBehaviour:
   groundedTolerance: 0.3
   rayLen: 1.5
   jumpForce: 10
+  downForce: 10
   coyoteTime: 0.2
   isGrounded: 0
   MaxSpeed: 8
@@ -776,7 +777,7 @@ MonoBehaviour:
   waterCurrentForce: 250
   waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 5
-  killDistance: 40
+  killDistance: 30
   isGrabbed: 1
   adjusted: 0
   splashPrefab: {fileID: 5204581918438656453, guid: 1ab0e75592b9d58478ded341b071d122, type: 3}
