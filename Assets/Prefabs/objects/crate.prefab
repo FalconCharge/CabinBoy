@@ -174,7 +174,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mass: 2
-  waterCurrentForce: 10
+  waterCurrentForce: 20
   waterCurrentDirection: {x: 0, y: 0, z: 1}
   valueOfCargo: 5
   killDistance: 40
