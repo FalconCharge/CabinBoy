@@ -1141,7 +1141,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 303678829}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 62c98c027fe63bc49b889ca6a0844697, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -1350,7 +1350,6 @@ MonoBehaviour:
   waterHeightFactor: 0
   spawnCratesTime: 5
   cargoText: {fileID: 1457798621}
-  timerText: {fileID: 0}
   timerDuration: 150
   startUI: {fileID: 247567972}
   island: {fileID: 1783231740}
@@ -1401,7 +1400,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65b8202bfcaceb94d945ad259240b5da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  timerText: {fileID: 0}
   progressionBar: {fileID: 1843917155}
   currTime: 100
 --- !u!114 &417890200
@@ -5261,7 +5259,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1572888733}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 62c98c027fe63bc49b889ca6a0844697, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5362,7 +5360,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1594218392}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 62c98c027fe63bc49b889ca6a0844697, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5415,7 +5413,7 @@ BoxCollider:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1613719424}
-  m_Material: {fileID: 0}
+  m_Material: {fileID: 13400000, guid: 62c98c027fe63bc49b889ca6a0844697, type: 2}
   m_IncludeLayers:
     serializedVersion: 2
     m_Bits: 0
@@ -5475,9 +5473,25 @@ PrefabInstance:
       propertyPath: camObj
       value: 
       objectReference: {fileID: 634765595}
+    - target: {fileID: 487640472654582186, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
+      propertyPath: showRay
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2730717816223790018, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
+      propertyPath: m_SlerpDrive.positionSpring
+      value: 100
+      objectReference: {fileID: 0}
+    - target: {fileID: 3087179542396684910, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
+      propertyPath: m_SlerpDrive.positionSpring
+      value: 3000
+      objectReference: {fileID: 0}
     - target: {fileID: 6244802479126770134, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
       propertyPath: m_Name
       value: player (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7459604034769618008, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
+      propertyPath: m_SlerpDrive.positionSpring
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 7512563058885998575, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
       propertyPath: m_LocalPosition.x
