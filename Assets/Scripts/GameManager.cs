@@ -1,7 +1,6 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,7 +30,6 @@ public class GameManager : MonoBehaviour
     [Header("Spawning")]
     [SerializeField] private float spawnCratesTime = 5f;
     [SerializeField] private TextMeshProUGUI cargoText;
-    [SerializeField] private TextMeshProUGUI timerText;
     
 
 
@@ -231,14 +229,12 @@ public class GameManager : MonoBehaviour
         while (elapsedTime < fadeDuration)
         {
             cargoText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
-            timerText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
             startUI.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         cargoText.alpha = 1f;
-        timerText.alpha = 1f;
         startUI.alpha = 1f;
     }
 

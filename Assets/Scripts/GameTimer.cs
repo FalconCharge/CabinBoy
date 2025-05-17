@@ -4,7 +4,6 @@ using UnityEngine.UI;
 
 public class GameTimer : MonoBehaviour
 {
-    [SerializeField] private TextMeshProUGUI timerText;
     [SerializeField] Slider progressionBar;
     [SerializeField] private float currTime = 1000f;
 
@@ -56,7 +55,6 @@ public class GameTimer : MonoBehaviour
     private void UpdateUI()
     {
         progressionBar.value = maxTime - currTime;
-        timerText.text = "Timer: " + currTime.ToString("F2");
     }
 
     public float GetCurrentTime()

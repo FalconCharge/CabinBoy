@@ -1,7 +1,5 @@
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.Analytics;
-using UnityEngine.InputSystem.Interactions;
+
 
 public class Cargo : MonoBehaviour
 {
