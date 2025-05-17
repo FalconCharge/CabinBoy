@@ -1,58 +1,114 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class CargoManager : MonoBehaviour
 {
-
-    [SerializeField] private GameObject[] products;
+    [Header("Setup")]
     [SerializeField] private float spaceBTWCargo = 2f;
     [SerializeField] private Vector2Int amountOfCrates = new Vector2Int(5, 5);
+
+    [SerializeField] TextMeshProUGUI cargoScoreText;
     private GameObject[,] crates;
 
-    [SerializeField] private float cratesLeft;
-    //[SerializeField] private GameObject gameOverUI;
+    [Header("Cargo Win/Loss Details")]
+    [SerializeField] GameObject valueCargo;
+    [SerializeField] int startAmountOfvalueCargo;
+    [SerializeField] int needAmountOfvalueCargo;
+    [SerializeField] GameObject heavyCargo;
+    [SerializeField] int startAmountOfHeavyCargo;
+    [SerializeField] int needAmountOfHeavyCargo;
+    [SerializeField] GameObject medCargo;
+    [SerializeField] int startAmountOfMedCargo;
+    [SerializeField] int needAmountOfMedCargo;
+    [SerializeField] GameObject lightCargo;
+    [SerializeField] private int startAmountOfLightCargo;
+    [SerializeField] int needAmountOfLightCargo;
+
+    [Header("Displaying private vars")]
+    [SerializeField] int lightCargoAmount  = 0;
+    [SerializeField] int medCargoAmount = 0;
+    [SerializeField] int heavyCargoAmount = 0;
+    [SerializeField] int valueCargoAmount = 0;
+
+    // Show player they are about to lose   
+    [SerializeField] private int warningBuffer = 1;
 
 
+    void Start(){
+        
+        //Fill in the crates array with the amounts of crates and access will goto light crates
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
+        medCargoAmount = 0;
+        heavyCargoAmount = 0;
+        valueCargoAmount = 0;
+        lightCargoAmount = 0;
+
         crates = new GameObject[amountOfCrates.x, amountOfCrates.y];
 
-        for(int row = 0; row < amountOfCrates.x; row++){
-            for(int col = 0; col < amountOfCrates.y; col++){
-                crates[row, col] = products[Random.Range(0, products.Length)];
+        for(int i = 0; i < amountOfCrates.x; i++){
+            for(int j = 0; j < amountOfCrates.y; j++){
+
+                //Grab a ranom crate that's avaible
+                crates[i, j] = GetRandomCrate();
             }
         }
 
-        cratesLeft = amountOfCrates.x * amountOfCrates.y;
+        UpdateCargoText();
 
-        //gameOverUI.SetActive(false);
     }
 
+    private GameObject GetRandomCrate()
+    {
+        // Gather crate‐types that are still available
+        List<int> availableTypes = new List<int>();
+        if (heavyCargoAmount < startAmountOfHeavyCargo)
+            availableTypes.Add(0);
+        if (medCargoAmount   < startAmountOfMedCargo)
+            availableTypes.Add(1);
+        if (lightCargoAmount < startAmountOfLightCargo)
+            availableTypes.Add(2);
+        if (valueCargoAmount < startAmountOfvalueCargo)
+            availableTypes.Add(3);
 
-    public void LostCrate(){
-        if(cratesLeft - 1 <= 0){
-            // TODO: Disable Normal UI (The score)
-            //gameOverUI.SetActive(true);
-            // TODO: Game Over does not mean game over the UI could say you won if you have enough crates left
-            // Prob should pass in a boolean saying whether it a win or not for the Game UI to adjust to that
-            FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
-            
-        }else{
-            cratesLeft -= 1;
+        int choice;
+        if (availableTypes.Count > 0)
+        {
+            // Pick a random crate from avaible 
+            int randIndex = Random.Range(0, availableTypes.Count);
+            choice = availableTypes[randIndex];
+        }
+        else
+        {
+            // If full give a light crate
+            choice = 2;
+        }
+
+        // Increment the current counter and return the prefab
+        switch (choice)
+        {
+            case 0:
+                heavyCargoAmount++;
+                return heavyCargo;
+            case 1:
+                medCargoAmount++;
+                return medCargo;
+            case 2:
+                lightCargoAmount++;
+                return lightCargo;
+            default:
+                valueCargoAmount++;
+                return valueCargo;
         }
     }
 
     public void LostPlayer(){
-        //gameOverUI.SetActive(true);
-
+        // TODO Pause the game somehow
         FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
     }
 
     public void SpawnCrates(){
-        // TODO Spawn in the crates
-        // Go through array 1 by 1 and spawn then in 
+        // Note that this spawning I don't like but it works enough
         Vector3 startPos = transform.position;
 
         for (int row = 0; row < amountOfCrates.x; row++)
@@ -68,15 +124,93 @@ public class CargoManager : MonoBehaviour
                 // Calculate position based on spacing
                 Vector3 spawnPos = startPos + new Vector3(row * spaceBTWCargo, transform.position.y, col * spaceBTWCargo);
 
-                Instantiate(crates[row, col], spawnPos, Quaternion.identity);
+                Instantiate(crates[row, col], spawnPos, crates[row, col].transform.rotation);//Quaternion.identity);
             }
         }
     }
 
+
     public bool HasCargo(){
-        if(cratesLeft > 0){
-            return true;
-        }
+        if(medCargoAmount > 0) return true;
+        if(lightCargoAmount > 0) return true;
+        if(heavyCargoAmount > 0) return true;
+        if(valueCargoAmount > 0) return true;
+
         return false;
+    }
+    public void LostCargo(GameObject cargoType){
+        if(cargoType.CompareTag("LightCargo")){
+            lightCargoAmount -= 1;
+        }else if(cargoType.CompareTag("MedCargo")){
+            medCargoAmount -= 1;
+        }else if(cargoType.CompareTag("HeavyCargo")){
+            heavyCargoAmount -= 1;
+        }else if (cargoType.CompareTag("ValueCargo")) {
+            valueCargoAmount -= 1;
+        }else if(cargoType.CompareTag("Player")){
+            LostPlayer();
+        }else{
+            Debug.LogWarning("Lost cargo without the tag LightCargo | MedCargo | HeavyCargo | Player");
+        }
+        CheckCargoLoss();
+        UpdateCargoText();
+
+    }
+
+
+    private void CheckCargoLoss()
+    {
+        // If any one type dips below the required “need” amount → LOSS
+        if (medCargoAmount < needAmountOfMedCargo ||
+            heavyCargoAmount   < needAmountOfHeavyCargo   ||
+            lightCargoAmount < needAmountOfLightCargo ||
+            valueCargoAmount < needAmountOfvalueCargo)
+        {
+            FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
+        }
+    }
+
+    private void CheckCargoWin()
+    {
+        // If all three meet or exceed their needs → WIN
+        if (medCargoAmount >= needAmountOfHeavyCargo &&
+            heavyCargoAmount   >= needAmountOfMedCargo   &&
+            lightCargoAmount >= needAmountOfLightCargo &&
+            valueCargoAmount >= needAmountOfvalueCargo)
+        {
+            FindFirstObjectByType<GameOverUI>().ShowGameOverUI(true);
+        }
+    }
+
+
+    //Getter for the amount of current Crates incase of future mechanics
+    public int AmountOfHeavyCargo() => medCargoAmount;
+    public int AmountOfMedCargo()   => heavyCargoAmount;
+    public int AmountOfLightCargo() => lightCargoAmount;
+    public int AmountOfValueCargo() => valueCargoAmount;
+
+    private void UpdateCargoText()
+    {
+        string H = FormatSegment(heavyCargoAmount, needAmountOfHeavyCargo);
+        string M = FormatSegment(medCargoAmount, needAmountOfMedCargo);
+        string L = FormatSegment(lightCargoAmount, needAmountOfLightCargo);
+        string V = FormatSegment(valueCargoAmount, needAmountOfvalueCargo);
+
+        cargoScoreText.text = $" {V}\n {H}\n {M}\n {L}";
+    }
+
+
+
+    // Returns "5/2" or "<color=red>1/2</color>" if at or below need,
+    // or "<color=yellow>2/2</color>" when within warningBuffer
+    private string FormatSegment(int current, int need)
+    {
+        string raw = $"{current}/{need}";
+
+        if (current < need)
+            return $"<color=red>{raw}</color>";
+        if (current <= need + warningBuffer)
+            return $"<color=yellow>{raw}</color>";
+        return raw;
     }
 }

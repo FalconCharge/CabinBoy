@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.IO.LowLevel.Unsafe;
-using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -17,9 +13,10 @@ public class PlayerManager : MonoBehaviour
 
     [SerializeField] private Animator ani;
     [HideInInspector] public InputManager inputManager;
-    PlayerLocomotion playerLocomotion;
+    [HideInInspector] PlayerLocomotion playerLocomotion;
+    [HideInInspector] ProceduralMovement proceduralMovement;
     public string currentStatee;
-    public bool isInteracting;
+    public bool isInteracting = false;
     [SerializeField] private bool inputs;
     [SerializeField] private bool movement;
     [SerializeField] private bool visuals;
@@ -33,17 +30,30 @@ public class PlayerManager : MonoBehaviour
     {
         inputManager = GetComponent<InputManager>();
         playerLocomotion = GetComponent<PlayerLocomotion>();
+        proceduralMovement = GetComponent<ProceduralMovement>();
         
         leftArmLayer  = ani.GetLayerIndex("LeftArm");
         rightArmLayer = ani.GetLayerIndex("RightArm");
     }
+
     private void Update()
     {
-        if (inputs)
+        if (isInteracting)
+        {
+            ani.SetLayerWeight(leftArmLayer, 1);
+            ani.SetLayerWeight(rightArmLayer, 1);
+
+            ani.SetFloat("armHeight", 1f);
+            inputs = false;
+            movement = false;
+            // visuals = false;
+
+        }
+        else if (inputs)
         {
             inputManager.HandleAllInputs();
 
-            float targetL = inputManager.left_Input  ? 1f : 0f;
+            float targetL = inputManager.left_Input ? 1f : 0f;
             float targetR = inputManager.right_Input ? 1f : 0f;
 
             float wL = ani.GetLayerWeight(leftArmLayer);
@@ -71,14 +81,15 @@ public class PlayerManager : MonoBehaviour
 
     private void FixedUpdate()
     {
-
         if (movement)
         {
+            Debug.Log("Movement");
             playerLocomotion.HandleAllMovement();
         }
 
         if (visuals)
         {
+            proceduralMovement.HandleAnims();
             //proceduralAnimate.HandleAllVisuals();
         }
     }

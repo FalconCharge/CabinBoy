@@ -30,7 +30,8 @@ public class GameManager : MonoBehaviour
     [Header("Spawning")]
     [SerializeField] private float spawnCratesTime = 5f;
     [SerializeField] private TextMeshProUGUI cargoText;
-    [SerializeField] private TextMeshProUGUI timerText;
+    
+
 
     private float textDisappearTime = 3f;
     private float textTimer = 0f;
@@ -41,10 +42,19 @@ public class GameManager : MonoBehaviour
     [Header("Timer")]
     [SerializeField] private float timerDuration = 100f;
 
+    [SerializeField] CanvasGroup startUI;
+
     private OceanManager oceanManager;
     private CargoManager cargoManager;
     private GameTimer gameTimer;
 
+
+
+    [Header("Island Movement")]
+    [SerializeField] private GameObject island;
+    [SerializeField] private Transform islandStartPoint;
+    [SerializeField] private Transform islandEndPoint;
+    [SerializeField] private float timerAdd = 8.0f;
 
     // private vars
     private float totalTime = 0.0f;
@@ -64,6 +74,9 @@ public class GameManager : MonoBehaviour
         cargoText.alpha = 0f;
 
         gameTimer = GetComponent<GameTimer>();
+
+        AudioManager.Instance.PlayMainTheme();
+
     }
 
 
@@ -82,6 +95,8 @@ public class GameManager : MonoBehaviour
 
         // Handles GameTimer
         HandleGameTimer();
+
+        MoveIslandTowardsShip();
     }
 
     private void Gusting()
@@ -188,7 +203,20 @@ public class GameManager : MonoBehaviour
             }else{
                 FindFirstObjectByType<GameOverUI>().ShowGameOverUI(false);
             }
+            Debug.Log("GameOver");
         }
+    }
+
+    private void MoveIslandTowardsShip()
+    {
+        if (island == null || islandStartPoint == null || islandEndPoint == null)
+            return;
+
+        // float t = Mathf.Clamp01(totalTime / timerDuration);
+        float t = timerDuration + timerAdd;
+        float rawT   = Mathf.Clamp01(totalTime / t);
+        float easedT = Mathf.SmoothStep(0f, 1f, rawT);
+        island.transform.position = Vector3.Lerp(islandStartPoint.position, islandEndPoint.position, easedT);
     }
 
 
@@ -201,13 +229,13 @@ public class GameManager : MonoBehaviour
         while (elapsedTime < fadeDuration)
         {
             cargoText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
-            timerText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+            startUI.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         cargoText.alpha = 1f;
-        timerText.alpha = 1f;
+        startUI.alpha = 1f;
     }
 
     // Coroutine to fade the text out

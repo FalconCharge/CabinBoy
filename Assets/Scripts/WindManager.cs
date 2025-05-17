@@ -32,6 +32,8 @@ public class WindManager : MonoBehaviour
     private float timeToNextGust = 0f;
 
     private bool hasWave = false;
+    private bool windAudioPlaying = false;
+
 
     void Start()
     {
@@ -75,6 +77,9 @@ public class WindManager : MonoBehaviour
 
     private void UpdatePointHeight()
     {
+        
+        AudioManager.Instance.StartWind(targetWind);
+
         // 1) currentWind -> targetWind
         currentWind = Mathf.MoveTowards(currentWind, targetWind, windChangeSpeed * Time.deltaTime);
 
@@ -100,12 +105,12 @@ public class WindManager : MonoBehaviour
         timeToNextGust = delay;
         targetWind = Mathf.Clamp(strength, -1f, 1f);
 
-        if(Mathf.Abs(targetWind) < particlesAtStrength){
-            return;
-        }else if(targetWind > 0){
-            StartStarboardParticle();
-        }else{
-            StartPortParticle();
+        if (Mathf.Abs(targetWind) >= particlesAtStrength)
+        {
+            if (targetWind > 0)
+                StartStarboardParticle();
+            else
+                StartPortParticle();
         }
         
         
@@ -127,6 +132,10 @@ public class WindManager : MonoBehaviour
         }else{
             StopPortParticles();
         }
+
+        AudioManager.Instance.StartWind(0f);
+
+        windAudioPlaying = false;
         
         targetWind = 0f;
     }

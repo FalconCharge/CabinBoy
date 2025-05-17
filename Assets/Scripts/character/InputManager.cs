@@ -1,7 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine.InputSystem;
 using UnityEngine;
 
 public class InputManager : MonoBehaviour
@@ -23,6 +19,8 @@ public class InputManager : MonoBehaviour
     public bool crouch_Input;
     public bool crouch_Pressed;
     public bool jump_Input = false;
+    public float jumpBufferTime = 0.1f;
+    public float lastJumpPressTime = -999f;
 
     private void Awake()
     {
@@ -66,7 +64,6 @@ public class InputManager : MonoBehaviour
     private void OnDisable()
     {
         playerControls.Disable();
-
     }
 
     public void HandleAllInputs()
@@ -95,19 +92,20 @@ public class InputManager : MonoBehaviour
         verticalInput = movementInput.y;
         horizontalInput = movementInput.x;
 
+        // moveSpeed = movementInput.magnitude;
         moveSpeed = Mathf.Clamp01(Mathf.Abs(horizontalInput) + Mathf.Abs(verticalInput));
     }
 
     private void HandleSprintingInput()
     {
-        if (sprint_Input && moveSpeed > 0.35f)
-        {
-            playerLocomotion.isSprinting = true;
-        }
-        else
-        {
-            playerLocomotion.isSprinting = false;
-        }
+        // if (sprint_Input && moveSpeed > 0.35f)
+        // {
+        //     playerLocomotion.isSprinting = true;
+        // }
+        // else
+        // {
+        //     playerLocomotion.isSprinting = false;
+        // }
     }
     //private void HandleCrouchInput()
     //{
@@ -125,7 +123,7 @@ public class InputManager : MonoBehaviour
     {
         if (jump_Input)
         {
-            playerLocomotion.HandleJumping();
+            lastJumpPressTime = Time.time;
             jump_Input = false;
         }
     }

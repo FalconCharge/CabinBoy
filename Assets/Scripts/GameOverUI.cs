@@ -8,19 +8,23 @@ public class GameOverUI : MonoBehaviour
     [SerializeField] private TextMeshProUGUI gameOverText;
     [SerializeField] private float fadeInDuration = 1.5f;
 
+    [SerializeField] GameObject gameManager;
+
     private bool isGameOver = false;
 
     void Start()
     {
         gameOverGroup.alpha = 0f;
         gameOverGroup.interactable = false;
-        gameOverGroup.blocksRaycasts = false;   
-    }
+        gameOverGroup.blocksRaycasts = false; 
+   }
 
     public void ShowGameOverUI(bool winner){
         if(!isGameOver){
             gameOverText.text = winner ? "Winner!" : "Loser!";
             StartCoroutine(FadeIn());
+
+            gameManager.GetComponent<CursorState>().ToggleCursorState();
         }
     }
 

@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using UnityEngine;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -18,9 +17,11 @@ public class BuoyancyObject : MonoBehaviour
     private Rigidbody rb;
     private OceanManager oceanManager;
 
+    [SerializeField] private float particleDown = 2.0f;
     private int floatersUnderWater;
 
     private bool underWater;
+
 
     void Start()
     {
@@ -29,18 +30,31 @@ public class BuoyancyObject : MonoBehaviour
     }
     void FixedUpdate()
     {
-
         floatersUnderWater = 0;
+        
         for(int i = 0; i < floaters.Length; i++){
             float difference = floaters[i].position.y - oceanManager.WaterHeightAtPosition(floaters[i].position) + waterHeightOffset;
             
 
             if(difference < 0){
-                rb.AddForceAtPosition(Vector3.up * floatingPower * Math.Abs(difference), floaters[i].position, ForceMode.Force);
+
+                if (gameObject.layer == LayerMask.NameToLayer("Player"))
+                {
+                    rb.AddForce(Vector3.up * floatingPower * Math.Abs(difference), ForceMode.Force);
+                    var c = GetComponent<PlayerManager>();
+                    if(c!= null)
+                        c.isInteracting = true;
+
+                }
+                else
+                {
+                    rb.AddForceAtPosition(Vector3.up * floatingPower * Math.Abs(difference), floaters[i].position, ForceMode.Force);
+                }
                 floatersUnderWater++;
 
                 if(!underWater){
                     underWater = true;
+                    
                     SwitchState(true);
                 }
             }
