@@ -197,7 +197,7 @@ public class CargoManager : MonoBehaviour
         string L = FormatSegment(lightCargoAmount, needAmountOfLightCargo);
         string V = FormatSegment(valueCargoAmount, needAmountOfvalueCargo);
 
-        cargoScoreText.text = $"V: {V}\nH: {H}\nM: {M}\nL: {L}";
+        cargoScoreText.text = $" {V}\n {H}\n {M}\n {L}";
     }
 
 
