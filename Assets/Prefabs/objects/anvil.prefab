@@ -157,8 +157,9 @@ MonoBehaviour:
   underWaterAngularDrag: 1
   airDrag: 0
   airAngularDrag: 0
-  waterHeightOffset: 0
+  waterHeightOffset: -1
   floatingPower: 100
+  particleDown: 2
 --- !u!114 &1605753448283877739
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,6 +179,9 @@ MonoBehaviour:
   killDistance: 40
   isGrabbed: 0
   adjusted: 0
+  splashPrefab: {fileID: 5204581918438656453, guid: 1ab0e75592b9d58478ded341b071d122, type: 3}
+  splashingPrefab: {fileID: 5109113932660543844, guid: fc05884525edf724da912604a4a301dd, type: 3}
+  particleDown: 2
 --- !u!114 &1949635021367682997
 MonoBehaviour:
   m_ObjectHideFlags: 0

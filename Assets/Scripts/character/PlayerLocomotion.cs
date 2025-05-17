@@ -29,6 +29,7 @@ public class PlayerLocomotion : MonoBehaviour
 
     [Header("Jump Settings")]
     public float jumpForce = 10.0f;
+    public float downForce = 10.0f;
     public float coyoteTime = 0.2f;
     private float _lastGroundedTime = -999f;
     public bool isGrounded = false;
@@ -68,6 +69,7 @@ public class PlayerLocomotion : MonoBehaviour
 
         // m_GoalVel = Vector3.zero;
     }
+    
 
     #endregion
     public void HandleAllMovement()
@@ -174,17 +176,17 @@ public class PlayerLocomotion : MonoBehaviour
         {
             float dist = hit.distance;
 
-            if(dist <= rideHeight + groundedTolerance)
+            if (dist <= rideHeight + groundedTolerance)
             {
                 isGrounded = true;
                 _lastGroundedTime = Time.time;
-                
+
                 Vector3 vel = _rb.linearVelocity;
                 Vector3 rayDir = transform.TransformDirection(downDir);
 
                 Vector3 otherVel = Vector3.zero;
                 Rigidbody hitBody = hit.rigidbody;
-                if(hitBody != null)
+                if (hitBody != null)
                 {
                     otherVel = hitBody.linearVelocity;
                 }
@@ -198,7 +200,7 @@ public class PlayerLocomotion : MonoBehaviour
 
                 _rb.AddForce(rayDir * springForce);
 
-                if(hitBody != null)
+                if (hitBody != null)
                     hitBody.AddForceAtPosition(rayDir * -springForce, hit.point);
 
             }
@@ -209,7 +211,8 @@ public class PlayerLocomotion : MonoBehaviour
         }
         else
         {
-            _rb.AddForce(downDir * RideSpringDamper, ForceMode.Acceleration);
+            // _rb.AddForce(downDir * RideSpringDamper, ForceMode.Acceleration);
+            _rb.AddForce(downDir * downForce, ForceMode.Acceleration);
             isGrounded = false;
         }
     }

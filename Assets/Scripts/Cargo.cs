@@ -33,6 +33,12 @@ public class Cargo : MonoBehaviour
 
     private float origMass;
 
+    
+    [SerializeField] private ParticleSystem splashPrefab;
+    [SerializeField] private ParticleSystem splashingPrefab;
+    private bool hasSplashed = false;
+    [SerializeField] private float particleDown = 2.0f;
+
     void Awake()
     {
         m_rb = GetComponent<Rigidbody>();
@@ -58,9 +64,20 @@ public class Cargo : MonoBehaviour
     void FixedUpdate()
     {
         //Applies force to the cargo
-        if(m_buoyancyObject.IsUnderWater()){
-            m_rb.AddForce(waterCurrentDirection.normalized * waterCurrentForce * m_rb.mass/2f, ForceMode.Acceleration);
+        if (m_buoyancyObject.IsUnderWater())
+        {
+            m_rb.AddForce(waterCurrentDirection.normalized * waterCurrentForce * m_rb.mass / 2f, ForceMode.Acceleration);
+
+            if (!hasSplashed)
+            {
+                //splash
+                Instantiate(splashPrefab, transform.position, Quaternion.identity, this.transform);
+                Instantiate(splashingPrefab, transform.position + (Vector3.down * particleDown), Quaternion.identity, this.transform);
+                hasSplashed = true;
+            }
         }
+        
+
         
     }
 
@@ -77,8 +94,6 @@ public class Cargo : MonoBehaviour
             // Destroy gameObject because it's no longer used
             Destroy(this.gameObject);
         }
-
-        
     }
 
     public void ApplyPickUpDetail(float linearDrag, float angularDrag){
