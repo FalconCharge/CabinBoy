@@ -19,6 +19,7 @@ public class AudioManager : MonoBehaviour
     [SerializeField] private AudioClip grabSound;
     [SerializeField] private AudioClip[] cargoHitSounds;
     [SerializeField] private AudioClip windSound;
+    [SerializeField] private AudioClip splash;
 
 
     private float sfxVolume = 1f;
@@ -108,12 +109,18 @@ public class AudioManager : MonoBehaviour
         PlaySfxClip(clip, volumeScale);
     }
 
+    public void playSplash(float volumeScale = 1f)
+    {
+        PlaySfxClip(splash, volumeScale);
+    }
+
 
     public void StartWind(float strength, float fadeDuration = -1f)
     {
         if (windSound == null || windSource == null) return;
 
-        if(!windSource.isPlaying){
+        if (!windSource.isPlaying)
+        {
             windSource.clip = windSound;
             windSource.loop = true;
             windSource.volume = 0f;

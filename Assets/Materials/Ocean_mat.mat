@@ -97,7 +97,7 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Amptitude: 2.4889631
+    - _Amptitude: 11.327268
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -140,7 +140,7 @@ Material:
     - _BottomColor: {r: 0.05490196, g: 0.59165174, b: 0.90588236, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
-    - _PanSpeed_1: {r: 0.01, g: 0.01, b: 0, a: 0}
+    - _PanSpeed_1: {r: 0, g: 0, b: 0, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _Tiling_and_Offset: {r: 0, g: 0, b: 0, a: 0}
     - _TopColor: {r: 0, g: 0.972549, b: 0.7747899, a: 0}

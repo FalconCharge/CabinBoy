@@ -70,6 +70,7 @@ public class Cargo : MonoBehaviour
 
             if (!hasSplashed)
             {
+                AudioManager.Instance.playSplash(0.5f);
                 //splash
                 Instantiate(splashPrefab, transform.position, Quaternion.identity, this.transform);
                 Instantiate(splashingPrefab, transform.position + (Vector3.down * particleDown), Quaternion.identity, this.transform);

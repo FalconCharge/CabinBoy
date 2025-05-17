@@ -692,7 +692,7 @@ MonoBehaviour:
   leftClosestObject: {fileID: 0}
   rightClosestObject: {fileID: 0}
   debugLines: 0
-  pullSpeed: 350
+  pullSpeed: 150
   limbPullForce: 25
   maxPullDistance: 3
   velocityDamper: 0.85
@@ -739,27 +739,27 @@ MonoBehaviour:
     positionDamper: 50
   - jointName: mixamorig:Spine1
     joint: {fileID: 0}
-    positionSpring: 3000
+    positionSpring: 7000
     positionDamper: 50
   - jointName: mixamorig:LeftArm
     joint: {fileID: 0}
-    positionSpring: 600
+    positionSpring: 1000
     positionDamper: 20
   - jointName: mixamorig:LeftForeArm
     joint: {fileID: 0}
-    positionSpring: 800
+    positionSpring: 1200
     positionDamper: 20
   - jointName: mixamorig:Head
     joint: {fileID: 0}
-    positionSpring: 500
+    positionSpring: 700
     positionDamper: 15
   - jointName: mixamorig:RightArm
     joint: {fileID: 0}
-    positionSpring: 600
+    positionSpring: 1000
     positionDamper: 20
   - jointName: mixamorig:RightForeArm
     joint: {fileID: 0}
-    positionSpring: 800
+    positionSpring: 1200
     positionDamper: 20
 --- !u!114 &5920964749360424944
 MonoBehaviour:
@@ -801,7 +801,7 @@ MonoBehaviour:
   underWaterAngularDrag: 1
   airDrag: 0
   airAngularDrag: 0
-  waterHeightOffset: -2
+  waterHeightOffset: 1.6
   floatingPower: 30
   particleDown: 10
 --- !u!1 &6645283282138734332
@@ -1970,6 +1970,10 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: -9165797768001435688, guid: 82155d0dd0476e343bb0d145b4336ca1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 999046655f34c2544956b8e28421480b, type: 2}
+    - target: {fileID: -9165797768001435688, guid: 82155d0dd0476e343bb0d145b4336ca1, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
       objectReference: {fileID: 2100000, guid: 3b2082246b5f44248b97452fa5b11fea, type: 2}
@@ -2121,6 +2125,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: -4747917413154575537, guid: 82155d0dd0476e343bb0d145b4336ca1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 999046655f34c2544956b8e28421480b, type: 2}
     - target: {fileID: -4747917413154575537, guid: 82155d0dd0476e343bb0d145b4336ca1, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
@@ -2445,6 +2453,10 @@ PrefabInstance:
       propertyPath: m_Materials.Array.size
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 8417361359673230750, guid: 82155d0dd0476e343bb0d145b4336ca1, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 2100000, guid: 999046655f34c2544956b8e28421480b, type: 2}
     - target: {fileID: 8417361359673230750, guid: 82155d0dd0476e343bb0d145b4336ca1, type: 3}
       propertyPath: 'm_Materials.Array.data[1]'
       value: 
