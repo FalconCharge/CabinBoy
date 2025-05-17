@@ -1,6 +1,7 @@
 using System.Collections;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private float spawnCratesTime = 5f;
     [SerializeField] private TextMeshProUGUI cargoText;
     [SerializeField] private TextMeshProUGUI timerText;
+    
+
 
     private float textDisappearTime = 3f;
     private float textTimer = 0f;
@@ -41,9 +44,12 @@ public class GameManager : MonoBehaviour
     [Header("Timer")]
     [SerializeField] private float timerDuration = 100f;
 
+    [SerializeField] CanvasGroup startUI;
+
     private OceanManager oceanManager;
     private CargoManager cargoManager;
     private GameTimer gameTimer;
+
 
 
     [Header("Island Movement")]
@@ -72,6 +78,7 @@ public class GameManager : MonoBehaviour
         gameTimer = GetComponent<GameTimer>();
 
         AudioManager.Instance.PlayMainTheme();
+
     }
 
 
@@ -225,12 +232,14 @@ public class GameManager : MonoBehaviour
         {
             cargoText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
             timerText.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
+            startUI.alpha = Mathf.Lerp(0f, 1f, elapsedTime / fadeDuration);
             elapsedTime += Time.deltaTime;
             yield return null;
         }
 
         cargoText.alpha = 1f;
         timerText.alpha = 1f;
+        startUI.alpha = 1f;
     }
 
     // Coroutine to fade the text out
