@@ -189,18 +189,18 @@ public class CargoManager : MonoBehaviour
     public int AmountOfMedCargo()   => heavyCargoAmount;
     public int AmountOfLightCargo() => lightCargoAmount;
     public int AmountOfValueCargo() => valueCargoAmount;
-    
 
     private void UpdateCargoText()
     {
-        // Build each segment with optional coloring
         string H = FormatSegment(heavyCargoAmount, needAmountOfHeavyCargo);
         string M = FormatSegment(medCargoAmount, needAmountOfMedCargo);
         string L = FormatSegment(lightCargoAmount, needAmountOfLightCargo);
         string V = FormatSegment(valueCargoAmount, needAmountOfvalueCargo);
 
-        cargoScoreText.text = $"H: {H}   V: {V}   M: {M}   L: {L}";
+        cargoScoreText.text = $"V: {V}\nH: {H}\nM: {M}\nL: {L}";
     }
+
+
 
     // Returns "5/2" or "<color=red>1/2</color>" if at or below need,
     // or "<color=yellow>2/2</color>" when within warningBuffer

@@ -2611,6 +2611,10 @@ PrefabInstance:
       propertyPath: camObj
       value: 
       objectReference: {fileID: 712689414}
+    - target: {fileID: 487640472654582186, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
+      propertyPath: jumpForce
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 1499733207727497810, guid: ab8e9d26261f75649809831eddfbc32b, type: 3}
       propertyPath: m_IsKinematic
       value: 1
