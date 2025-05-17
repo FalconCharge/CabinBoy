@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [ExecuteAlways]
 public class JointSlerpDriveController : MonoBehaviour
@@ -14,11 +17,17 @@ public class JointSlerpDriveController : MonoBehaviour
         [HideInInspector]
         public ConfigurableJoint joint;
 
-        public float positionSpring;
+        [Tooltip("Spring strength for the slerp drive")]
+        public float positionSpring = 0f;
 
-        public float positionDamper;
+        [Tooltip("Damping value for the slerp drive")]
+        public float positionDamper = 0f;
+
+        [Tooltip("Maximum force the slerp drive can apply")]
+        public float maximumForce = Mathf.Infinity;
     }
-        
+
+    [Tooltip("List of joints to configure")]
     public List<JointConfig> jointConfigs = new List<JointConfig>();
 
     void Reset()
@@ -38,18 +47,26 @@ public class JointSlerpDriveController : MonoBehaviour
         ApplyAll();
     }
 
+    [ContextMenu("Apply Slerp Drives")]
     public void ApplyAll()
     {
-        if (jointConfigs == null) return;
+        if (jointConfigs == null)
+            return;
 
         foreach (var cfg in jointConfigs)
         {
-            if (cfg.joint == null) continue;
+            if (cfg.joint == null)
+                continue;
 
             var drive = cfg.joint.slerpDrive;
             drive.positionSpring = cfg.positionSpring;
             drive.positionDamper = cfg.positionDamper;
+            drive.maximumForce = cfg.maximumForce;
             cfg.joint.slerpDrive = drive;
+
+#if UNITY_EDITOR
+            EditorUtility.SetDirty(cfg.joint);
+#endif
         }
     }
 
@@ -64,7 +81,8 @@ public class JointSlerpDriveController : MonoBehaviour
                 jointName = j.gameObject.name,
                 joint = j,
                 positionSpring = j.slerpDrive.positionSpring,
-                positionDamper = j.slerpDrive.positionDamper
+                positionDamper = j.slerpDrive.positionDamper,
+                maximumForce = j.slerpDrive.maximumForce,
             });
         }
     }
